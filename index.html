@@ -283,6 +283,9 @@ canvas{display:block;touch-action:none;cursor:crosshair}
 .lobby-list .dvd-tile{cursor:default}
 .lobby-list .dvd-tile:hover{transform:none;box-shadow:0 6px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18)}
 .lobby-list img{width:72px;height:72px}
+.lobby-list .kick{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:3px solid var(--ink2);background:var(--rose);color:var(--cream);font:700 15px/1 "Fredoka",var(--ui);cursor:pointer;box-shadow:0 3px 0 var(--ink2)}
+.lobby-list .kick:hover,.lobby-list .kick:focus-visible{outline:none;background:#ff5a7a;transform:scale(1.12)}
+.host-btns{display:flex;gap:6px;flex-wrap:wrap}
 .lobby-list .who{font-size:17px;font-weight:700;text-align:center;overflow-wrap:anywhere;text-shadow:0 2px 0 var(--ink2)}
 .lobby-list .tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 .lobby-list .empty-slot{opacity:.45;border-style:dashed;min-height:140px;justify-content:center;background:rgba(10,4,30,.3)}
@@ -361,7 +364,10 @@ canvas{display:block;touch-action:none;cursor:crosshair}
         <div class="row panel-btns">
           <button class="btn" id="muteBtn" type="button">Ton: an</button>
           <button class="btn" id="newBtn" type="button">Hauptmenü…</button>
-          <button class="btn" id="skipBtn" type="button" hidden>Zug überspringen</button>
+        </div>
+        <div class="row host-btns" id="hostBtns" hidden>
+          <button class="btn" id="skipBtn" type="button">Zug überspringen</button>
+          <button class="btn" id="kickBtn" type="button">Spieler entfernen</button>
         </div>
       </div>
     </section>
@@ -384,6 +390,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
     <h1 class="dvd-title" aria-label="Plinko Nacht"><span class="w1">Plinko</span><span class="w2">Nacht</span></h1>
     <div class="dvd-sub">Die Kugel-Edition</div>
     <nav class="dvd-menu" aria-label="Hauptmenü">
+      <button class="dvd-item" type="button" id="rejoinBtn" hidden>Zurück in den Raum</button>
       <button class="dvd-item" type="button" data-go="pgCount">Lokales Spiel</button>
       <button class="dvd-item" type="button" id="onlineMenuBtn">Online spielen</button>
       <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
@@ -1315,7 +1322,8 @@ function updatePanel() {
   } else { $('#abilName').textContent = 'Fähigkeit'; $('#abilSub').textContent = 'Startet mit dem Spiel'; ab.disabled = true; ab.classList.remove('pressed'); }
   const th = THEMES[curTheme()].name;
   $('#stageTitle').textContent = S.phase === 'setup' ? 'Spielfeld' : `${ONLINE ? `Online: ${ONLINE.name} – ` : 'Spielfeld – '}${LEVELS[S.levelKey].name} – Runde ${S.round} – ${th}`;
-  $('#skipBtn').hidden = !(ONLINE && ONLINE.host && !isMine() && S.phase === 'aim');
+  $('#hostBtns').hidden = !(ONLINE && ONLINE.host && !isMine() && S.phase === 'aim');
+  if (!$('#hostBtns').hidden && curP()) $('#kickBtn').textContent = `${curP().name} entfernen`;
   $('#taskTxt').textContent = cp && S.phase !== 'setup' ? `Plinko Nacht – ${cp.name}` : 'Plinko Nacht';
 }
 
@@ -1540,7 +1548,7 @@ function menuMusicTick() {
     tuneTime += len * beat; tuneStep++;
   }
 }
-buildScene(); splitTitle();
+buildScene(); splitTitle(); setTimeout(syncRejoin, 0);
 tuneTimer = setInterval(menuMusicTick, 250);
 const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard'];
 let castIdx = 0, castOnly = false;
@@ -1640,7 +1648,7 @@ function spatialMove(dir) {
 }
 function openSetup() {
   hideOverlays(); S.phase = 'setup'; S.balls = [];
-  $('#setup').hidden = false; syncToggles(); showPage('pgMain'); updatePanel();
+  $('#setup').hidden = false; syncToggles(); syncRejoin(); showPage('pgMain'); updatePanel();
 }
 document.querySelectorAll('#setup [data-go]').forEach(b => b.addEventListener('click', () => {
   castOnly = false;
@@ -1705,6 +1713,7 @@ function makeLocalNet() {
     push: async (p, v) => { const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6); write(t => setAt(t, p + '/' + id, v)); return id; },
     on(p, cb) { const s = { path: p, cb, last: undefined }; subs.push(s); setTimeout(notify, 0); return () => { const i = subs.indexOf(s); if (i >= 0) subs.splice(i, 1); }; },
     removeOnDisconnect(p) { leaving.push(p); },
+    onReconnect() { return () => {}; },
     cancelOnDisconnect() { leaving.length = 0; },
     top: async n => Object.values(getAt(load(), 'leaderboard') || {}).sort((a, b) => b.score - a.score).slice(0, n),
   };
@@ -1722,6 +1731,7 @@ async function makeFirebaseNet(cfg) {
     push: (p, v) => db.ref(p).push(v).then(r => r.key),
     on(p, cb, onErr) { const r = db.ref(p), h = s => cb(s.val()); r.on('value', h, e => { console.warn(e); if (onErr) onErr(e); }); return () => r.off('value', h); },
     removeOnDisconnect(p) { const d = db.ref(p).onDisconnect(); d.remove(); disc.push(d); },
+    onReconnect(cb) { let was = true; const r = db.ref('.info/connected'), h = s => { const c = !!s.val(); if (c && !was) cb(); was = c; }; r.on('value', h); return () => r.off('value', h); },
     cancelOnDisconnect() { disc.forEach(d => d.cancel()); disc.length = 0; },
     top: n => db.ref('leaderboard').orderByChild('score').limitToLast(n).get().then(s => { const a = []; s.forEach(c => { a.push(c.val()); }); return a.reverse(); }),
   };
@@ -1793,13 +1803,13 @@ function syncListing(n) {
   const entry = { name: String(o.meta.name || o.name).slice(0, 24), count: n, status: o.meta.status === 'lobby' ? 'lobby' : 'playing' };
   const sig = JSON.stringify(entry);
   if (sig === o.listSig) return;
-  const first = !o.listSig;
-  o.listSig = sig;
+  const first = !o.listReg;
+  o.listSig = sig; o.listReg = true;
   const write = () => o.net.set('lobbies/' + o.listKey, { ...entry, uid: o.uid, ts: o.net.stamp() }).catch(e => console.warn('Raumliste:', e));
   write();
   if (first) {
     o.net.removeOnDisconnect('lobbies/' + o.listKey);
-    o.beat = setInterval(() => { if (ONLINE === o) write(); }, 2 * 60 * 1000);
+    if (!o.beat) o.beat = setInterval(() => { if (ONLINE === o) write(); }, 2 * 60 * 1000);
   }
 }
 function stopRoomList() { if (roomListOff) { roomListOff(); roomListOff = null; } }
@@ -1844,6 +1854,7 @@ async function enterRoom(create) {
   if (room.length < 2) { err.textContent = 'Gib einen Raumnamen mit mindestens 2 Zeichen ein.'; $('#roomName').focus(); return; }
   if (pass.length < 4) { err.textContent = 'Das Passwort braucht mindestens 4 Zeichen.'; $('#roomPass').focus(); return; }
   const net = await getNet(); if (!net) { err.textContent = 'Keine Online-Verbindung.'; return; }
+  let rejoining = false;
   $('#roomCreate').disabled = $('#roomJoin').disabled = true;
   err.textContent = create ? 'Erstelle Raum …' : 'Suche Raum …';
   try {
@@ -1853,26 +1864,38 @@ async function enterRoom(create) {
     if (!create && !meta) { err.textContent = 'Kein Raum gefunden. Prüf Raumname und Passwort.'; return; }
     if (create) await net.set(path, { meta: { name: room, host: net.uid, status: 'lobby', level: settings.level, loot: settings.loot, created: net.stamp() } });
     else {
+      if (await net.get(`${path}/kicked/${net.uid}`)) { err.textContent = 'Der Host hat dich aus diesem Raum entfernt.'; forgetRoom(); return; }
       const players = (await net.get(path + '/players')) || {};
       if (!players[net.uid]) {
-        if (meta.status !== 'lobby') { err.textContent = 'In diesem Raum läuft gerade ein Spiel. Warte, bis es vorbei ist.'; return; }
+        const st = meta.status !== 'lobby' ? await net.get(path + '/state') : null;
+        rejoining = !!(st && (st.players || []).some(p => p.uid === net.uid));
+        if (meta.status !== 'lobby' && !rejoining) { err.textContent = 'In diesem Raum läuft gerade ein Spiel. Warte, bis es vorbei ist.'; return; }
         if (Object.keys(players).length >= 4) { err.textContent = 'Der Raum ist voll (4 Personen).'; return; }
       }
     }
     await net.set(`${path}/players/${net.uid}`, { name: name.slice(0, 16), power: onPower, joined: Date.now() });
     net.removeOnDisconnect(`${path}/players/${net.uid}`);
     err.textContent = '';
-    joinRoom(net, path, room);
+    rememberRoom(room, pass);
+    joinRoom(net, path, room, rejoining, { name: name.slice(0, 16), power: onPower });
   } catch (e) { console.warn(e); err.textContent = 'Das hat nicht geklappt. Prüf die Verbindung und versuch es nochmal.'; }
   finally { $('#roomCreate').disabled = $('#roomJoin').disabled = false; }
 }
-function joinRoom(net, path, roomName) {
+function joinRoom(net, path, roomName, rejoining, me) {
   leaveRoom(false);
   ONLINE = { net, path, uid: net.uid, host: false, name: roomName, players: {}, meta: null, loot: {}, unsub: [], lastLive: 0, lastAim: -1, lootDeadline: 0, lootDlRound: -1, lootShown: -1, lootApplied: -1 };
   S.v = 0; S.players = []; S.phase = 'setup';
   $('#lobbyName').textContent = roomName;
   $('#lobbyMaps').dataset.built = '';
+  ONLINE.fresh = !!rejoining;
   ONLINE.unsub.push(net.on(path + '/meta', onMeta));
+  ONLINE.unsub.push(net.on(`${path}/kicked/${net.uid}`, k => { if (k && ONLINE && ONLINE.path === path) wasKicked(); }));
+  ONLINE.unsub.push(net.onReconnect(() => {
+    // Verbindung kurz weg gewesen: Firebase hat uns aus der Spielerliste genommen, also wieder eintragen.
+    const o = ONLINE; if (!o || o.path !== path) return;
+    net.set(`${path}/players/${net.uid}`, { ...me, joined: Date.now() }).then(() => net.removeOnDisconnect(`${path}/players/${net.uid}`));
+    if (o.host && o.listKey) { o.listSig = ''; o.listReg = false; renderLobby(); }
+  }));
   ONLINE.unsub.push(net.on(path + '/players', p => { if (ONLINE) { ONLINE.players = p || {}; renderLobby(); checkLoot(); } }));
   ONLINE.unsub.push(net.on(path + '/state', applyState));
   ONLINE.unsub.push(net.on(path + '/live', onLive));
@@ -1884,7 +1907,7 @@ function joinRoom(net, path, roomName) {
 }
 function onMeta(m) {
   if (!ONLINE) return;
-  if (!m) { leaveRoom(true); openSetup(); openOnline(); setTimeout(() => { $('#onErr').textContent = 'Der Raum wurde geschlossen.'; }, 50); return; }
+  if (!m) { forgetRoom(); leaveRoom(true); openSetup(); openOnline(); setTimeout(() => { $('#onErr').textContent = 'Der Raum wurde geschlossen.'; }, 50); return; }
   ONLINE.meta = m; ONLINE.host = m.host === ONLINE.uid;
   renderLobby(); updatePanel();
 }
@@ -1906,9 +1929,10 @@ function lobbyPlayers() {
 function renderLobby() {
   if (!ONLINE) return;
   const host = ONLINE.meta && ONLINE.meta.host, list = lobbyPlayers();
-  const tiles = list.map((p, i) => `<div class="dvd-tile"><img src="${ICON_URL[p.power] || ICON_URL.fuchs}" alt=""><span class="who" style="color:${PCOL[i]}">${esc(p.name || '?')}</span><span class="tag">${[p.uid === host && 'Host', p.uid === ONLINE.uid && 'Du'].filter(Boolean).join(' · ') || '&nbsp;'}</span><span class="md">${CHARS[p.power] ? CHARS[p.power].name : ''}</span></div>`);
+  const tiles = list.map((p, i) => `<div class="dvd-tile"><img src="${ICON_URL[p.power] || ICON_URL.fuchs}" alt=""><span class="who" style="color:${PCOL[i]}">${esc(p.name || '?')}</span><span class="tag">${[p.uid === host && 'Host', p.uid === ONLINE.uid && 'Du'].filter(Boolean).join(' · ') || '&nbsp;'}</span><span class="md">${CHARS[p.power] ? CHARS[p.power].name : ''}</span>${ONLINE.host && p.uid !== ONLINE.uid ? `<button class="kick" type="button" data-uid="${esc(p.uid)}" aria-label="${esc(p.name || '?')} entfernen" title="Aus dem Raum entfernen">✕</button>` : ''}</div>`);
   for (let i = list.length; i < 4; i++) tiles.push('<div class="dvd-tile empty-slot"><span class="md">Freier Platz</span></div>');
   $('#lobbyList').innerHTML = tiles.join('');
+  $('#lobbyList').querySelectorAll('.kick').forEach(b => b.addEventListener('click', () => kickPlayer(b.dataset.uid)));
   const lvl = (ONLINE.meta && ONLINE.meta.level) || 'gasse', grid = $('#lobbyMaps');
   if (grid.dataset.built !== '1') {
     grid.innerHTML = [...Object.keys(LEVELS), 'zufall'].map(k => `<button class="dvd-tile" type="button" data-k="${k}"><img src="${THUMBS[k]}" alt=""><span class="mn">${k === 'zufall' ? 'Zufall' : LEVELS[k].name}</span></button>`).join('');
@@ -1956,7 +1980,8 @@ function pushState() {
 }
 const normPlayer = p => ({ uid: p.uid, name: p.name || '?', power: CHARS[p.power] ? p.power : 'fuchs', score: p.score || 0, balls: p.balls || 0, charges: p.charges || 0, armed: false, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 'rainbow' : null, gold: !!p.gold, theme: THEMES[p.theme] ? p.theme : 'nacht' });
 function applyState(st) {
-  if (!ONLINE || !st || st.by === ONLINE.uid) return;
+  if (!ONLINE || !st || (st.by === ONLINE.uid && !ONLINE.fresh)) return;
+  ONLINE.fresh = false;
   S.v = st.v || 0;
   const prevCur = S.cur, prevPhase = S.phase, np = st.pegs || [];
   if (!$('#setup').hidden || (!$('#over').hidden && st.phase !== 'over')) { hideOverlays(); audio(); }
@@ -2026,13 +2051,47 @@ function checkLoot(force) {
   S.phase = 'aim'; $('#loot').hidden = true;
   pushState(); announceTurn(); updatePanel();
 }
+/* Wiedereinstieg und Kicken */
+const LAST_ROOM_KEY = 'plinko-lastroom', LAST_ROOM_MAX_AGE = 3 * 60 * 60 * 1000;
+function lastRoom() { try { const r = JSON.parse(localStorage.getItem(LAST_ROOM_KEY) || 'null'); return r && r.room && Date.now() - (r.ts || 0) < LAST_ROOM_MAX_AGE ? r : null; } catch (e) { return null; } }
+function rememberRoom(room, pass) { try { localStorage.setItem(LAST_ROOM_KEY, JSON.stringify({ room, pass, ts: Date.now() })); } catch (e) {} }
+function forgetRoom() { try { localStorage.removeItem(LAST_ROOM_KEY); } catch (e) {} syncRejoin(); }
+function syncRejoin() {
+  const r = lastRoom(), b = $('#rejoinBtn');
+  b.hidden = !r || !!ONLINE;
+  if (r) b.textContent = `Zurück in „${r.room.slice(0, 18)}“`;
+}
+async function rejoinLast() {
+  const r = lastRoom(); if (!r) { syncRejoin(); return; }
+  await openOnline();
+  $('#roomName').value = r.room; $('#roomPass').value = r.pass;
+  enterRoom(false);
+}
+function wasKicked() {
+  forgetRoom(); leaveRoom(true); openSetup(); openOnline();
+  setTimeout(() => { $('#onErr').textContent = 'Der Host hat dich aus dem Raum entfernt.'; }, 50);
+}
+function kickPlayer(uid) {
+  if (!ONLINE || !ONLINE.host || uid === ONLINE.uid) return;
+  ONLINE.net.set(`${ONLINE.path}/kicked/${uid}`, true);
+  ONLINE.net.set(`${ONLINE.path}/players/${uid}`, null);
+}
+function kickCurrent() {
+  if (!ONLINE || !ONLINE.host || isMine() || S.phase !== 'aim') return;
+  const p = curP(); if (!p) return;
+  kickPlayer(p.uid);
+  p.balls = 0;
+  toast(`${p.name} wurde entfernt`, PCOL[S.cur]);
+  if (S.players.every(q => q.balls <= 0)) { S.phase = 'over'; pushState(); endGame(); return; }
+  skipTurn();
+}
 function skipTurn() {
   if (!ONLINE || !ONLINE.host || isMine() || S.phase !== 'aim') return;
   const n = S.players.length;
   for (let k = 1; k <= n; k++) { const j = (S.cur + k) % n; if (S.players[j].balls > 0) { S.cur = j; break; } }
   pushState(); announceTurn(); updatePanel();
 }
-function toMenu() { leaveRoom(false); openSetup(); }
+function toMenu() { if (ONLINE) forgetRoom(); leaveRoom(false); openSetup(); }
 
 $('#onlineMenuBtn').addEventListener('click', openOnline);
 $('#boardMenuBtn').addEventListener('click', openBoard);
@@ -2040,9 +2099,11 @@ $('#roomCreate').addEventListener('click', () => enterRoom(true));
 $('#roomJoin').addEventListener('click', () => enterRoom(false));
 $('#roomPass').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); enterRoom(false); } });
 $('#onName').addEventListener('input', e => { settings.players[0].name = e.target.value; });
-$('#lobbyLeave').addEventListener('click', () => { leaveRoom(false); openOnline(); });
+$('#lobbyLeave').addEventListener('click', () => { forgetRoom(); leaveRoom(false); openOnline(); });
 $('#lobbyStart').addEventListener('click', hostStart);
 $('#skipBtn').addEventListener('click', skipTurn);
+$('#kickBtn').addEventListener('click', kickCurrent);
+$('#rejoinBtn').addEventListener('click', rejoinLast);
 $('#againBtn').addEventListener('click', startGame);
 $('#setupBtn').addEventListener('click', toMenu);
 $('#newBtn').addEventListener('click', toMenu);
