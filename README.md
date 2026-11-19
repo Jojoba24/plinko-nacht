@@ -1,10 +1,13 @@
 # Plinko Nacht
 
-Ein Kugel-und-Laternen-Spiel für den Browser: Schieß Leuchtkugeln zwischen die Laternen und lösch alle orangen Ziellaternen. Retro-Desktop-Optik, DVD-Menü, sechs Charaktere mit Fähigkeiten, Lootboxen am Rundenende und erfundene Werbepausen.
+Ein Kugel-und-Laternen-Spiel für den Browser: Schieß Leuchtkugeln zwischen die Laternen und lösch alle orangen Ziellaternen. Retro-Desktop-Optik, ein DVD-Menü im Stil alter Zeichentrickfilm-DVDs, sechs Charaktere mit Fähigkeiten, Lootboxen und erfundene Werbepausen.
 
 - **Lokal:** 1 bis 4 Personen spielen abwechselnd am selben Gerät.
-- **Online:** 2 bis 4 Personen spielen auf eigenen Geräten in einem Raum, dem man mit Raumname und Passwort beitritt.
+- **Roguelike-Modus:** ein Run für eine Person über immer schwerere Felder. Nach jeder Runde und jedem geschafften Feld wählst du eins von drei Upgrades.
+- **Online:** 2 bis 4 Personen spielen auf eigenen Geräten in einem Raum, dem man mit Raumname und Passwort beitritt. Offene Räume stehen in einer Liste, wer rausfliegt, kommt über „Zurück in …“ wieder rein, und der Host kann Leute entfernen.
 - **Bestenliste:** weltweit über Firebase, ohne Firebase nur auf dem jeweiligen Gerät.
+- **Bonusmaterial:** Im Hauptmenü erklärt eine eigene Seite Regeln, Laternen, Charaktere, Lootboxen, Upgrades und Online-Funktionen.
+- **Lootboxen:** jede Runde, alle 3 Runden (Standard) oder aus, einstellbar im Hauptmenü.
 
 Das ganze Spiel steckt in `index.html`. Es gibt keinen Build-Schritt.
 
@@ -35,7 +38,7 @@ Dann `http://localhost:8000` öffnen.
 1. Auf <https://console.firebase.google.com> ein neues Projekt anlegen (Google Analytics wird nicht gebraucht).
 2. **Authentication** → Jetzt starten → Anbieter **Anonym** aktivieren.
 3. **Realtime Database** → Datenbank erstellen → Standort z. B. `europe-west1` → im **gesperrten Modus** starten.
-4. In der Realtime Database unter **Regeln** den Inhalt von [`database.rules.json`](database.rules.json) einfügen und veröffentlichen.
+4. In der Realtime Database unter **Regeln** den Inhalt von [`database.rules.json`](database.rules.json) einfügen und veröffentlichen. Nach jeder Änderung an der Datei die Regeln dort neu einfügen (zuletzt hinzugekommen: `lobbies` für die Raumliste).
 5. **Projekteinstellungen** → Allgemein → Deine Apps → Web-App (`</>`) hinzufügen. Firebase Hosting wird nicht gebraucht.
 6. Die angezeigte Konfiguration in [`firebase-config.js`](firebase-config.js) eintragen (statt `null`). Wichtig ist auch `databaseURL`. Falls sie fehlt, steht sie oben auf der Seite der Realtime Database.
 7. **Authentication** → Einstellungen → **Autorisierte Domains**: die Domain eintragen, unter der das Spiel läuft (z. B. `deinname.github.io` oder `spiel.jonathanbatkowski.de`).
@@ -78,6 +81,9 @@ Die WordPress-Seite bleibt dabei unberührt. Es gibt drei Wege:
 ## Grenzen
 
 - Die Punkte werden im Browser berechnet. Wer sich auskennt, kann sich Fantasiepunkte in die Bestenliste schreiben. Für eine Freundesrunde reicht das.
-- Raumname und Passwort bilden zusammen den geheimen Pfad des Raums. Ohne Passwort lässt sich ein Raum weder finden noch auflisten. Wer das Passwort kennt, kann aber alles im Raum lesen und schreiben.
-- Verlässt der Host den Raum, wird der Raum geschlossen. Hängt eine Person mitten im Spiel fest, kann der Host ihren Zug überspringen.
+- Raumname und Passwort bilden zusammen den geheimen Pfad des Raums. Die öffentliche Raumliste (`lobbies`) enthält nur Name, Personenzahl und Status, nie das Passwort. Wer das Passwort kennt, kann alles im Raum lesen und schreiben.
+- Verlässt der Host den Raum, wird der Raum geschlossen. Hängt eine Person mitten im Spiel fest, kann der Host ihren Zug überspringen oder sie entfernen.
+- Für „Zurück in …“ merkt sich der Browser Raumname und Passwort des letzten Raums für drei Stunden (localStorage). Wer den Raum selbst verlässt, löscht den Eintrag.
+- Ein Kick hält nur, solange die Person dieselbe anonyme Anmeldung hat. Wer die Browserdaten löscht, kann mit dem Passwort wieder beitreten.
+- Der Roguelike-Modus läuft nur lokal.
 - Alte Räume bleiben in der Datenbank liegen, bis du sie in der Firebase-Konsole löschst.

@@ -150,6 +150,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
 .dvd[data-page=pgMap]{--cam:1}
 .dvd[data-page=pgOnline],.dvd[data-page=pgLobby]{--cam:-1}
 .dvd[data-page=pgBoard]{--cam:.3}
+.dvd[data-page=pgExtras]{--cam:-.3}
 .dvd-bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;
   background:linear-gradient(180deg,#0d0830 0%,#22125a 38%,#4a1f74 62%,#9a3f7a 80%,#ef8a6a 100%)}
 .dvd-bg .ly{position:absolute;left:-22vw;width:144vw;bottom:0;transition:transform 1.3s cubic-bezier(.45,0,.2,1);transform:translateX(calc(var(--cam) * var(--d) * -14vw))}
@@ -281,6 +282,27 @@ canvas{display:block;touch-action:none;cursor:crosshair}
 .room-card .rs.busy{color:#ffb8c8}
 .room-card:disabled{opacity:.6}
 .room-none{grid-column:1/-1;margin:0;text-align:center;font-size:15px;font-weight:600;color:#e0d4ff;background:rgba(10,4,30,.35);border:3px dashed rgba(255,244,214,.3);border-radius:16px;padding:14px}
+.extras{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;width:100%;align-items:start}
+.extra-chapters{display:flex;flex-direction:column;gap:10px}
+.extra-chapters .dvd-tile{flex-direction:row;justify-content:flex-start;gap:10px;padding:9px 12px;text-align:left}
+.extra-chapters .cs{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--gold);color:var(--ink2);font-weight:700;font-size:17px;border:3px solid var(--ink2)}
+.extra-chapters .cn{font-family:"Lilita One","Fredoka",var(--ui);font-size:17px;letter-spacing:.02em}
+.extra-chapters .dvd-tile.sel::after{display:none}
+.extra-body{min-height:420px;max-height:min(62vh,560px);overflow:auto;padding:18px 20px;border-radius:22px;background:rgba(10,4,30,.45);border:4px solid var(--ink2);font-size:15px;line-height:1.5;animation:pagein .4s ease-out}
+.extra-body h3{margin:0 0 10px;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:26px;color:var(--gold);text-shadow:0 3px 0 var(--ink2)}
+.extra-body p{margin:0 0 12px}
+.extra-body .xn{color:#d8c8ff;font-size:14px;margin-top:12px}
+.xl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.xl li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06)}
+.xl li div{display:flex;flex-direction:column;gap:2px;min-width:0}
+.xl li b{font-weight:700}
+.xl small{font-size:12px;color:#d8c8ff;font-weight:600}
+.xl .xs{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:#2f1868;border:3px solid var(--ink2);font-style:normal;font-weight:700;color:var(--gold);font-size:16px}
+.xl .xd{width:30px;height:30px;margin:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,var(--xc) 45%,#000 140%);border:3px solid var(--ink2)}
+.xc li{grid-template-columns:64px minmax(0,1fr)}
+.xc img{width:64px;height:64px;filter:drop-shadow(0 3px 0 var(--ink2))}
+.xl .xp{color:var(--cream)}
+.xl .xt{color:#c8f5c0;font-size:14px}
 .dvd-nav{display:flex;justify-content:space-between;width:100%;gap:12px;flex-wrap:wrap}
 .online-form{display:flex;flex-direction:column;gap:14px;width:100%;max-width:560px;padding:20px;border-radius:22px;background:rgba(10,4,30,.35);border:4px solid var(--ink2)}
 .dvd-field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:#d8c8ff}
@@ -318,6 +340,10 @@ canvas{display:block;touch-action:none;cursor:crosshair}
   .mini-cast{grid-template-columns:repeat(3,minmax(0,1fr))}
   .lobby-list{grid-template-columns:repeat(2,minmax(0,1fr))}
   .online-form{padding:14px}
+  .extras{grid-template-columns:minmax(0,1fr)}
+  .extra-chapters{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .extra-chapters .cn{font-size:15px}
+  .extra-body{max-height:none;min-height:0;padding:14px}
   .dvd-item{padding:6px 16px 6px 46px}
   .dvd-page:not(#pgMain){padding:44px 14px 18px}
   .moon{right:29vw;top:10vh}
@@ -405,6 +431,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
       <button class="dvd-item" type="button" id="rogueMenuBtn">Roguelike-Modus</button>
       <button class="dvd-item" type="button" id="onlineMenuBtn">Online spielen</button>
       <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
+      <button class="dvd-item" type="button" id="extrasMenuBtn">Bonusmaterial</button>
       <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
       <button class="dvd-item" type="button" id="lootToggle">Lootboxen: Alle 3 Runden</button>
       <button class="dvd-item" type="button" id="adsToggle">Werbepausen: An</button>
@@ -473,6 +500,15 @@ canvas{display:block;touch-action:none;cursor:crosshair}
     <div class="map-grid" id="lobbyMaps"></div>
     <p class="dvd-sub" id="lobbyWait" style="letter-spacing:.2em"></p>
     <div class="dvd-nav"><button class="dvd-item" type="button" id="lobbyLeave">◀ Raum verlassen</button><button class="dvd-item" type="button" id="lobbyStart">Spiel starten ▶</button></div>
+  </div>
+
+  <div class="dvd-page" id="pgExtras" hidden>
+    <h2 class="dvd-h">Bonusmaterial</h2>
+    <div class="extras">
+      <nav class="extra-chapters" id="extraChapters" aria-label="Kapitel"></nav>
+      <article class="extra-body" id="extraBody" aria-live="polite"></article>
+    </div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgBoard" hidden>
@@ -1677,7 +1713,7 @@ function menuMusicTick() {
 }
 buildScene(); splitTitle(); setTimeout(syncRejoin, 0);
 tuneTimer = setInterval(menuMusicTick, 250);
-const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard'];
+const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras'];
 let castIdx = 0, castOnly = false;
 const curPage = () => PAGES.find(p => !$('#' + p).hidden);
 function showPage(id, focusSel) {
@@ -1755,7 +1791,7 @@ function goBack() {
   if (pg === 'pgCount') showPage('pgMain');
   else if (pg === 'pgCast') castBack();
   else if (pg === 'pgMap') mapBack();
-  else if (pg === 'pgOnline' || pg === 'pgBoard') showPage('pgMain');
+  else if (pg === 'pgOnline' || pg === 'pgBoard' || pg === 'pgExtras') showPage('pgMain');
 }
 function spatialMove(dir) {
   const pg = $('#' + curPage());
@@ -1811,6 +1847,64 @@ window.addEventListener('keydown', e => {
   if (dirs[e.key] && !(inInput && (e.key === 'ArrowLeft' || e.key === 'ArrowRight'))) { e.preventDefault(); spatialMove(dirs[e.key]); }
   else if (e.key === 'Escape') { e.preventDefault(); goBack(); }
 });
+
+/* ---------- Bonusmaterial: Erklärungen zu allen Spielfunktionen ---------- */
+const TIPS = {
+  fuchs:  'Ziel auf dichte Stellen: Die zweite Kugel fliegt in die Gegenrichtung weiter und räumt die andere Seite ab.',
+  drache: 'Perfekt, um durch eine Wand aus blauen Laternen zu den orangen dahinter zu kommen. Brennende Kugeln prallen nicht ab.',
+  uhu:    'Für knifflige Abpraller über die Wand. Die lange Zielhilfe hält zwei Schüsse lang.',
+  lumi:   'Holt einzelne Ziellaternen, die sonst kaum zu erreichen sind. Besonders stark gegen Ende eines Feldes.',
+  quaxi:  'Die sichere Wahl, wenn du die Kugel zurückhaben willst: Wer ins Boot fällt, bringt eine Kugel zurück.',
+  mira:   'Gibt der Kugel eine zweite Runde durchs Feld. Schieß steil, dann federt sie hoch in die oberen Reihen.',
+};
+const EXTRA_CHAPTERS = [
+  { id: 'regeln', sym: '?', name: 'So wird gespielt' },
+  { id: 'laternen', sym: '●', name: 'Die Laternen' },
+  { id: 'figuren', sym: '★', name: 'Charaktere' },
+  { id: 'loot', sym: '▣', name: 'Lootboxen' },
+  { id: 'rogue', sym: '↯', name: 'Roguelike' },
+  { id: 'online', sym: '⇄', name: 'Online' },
+];
+function extraHTML(id) {
+  const li = (icon, title, text) => `<li>${icon}<div><b>${title}</b><span>${text}</span></div></li>`;
+  const dot = c => `<i class="xd" style="--xc:${c}"></i>`;
+  const sym = t => `<i class="xs">${t}</i>`;
+  if (id === 'regeln') return `<h3>So wird gespielt</h3><p>Schieß Leuchtkugeln von oben ins Feld. Jede getroffene Laterne leuchtet auf und verschwindet, sobald die Kugel unten raus ist. Lösch alle <b>orangen Ziellaternen</b>, dann hast du das Feld geschafft.</p><ul class="xl">
+    ${li(sym('⛵'), 'Das Boot', 'Unten fährt ein Boot hin und her. Fällt die Kugel hinein, bekommst du sie zurück (+1 Kugel).')}
+    ${li(sym('×10'), 'Multiplikator', 'Je weniger Ziellaternen übrig sind, desto mehr zählt jeder Treffer: ×2, ×3, ×5 und am Ende ×10.')}
+    ${li(sym('+1'), 'Starker Schuss', `Holst du mit einem Schuss ${fmt(2500)} Punkte oder mehr, gibt es eine Kugel gratis.`)}
+    ${li(sym('★'), 'Finale', `Triffst du die letzte Ziellaterne, öffnen sich unten Bonuszonen: ${ZONES.map(fmt).join(' · ')} Punkte.`)}
+    ${li(sym('F'), 'Fähigkeiten', 'Jeder Charakter hat eine Spezialfähigkeit. Mit F oder dem Fähigkeiten-Knopf machst du sie für den nächsten Schuss scharf. Das kostet eine Ladung.')}
+    ${li(sym('⌨'), 'Steuerung', 'Maus: zielen und klicken. Touch: ziehen und loslassen. Tastatur: Pfeiltasten zielen (mit Umschalt fein), Leertaste schießt.')}
+  </ul>`;
+  if (id === 'laternen') return `<h3>Die Laternen</h3><ul class="xl">
+    ${li(dot(TYPES.target.c), 'Orange: Ziellaterne', `${TYPES.target.base} Punkte. Alle löschen heißt Feld geschafft. Sie treiben den Multiplikator hoch.`)}
+    ${li(dot(TYPES.plain.c), 'Blau: normale Laterne', `${TYPES.plain.base} Punkte. Gut für Abpraller und Kombos.`)}
+    ${li(dot(TYPES.power.c), 'Grün: Ladungslaterne', `${TYPES.power.base} Punkte und +1 Ladung für deine Fähigkeit (höchstens ${MAX_CHARGES}).`)}
+    ${li(dot(TYPES.bonus.c), 'Lila: Bonuslaterne', `${TYPES.bonus.base} Punkte. Wechselt nach jedem Zug den Platz.`)}
+  </ul><p class="xn">Bleibt eine Kugel hängen, räumt das Spiel die getroffenen Laternen um sie herum nach kurzer Zeit ab.</p>`;
+  if (id === 'figuren') return `<h3>Charaktere und ihre Fähigkeiten</h3><ul class="xl xc">${Object.entries(CHARS).map(([k, c]) => `<li><img src="${ICON_URL[k]}" alt=""><div><b style="color:${c.col}">${c.name}</b> <small>${c.kind}</small><span class="xp">Fähigkeit: <b>${c.power}</b> – ${c.desc}</span><span>${BIO[k]}</span><span class="xt">Tipp: ${TIPS[k]}</span></div></li>`).join('')}</ul>`;
+  if (id === 'loot') return `<h3>Lootboxen</h3><p>Am Ende einer Runde öffnet jede Person eine Box. Wie oft das passiert, stellst du im Hauptmenü ein: jede Runde, alle 3 Runden (Standard) oder gar nicht. Online öffnet jede Person ihre Box auf dem eigenen Gerät.</p><ul class="xl">${LOOT.filter(l => l.id !== 'theme').map(l => li(sym(l.sym || '·'), l.name, l.desc)).join('')}
+    ${li(sym('▦'), 'Themes', `Ändern das Aussehen des Spielfelds in deinen Zügen: ${LOOT.filter(l => l.id === 'theme').map(l => THEMES[l.theme].name).join(', ')}. Je seltener, desto schicker.`)}</ul>`;
+  if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Ein Run für eine Person. Du startest mit 10 Kugeln auf einem zufälligen Feld. Nach jeder Runde (3 Schüsse) und nach jedem geschafften Feld wählst du <b>eins von drei Upgrades</b>. Geschaffte Felder geben +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn die Kugeln ausgehen.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
+  return `<h3>Online spielen</h3><ul class="xl">
+    ${li(sym('⌂'), 'Räume', 'Erstell einen Raum mit Name und Passwort. 2 bis 4 Personen spielen abwechselnd, alle sehen Zielen und Flugbahn live.')}
+    ${li(sym('≡'), 'Raumliste', 'Offene Räume stehen in der Liste. Antippen, Passwort eingeben, beitreten. Das Passwort steht nie in der Liste.')}
+    ${li(sym('↺'), 'Wieder rein', 'Fliegst du raus oder lädst die Seite neu, steht im Hauptmenü „Zurück in …“. Damit landest du wieder in der laufenden Partie.')}
+    ${li(sym('✕'), 'Host-Rechte', 'Der Host wählt die Szene, startet, kann hängende Züge überspringen und Leute aus dem Raum entfernen.')}
+  </ul>`;
+}
+function showExtra(id) {
+  $('#extraBody').innerHTML = extraHTML(id);
+  $('#extraChapters').querySelectorAll('.dvd-tile').forEach(b => b.classList.toggle('sel', b.dataset.id === id));
+}
+function openExtras() {
+  $('#extraChapters').innerHTML = EXTRA_CHAPTERS.map((c, i) => `<button class="dvd-tile" type="button" data-id="${c.id}"><span class="cs">${c.sym}</span><span class="cn">${i + 1}. ${c.name}</span></button>`).join('');
+  $('#extraChapters').querySelectorAll('.dvd-tile').forEach(b => { b.addEventListener('focus', () => showExtra(b.dataset.id)); b.addEventListener('click', () => showExtra(b.dataset.id)); });
+  showExtra('regeln');
+  showPage('pgExtras', '.dvd-tile');
+}
+$('#extrasMenuBtn').addEventListener('click', openExtras);
 
 /* ---------- Netz: Firebase oder Testmodus (?net=local) ---------- */
 let netPromise = null, netError = '';
