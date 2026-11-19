@@ -111,6 +111,16 @@ canvas{display:block;touch-action:none;cursor:crosshair}
 .results li:first-child{background:var(--sel);color:var(--sel-ink)}
 .reel{position:relative;overflow:hidden;background:var(--field);box-shadow:var(--in);height:132px}
 .reel::after{content:"";position:absolute;left:50%;top:3px;bottom:3px;width:2px;margin-left:-1px;background:var(--alert)}
+.upg-dlg{max-width:720px}
+.upg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.btn.upg{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;min-height:190px;text-align:center;white-space:normal}
+.btn.upg:active:not(:disabled){padding:15px 9px 13px 11px}
+.upg .us{width:52px;height:52px;display:grid;place-items:center;font-size:22px;font-weight:700;color:#fff;background:radial-gradient(circle at 35% 30%,#7fa8ff,#000080);box-shadow:var(--in);border-radius:50%}
+.upg .un{font-weight:700;font-size:15px}
+.upg .ud{font-size:13px;line-height:1.35;color:var(--muted)}
+.upg .ul{margin-top:auto;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sel)}
+.btn.upg:focus-visible{outline:2px dotted #000;outline-offset:-6px}
+@media (max-width:600px){.upg-grid{grid-template-columns:minmax(0,1fr)}.btn.upg{min-height:0;display:grid;grid-template-columns:52px minmax(0,1fr);text-align:left;column-gap:12px;align-items:center}.upg .us{grid-row:span 3}.upg .ul{margin-top:0}}
 .strip{display:flex;gap:8px;padding:12px 0;will-change:transform}
 .item{flex:none;width:96px;height:106px;background:var(--face);box-shadow:var(--out);border-top:5px solid var(--rc);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;padding:4px;line-height:1.2;text-align:center}
 .orb{width:42px;height:42px;border-radius:50%;background:var(--ob,var(--rc));border:1px solid #000;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;text-shadow:1px 1px 0 #000}
@@ -215,7 +225,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
   transition:transform .2s cubic-bezier(.3,1.8,.5,1),color .15s}
 .dvd-menu .dvd-item{animation:pagein .6s cubic-bezier(.2,1.5,.45,1) both}
 .dvd-menu .dvd-item:nth-child(1){animation-delay:1.05s}.dvd-menu .dvd-item:nth-child(2){animation-delay:1.15s}.dvd-menu .dvd-item:nth-child(3){animation-delay:1.25s}
-.dvd-menu .dvd-item:nth-child(4){animation-delay:1.35s}.dvd-menu .dvd-item:nth-child(5){animation-delay:1.45s}.dvd-menu .dvd-item:nth-child(6){animation-delay:1.55s}.dvd-menu .dvd-item:nth-child(7){animation-delay:1.65s}
+.dvd-menu .dvd-item:nth-child(4){animation-delay:1.35s}.dvd-menu .dvd-item:nth-child(5){animation-delay:1.45s}.dvd-menu .dvd-item:nth-child(6){animation-delay:1.55s}.dvd-menu .dvd-item:nth-child(7){animation-delay:1.65s}.dvd-menu .dvd-item:nth-child(n+8){animation-delay:1.75s}
 .dvd-item::before{content:"";position:absolute;left:14px;top:50%;width:24px;height:24px;margin-top:-14px;border-radius:50%;
   background:radial-gradient(circle at 34% 30%,#fff 0 12%,#ffe066 30%,#ff9a1f 70%,#c25a00 100%);border:3px solid var(--ink2);opacity:0;transform:scale(.2)}
 .dvd-item:hover,.dvd-item:focus-visible{color:var(--gold);outline:none;transform:scale(1.12) rotate(-2deg)}
@@ -392,6 +402,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
     <nav class="dvd-menu" aria-label="Hauptmenü">
       <button class="dvd-item" type="button" id="rejoinBtn" hidden>Zurück in den Raum</button>
       <button class="dvd-item" type="button" data-go="pgCount">Lokales Spiel</button>
+      <button class="dvd-item" type="button" id="rogueMenuBtn">Roguelike-Modus</button>
       <button class="dvd-item" type="button" id="onlineMenuBtn">Online spielen</button>
       <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
       <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
@@ -489,6 +500,18 @@ canvas{display:block;touch-action:none;cursor:crosshair}
   </section>
 </div>
 
+<div class="overlay" id="upg" hidden>
+  <section class="win dlg upg-dlg" aria-label="Upgrade wählen">
+    <div class="tb"><span class="tb-ico"></span><span class="t">Upgrade.exe</span><span class="tbb" aria-hidden="true">×</span></div>
+    <div class="wb">
+      <h2 id="upgHead">Runde vorbei</h2>
+      <p class="lootfor" id="upgSub"></p>
+      <div class="upg-grid" id="upgGrid"></div>
+      <p class="note">Upgrades halten den ganzen Run. Manche lassen sich mehrmals nehmen und werden dann stärker.</p>
+    </div>
+  </section>
+</div>
+
 <div class="overlay" id="loot" hidden>
   <section class="win dlg" aria-label="Lootbox">
     <div class="tb"><span class="tb-ico"></span><span class="t" id="lootTitle">Lootbox.exe</span><span class="tbb" aria-hidden="true">×</span></div>
@@ -501,7 +524,7 @@ canvas{display:block;touch-action:none;cursor:crosshair}
         <button class="btn def" id="lootOpen" type="button">Box öffnen</button>
         <button class="btn def" id="lootNext" type="button" hidden>Weiter</button>
       </div>
-      <p class="note">Nach jeder Runde bekommt jede Person eine Box. Drin sein können Punkte, Kugeln, Ladungen für die Fähigkeit, Spielfeld-Themes und leere Kartons.</p>
+      <p class="note">Am Rundenende bekommt jede Person eine Box (wie oft, stellst du im Hauptmenü ein). Drin sein können Punkte, Kugeln, Ladungen für die Fähigkeit, Spielfeld-Themes und leere Kartons.</p>
     </div>
   </section>
 </div>
@@ -568,6 +591,23 @@ const LOOT = [
   { id: 'theme', theme: 'vapor',    rar: 4, w: 3, sym: '', name: 'Theme: Vaporwave' },
   { id: 'gold',   rar: 4, w: 3,  sym: '×2',  name: 'Goldkugel',         desc: 'Doppelte Punkte beim nächsten Schuss' },
 ];
+/* Roguelike-Upgrades: Nach jeder Runde und jedem geschafften Feld eins von drei wählen. */
+const UPGRADES = [
+  { id: 'boot',     sym: '⛵', max: 3,  name: 'Breiteres Boot',  desc: 'Das Fangboot wird 25 % breiter.' },
+  { id: 'ruhig',    sym: '≈',  max: 2,  name: 'Ruhige See',      desc: 'Das Boot fährt 30 % langsamer und ist leichter zu treffen.' },
+  { id: 'fernrohr', sym: '◎',  max: 1,  name: 'Dauer-Fernrohr',  desc: 'Die lange Zielhilfe mit Abprallern ist bei jedem Schuss an.' },
+  { id: 'speicher', sym: '+L', max: 2,  name: 'Ladungsspeicher', desc: '+1 maximale Ladung für deine Fähigkeit und sofort +1 Ladung.' },
+  { id: 'ziel',     sym: '★',  max: 4,  name: 'Laternenjäger',   desc: 'Ziellaternen bringen 50 % mehr Punkte.' },
+  { id: 'feuer',    sym: '▲',  max: 3,  name: 'Glutstart',       desc: 'Jede Kugel brennt die ersten 0,5 Sekunden durch alle Laternen.' },
+  { id: 'glueck',   sym: '×2', max: 3,  name: 'Glückskugel',     desc: '15 % Chance, dass ein Schuss doppelte Punkte bringt.' },
+  { id: 'magnet',   sym: '✦',  max: 3,  name: 'Lockstoff',       desc: 'Jede Kugel wird 0,8 Sekunden lang zur nächsten Ziellaterne gezogen.' },
+  { id: 'zwilling', sym: '◐',  max: 3,  name: 'Zwillingsglück',  desc: '30 % Chance, dass sich die Kugel beim ersten Treffer teilt.' },
+  { id: 'feder',    sym: '⌒',  max: 1,  name: 'Federboden',      desc: 'Bei jedem Schuss federt der Boden die Kugel einmal zurück.' },
+  { id: 'gruen',    sym: '●',  max: 3,  name: 'Grüner Daumen',   desc: '+2 grüne Laternen, jetzt und auf jedem neuen Feld.' },
+  { id: 'kugeln',   sym: '+3', max: 99, name: 'Kugelsack',       desc: '+3 Kugeln.' },
+];
+const perk = (id, p = curP()) => (p && p.perks && p.perks[id]) || 0;
+const maxCh = p => MAX_CHARGES + perk('speicher', p);
 const ADS = [
   { brand: 'Kugelfett Ultra', slogan: 'Damit Ihre Kugeln noch runder rollen.', price: 'Nur 9,99 DM', fine: 'Nicht zum Verzehr geeignet. Kann Spuren von Schwerkraft enthalten.', bg: '#ffe14d', fg: '#1a1200' },
   { brand: 'Schwerkraft-Abo', slogan: 'Jetzt 10 % langsamer fallen. Jeden Monat.', price: 'Erster Monat gratis*', fine: '*Danach 49 DM pro Monat. Kündigung nur per Fax.', bg: '#1fd1a0', fg: '#04231a' },
@@ -621,7 +661,7 @@ const S = {
   adGap: 0, lastAd: -1, round: 1, turnInRound: 0, lootQ: [], lootFor: 0, lootAfter: null,
 };
 const LOOT_MODES = { selten: 'Alle 3 Runden', jede: 'Jede Runde', aus: 'Aus' };
-const settings = { count: 2, level: 'gasse', ads: true, loot: (() => { try { const v = localStorage.getItem('plinko-loot'); return LOOT_MODES[v] ? v : 'selten'; } catch (e) { return 'selten'; } })(), players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
+const settings = { mode: 'normal', count: 2, level: 'gasse', ads: true, loot: (() => { try { const v = localStorage.getItem('plinko-loot'); return LOOT_MODES[v] ? v : 'selten'; } catch (e) { return 'selten'; } })(), players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
 let ONLINE = null;
 
 /* ---------- Audio ---------- */
@@ -724,13 +764,13 @@ function genPoints(key) {
   for (const p of raw) if (pts.every(q => Math.hypot(q[0] - p[0], q[1] - p[1]) >= PR * 2 + 6)) pts.push(p);
   return pts;
 }
-function buildLevel(key) {
+function buildLevel(key, orange, greens = 3) {
   const pts = genPoints(key);
   S.pegs = pts.map(([x, y]) => ({ x, y, type: 'plain', hit: false, gone: false, flash: 0, order: 0 }));
   const idx = shuffle(S.pegs.map((_, i) => i));
-  S.orangeTotal = Math.min(25, Math.round(S.pegs.length * 0.26));
+  S.orangeTotal = Math.min(orange || 25, Math.round(S.pegs.length * 0.26));
   idx.slice(0, S.orangeTotal).forEach(i => S.pegs[i].type = 'target');
-  idx.slice(S.orangeTotal, S.orangeTotal + 3).forEach(i => S.pegs[i].type = 'power');
+  idx.slice(S.orangeTotal, S.orangeTotal + greens).forEach(i => S.pegs[i].type = 'power');
 }
 function pickBonus() {
   for (const p of S.pegs) if (p.type === 'bonus' && !p.hit) p.type = 'plain';
@@ -743,7 +783,7 @@ function mult() {
   return f <= 0.12 ? 10 : f <= 0.28 ? 5 : f <= 0.44 ? 3 : f <= 0.64 ? 2 : 1;
 }
 const curP = () => S.players[S.cur];
-const boatW = () => { const p = curP(); return p && (p.bigBoat > 0 || (p.armed && p.power === 'quaxi')) ? BW * 1.9 : BW; };
+const boatW = () => { const p = curP(); return (p && (p.bigBoat > 0 || (p.armed && p.power === 'quaxi')) ? BW * 1.9 : BW) * (1 + 0.25 * perk('boot')); };
 const curTheme = () => (S.phase !== 'setup' && curP() ? curP().theme : 'nacht');
 
 /* ---------- Effekte ---------- */
@@ -755,12 +795,13 @@ function burst(x, y, col, n = 10, sp = 160) {
 /* ---------- Spielablauf ---------- */
 function startGame() {
   if (ONLINE) { hostStart(); return; }
-  const n = settings.count;
-  S.levelKey = settings.level === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : settings.level;
-  buildLevel(S.levelKey);
+  const rogue = settings.mode === 'rogue', n = rogue ? 1 : settings.count;
+  S.rogue = rogue ? { stage: 1, picks: 0 } : null;
+  S.levelKey = rogue || settings.level === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : settings.level;
+  if (rogue) buildLevel(S.levelKey, rogueOrange(1)); else buildLevel(S.levelKey);
   S.players = settings.players.slice(0, n).map((p, i) => ({
-    name: p.name.trim() || `Spieler ${i + 1}`, power: p.power, score: 0, balls: BALLS_BY_COUNT[n],
-    charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, theme: 'nacht',
+    name: p.name.trim() || `Spieler ${i + 1}`, power: p.power, score: 0, balls: rogue ? 10 : BALLS_BY_COUNT[n],
+    charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, theme: 'nacht', perks: {},
   }));
   S.cur = 0; S.finale = false; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.toasts = [];
   S.order = 0; S.lastMult = 1; S.timeScale = 1; S.adGap = 0; S.round = 1; S.turnInRound = 0;
@@ -768,15 +809,16 @@ function startGame() {
   S.phase = 'aim';
   hideOverlays();
   audio();
-  toast(n > 1 ? `${S.players[0].name} beginnt` : LEVELS[S.levelKey].name, PCOL[0], `Runde 1 · ${LEVELS[S.levelKey].name}`);
+  if (rogue) toast('Roguelike: Feld 1', PCOL[0], `${LEVELS[S.levelKey].name} · ${S.orangeTotal} Ziellaternen`);
+  else toast(n > 1 ? `${S.players[0].name} beginnt` : LEVELS[S.levelKey].name, PCOL[0], `Runde 1 · ${LEVELS[S.levelKey].name}`);
   updatePanel();
 }
 function hideOverlays() {
-  for (const id of ['#setup', '#over', '#loot', '#ad']) $(id).hidden = true;
+  for (const id of ['#setup', '#over', '#loot', '#ad', '#upg']) $(id).hidden = true;
   clearInterval(adTimer); lootBusy = false; S.lootAfter = null; adAfter = null;
 }
 const isMine = () => !ONLINE || (!!curP() && curP().uid === ONLINE.uid);
-const canAct = () => S.phase === 'aim' && isMine() && $('#ad').hidden && $('#loot').hidden && $('#over').hidden && $('#setup').hidden;
+const canAct = () => S.phase === 'aim' && isMine() && $('#ad').hidden && $('#loot').hidden && $('#upg').hidden && $('#over').hidden && $('#setup').hidden;
 function toggleAbility() {
   if (!canAct()) return;
   const p = curP(); if (!p) return;
@@ -803,6 +845,11 @@ function shoot() {
   const dx = Math.cos(S.aim), dy = Math.sin(S.aim);
   const b0 = { x: LX + dx * 40, y: LY + dy * 40, vx: dx * SPEED, vy: dy * SPEED, fire: 0, magnet: 0, split: false, trail: [], tt: 0, anchor: null, col: PCOL[S.cur], skin: p.skin, gold: false };
   S.balls = [b0];
+  if (perk('feuer', p)) b0.fire = 0.5 * perk('feuer', p);
+  if (perk('magnet', p)) b0.magnet = 0.8 * perk('magnet', p);
+  if (Math.random() < 0.3 * perk('zwilling', p)) b0.split = true;
+  if (perk('feder', p)) S.shot.floor = 1;
+  if (Math.random() < 0.15 * perk('glueck', p)) { p.gold = true; }
   if (p.armed) { p.armed = false; p.charges--; activate(p, b0); }
   if (p.gold) { p.gold = false; b0.gold = true; S.shot.gold = true; toast('Goldkugel!', '#b07800', 'Doppelte Punkte'); }
   S.phase = 'shot';
@@ -814,7 +861,7 @@ function hitPeg(p) {
   if (p.hit) return;
   p.hit = true; p.flash = 1; p.order = ++S.order;
   const sh = S.shot, pl = curP(); sh.hits++;
-  const pts = TYPES[p.type].base * mult() * (sh.gold ? 2 : 1);
+  const pts = Math.round(TYPES[p.type].base * mult() * (sh.gold ? 2 : 1) * (p.type === 'target' ? 1 + 0.5 * perk('ziel', pl) : 1));
   sh.score += pts; pl.score += pts;
   S.popups.push({ x: p.x, y: p.y - 16, text: fmt(pts), col: TYPES[p.type].lit, t: 1 });
   tone(noteFreq(Math.min(sh.hits - 1, 19)), 0.24, 'triangle', 0.11);
@@ -825,8 +872,8 @@ function hitPeg(p) {
     if (orangeLeft() === 0 && !S.finale) { S.finale = true; toast('Letzte Ziellaterne!', '#c00000', 'Finale: Triff eine Bonuszone'); [0, 4, 7, 12].forEach((k, i) => tone(noteFreq(10 + k), 0.6, 'triangle', 0.08, i * 0.08)); }
   }
   if (p.type === 'power') {
-    if (pl.charges < MAX_CHARGES) { pl.charges++; toast('+1 Ladung', '#1d6e2a', `${CHARS[pl.power].power} aufgeladen (${pl.charges}/${MAX_CHARGES})`); }
-    else toast('Ladungen voll', '#1d6e2a', `${MAX_CHARGES}/${MAX_CHARGES}`);
+    if (pl.charges < maxCh(pl)) { pl.charges++; toast('+1 Ladung', '#1d6e2a', `${CHARS[pl.power].power} aufgeladen (${pl.charges}/${maxCh(pl)})`); }
+    else toast('Ladungen voll', '#1d6e2a', `${maxCh(pl)}/${maxCh(pl)}`);
     [0, 7].forEach((k, i) => tone(noteFreq(7 + k), 0.25, 'sine', 0.06, i * 0.06));
   }
   updatePanel();
@@ -853,6 +900,7 @@ function endShot() {
   updatePanel();
 }
 function finishTurn() {
+  if (S.rogue && !ONLINE) { rogueFinishTurn(); return; }
   if (S.finale || S.players.every(p => p.balls <= 0)) { S.phase = 'over'; pushState(); endGame(); return; }
   const n = S.players.length, prev = S.cur;
   for (let k = 1; k <= n; k++) { const j = (prev + k) % n; if (S.players[j].balls > 0) { S.cur = j; break; } }
@@ -893,7 +941,11 @@ function endGame() {
   updatePanel();
   const ranked = S.players.map((p, i) => ({ ...p, i })).sort((a, b) => b.score - a.score);
   let title, sub;
-  if (S.players.length === 1) {
+  if (S.rogue) {
+    const n = Object.values(S.players[0].perks || {}).reduce((a, b) => a + b, 0);
+    title = 'Run vorbei';
+    sub = `Du bist bis Feld ${S.rogue.stage} gekommen und hattest ${n} ${n === 1 ? 'Upgrade' : 'Upgrades'}. Es ${orangeLeft() === 1 ? 'brannte noch eine Ziellaterne' : `brannten noch ${orangeLeft()} Ziellaternen`}.`;
+  } else if (S.players.length === 1) {
     const left = orangeLeft();
     title = S.finale ? 'Alle Ziellaternen gelöscht!' : 'Keine Kugeln mehr';
     sub = S.finale ? `Du hast ${LEVELS[S.levelKey].name} geschafft.` : `Es ${left === 1 ? 'brennt noch eine Ziellaterne' : `brennen noch ${left} Ziellaternen`}. Versuch es nochmal.`;
@@ -909,7 +961,7 @@ function endGame() {
   if (ONLINE) { again.disabled = !ONLINE.host; again.textContent = ONLINE.host ? 'Neues Spiel im Raum' : 'Host startet neu'; $('#setupBtn').textContent = 'Raum verlassen'; }
   else { again.disabled = false; again.textContent = 'Nochmal'; $('#setupBtn').textContent = 'Hauptmenü…'; }
   const entries = S.players.filter(p => p.score > 0 && (!ONLINE || p.uid === ONLINE.uid)).map(p => ({
-    name: p.name.slice(0, 16), score: Math.round(p.score), char: p.power, map: S.levelKey, players: S.players.length, mode: ONLINE ? 'online' : 'lokal',
+    name: p.name.slice(0, 16), score: Math.round(p.score), char: p.power, map: S.levelKey, players: S.players.length, mode: ONLINE ? 'online' : S.rogue ? 'rogue' : 'lokal', ...(S.rogue ? { stage: S.rogue.stage } : {}),
   }));
   if (entries.length) Board.submitAll(entries).then(where => { $('#overSub').textContent = `${sub} Eingetragen in die Bestenliste${where === 'local' ? ' auf diesem Gerät' : ''}.`; }).catch(() => {});
   setTimeout(() => { if (S.phase === 'over') { $('#over').hidden = false; (again.disabled ? $('#setupBtn') : again).focus(); } }, 900);
@@ -921,6 +973,80 @@ function announceTurn() {
     if (ONLINE) { S.adGap++; if (settings.ads && S.adGap >= 2 && Math.random() < 0.35) { S.adGap = 0; showAd(null); } }
   } else toast(`${curP().name} ist dran`, PCOL[S.cur], `Runde ${S.round}`);
 }
+
+/* ---------- Roguelike-Modus ---------- */
+const rogueOrange = stage => 8 + stage * 3;
+function rogueFinishTurn() {
+  const p = S.players[0];
+  if (S.finale) {
+    p.balls += 3;
+    toast(`Feld ${S.rogue.stage} geschafft!`, '#1d6e2a', '+3 Kugeln');
+    S.phase = 'upgrade';
+    showUpgrade(`Feld ${S.rogue.stage} geschafft!`, () => nextStage());
+    updatePanel(); return;
+  }
+  if (p.balls <= 0) { S.phase = 'over'; endGame(); return; }
+  S.turnInRound++;
+  pickBonus();
+  if (S.turnInRound >= 3) {
+    S.turnInRound = 0; S.round++;
+    S.phase = 'upgrade';
+    showUpgrade(`Runde ${S.round - 1} ist vorbei`, () => maybeAd(rogueResume));
+  } else rogueResume();
+  updatePanel();
+}
+function rogueResume() { S.phase = 'aim'; S.balls = []; updatePanel(); }
+function nextStage() {
+  const p = S.players[0];
+  S.rogue.stage++;
+  const keys = Object.keys(LEVELS).filter(k => k !== S.levelKey);
+  S.levelKey = keys[Math.floor(Math.random() * keys.length)];
+  buildLevel(S.levelKey, rogueOrange(S.rogue.stage), 3 + 2 * perk('gruen', p));
+  S.finale = false; S.lastMult = 1; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.order = 0; S.turnInRound = 0; S.round++;
+  pickBonus();
+  S.phase = 'aim';
+  toast(`Feld ${S.rogue.stage}`, PCOL[0], `${LEVELS[S.levelKey].name} · ${S.orangeTotal} Ziellaternen`);
+  [0, 4, 7, 12].forEach((k, i) => tone(noteFreq(8 + k), 0.4, 'triangle', 0.07, i * 0.08));
+  updatePanel();
+}
+function rollUpgrades(p) {
+  const open = UPGRADES.filter(u => perk(u.id, p) < u.max);
+  return shuffle(open).slice(0, 3);
+}
+function showUpgrade(head, after) {
+  const p = S.players[0], opts = rollUpgrades(p);
+  $('#upgHead').textContent = head;
+  $('#upgSub').textContent = `Wähle ein Upgrade. Du hast ${p.balls} ${p.balls === 1 ? 'Kugel' : 'Kugeln'}.`;
+  $('#upgGrid').innerHTML = opts.map(u => {
+    const lv = perk(u.id, p);
+    return `<button class="btn upg" type="button" data-id="${u.id}"><span class="us">${u.sym}</span><span class="un">${u.name}</span><span class="ud">${u.desc}</span><span class="ul">${u.max > 1 && u.max < 99 ? `Stufe ${lv + 1} von ${u.max}` : u.max === 1 ? 'Einmalig' : lv ? `Schon ${lv}× genommen` : '&nbsp;'}</span></button>`;
+  }).join('');
+  const btns = [...$('#upgGrid').querySelectorAll('.upg')];
+  btns.forEach(b => b.addEventListener('click', () => {
+    if ($('#upg').hidden) return;
+    applyUpgrade(p, b.dataset.id);
+    $('#upg').hidden = true;
+    after();
+  }));
+  $('#upg').hidden = false;
+  [0, 4, 7].forEach((k, i) => tone(noteFreq(10 + k), 0.25, 'sine', 0.06, i * 0.07));
+  if (btns[0]) btns[0].focus();
+}
+function applyUpgrade(p, id) {
+  const u = UPGRADES.find(x => x.id === id); if (!u) return;
+  p.perks[id] = (p.perks[id] || 0) + 1; S.rogue.picks++;
+  if (id === 'speicher') p.charges = Math.min(maxCh(p), p.charges + 1);
+  if (id === 'kugeln') p.balls += 3;
+  if (id === 'gruen') { const c = shuffle(S.pegs.filter(q => q.type === 'plain' && !q.hit && !q.gone)); c.slice(0, 2).forEach(q => { q.type = 'power'; q.flash = 1; }); }
+  toast(u.name, '#000080', u.max > 1 && u.max < 99 ? `Stufe ${p.perks[id]}` : '');
+  updatePanel();
+}
+$('#upgGrid').addEventListener('keydown', e => {
+  const btns = [...$('#upgGrid').querySelectorAll('.upg')], i = btns.indexOf(document.activeElement);
+  if (i < 0) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { btns[(i + 1) % btns.length].focus(); e.preventDefault(); e.stopPropagation(); }
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { btns[(i + btns.length - 1) % btns.length].focus(); e.preventDefault(); e.stopPropagation(); }
+});
 
 /* ---------- Werbepausen ---------- */
 let adTimer = null, adAfter = null;
@@ -995,7 +1121,7 @@ function applyLoot(p, l) {
   let desc = l.desc;
   if (l.id === 'pts') p.score += 250;
   else if (l.id === 'skin') p.skin = 'rainbow';
-  else if (l.id === 'charge') { if (p.charges < MAX_CHARGES) p.charges++; else desc = `Schon ${MAX_CHARGES} Ladungen. Mehr passt nicht rein.`; }
+  else if (l.id === 'charge') { if (p.charges < maxCh(p)) p.charges++; else desc = `Schon ${maxCh(p)} Ladungen. Mehr passt nicht rein.`; }
   else if (l.id === 'ball') p.balls++;
   else if (l.id === 'gold') p.gold = true;
   else if (l.id === 'theme') { const had = p.theme === l.theme; p.theme = l.theme; desc = had ? 'Hattest du schon. Bleibt aktiv.' : `Dein Spielfeld sieht in deinen Zügen jetzt aus wie ${THEMES[l.theme].name}.`; }
@@ -1095,7 +1221,7 @@ function stepBalls(h) {
   S.balls = S.balls.filter(b => !b.dead);
 }
 function aimPath() {
-  const p = curP(), long = !!p && (p.sight > 0 || (p.armed && p.power === 'uhu'));
+  const p = curP(), long = !!p && (p.sight > 0 || (p.armed && p.power === 'uhu') || perk('fernrohr', p) > 0);
   const dx = Math.cos(S.aim), dy = Math.sin(S.aim);
   const pts = [], hh = 1 / 120, steps = long ? 300 : 110, b = { x: LX + dx * 40, y: LY + dy * 40, vx: dx * SPEED, vy: dy * SPEED };
   let bounces = 0;
@@ -1119,7 +1245,8 @@ function aimPath() {
 /* ---------- Schleife ---------- */
 function update(dt) {
   S.t += dt;
-  S.bucketX = 400 + 290 * Math.sin(S.t * 0.85);
+  S.boatPh = (S.boatPh || 0) + dt * 0.85 * (1 - 0.3 * perk('ruhig'));
+  S.bucketX = 400 + 290 * Math.sin(S.boatPh);
   let target = 1;
   if (S.phase === 'shot' && !S.finale && orangeLeft() === 1) {
     const o = S.pegs.find(p => p.type === 'target' && !p.hit);
@@ -1215,7 +1342,7 @@ function draw() {
   if (S.phase !== 'setup' && curP()) {
     const p = curP(), c = CHARS[p.power];
     const line1 = `${p.name} · ${c.name} · ${p.balls} ${p.balls === 1 ? 'Kugel' : 'Kugeln'}`;
-    const line2 = !isMine() ? (S.phase === 'shot' && S.shot ? `Schuss: ${fmt(S.shot.score)} · du schaust zu` : 'Du schaust zu') : p.armed ?`${c.power} ist scharf` : S.phase === 'shot' && S.shot ? `Schuss: ${fmt(S.shot.score)}` : `Ladungen: ${p.charges}/${MAX_CHARGES}`;
+    const line2 = !isMine() ? (S.phase === 'shot' && S.shot ? `Schuss: ${fmt(S.shot.score)} · du schaust zu` : 'Du schaust zu') : p.armed ?`${c.power} ist scharf` : S.phase === 'shot' && S.shot ? `Schuss: ${fmt(S.shot.score)}` : `Ladungen: ${p.charges}/${maxCh(p)}`;
     ctx.font = `700 14px ${UI_FONT}`;
     const w = Math.max(ctx.measureText(line1).width, ctx.measureText(line2).width) + 70;
     bevelBox(12, 12, w, 50);
@@ -1295,17 +1422,17 @@ window.addEventListener('keydown', e => {
 });
 
 /* ---------- Seitenleiste ---------- */
-const pips = n => '■'.repeat(n) + '□'.repeat(MAX_CHARGES - n);
+const pips = (n, p) => '■'.repeat(n) + '□'.repeat(Math.max(0, maxCh(p) - n));
 function updatePanel() {
   const el = $('#players');
   if (!S.players.length) el.innerHTML = '<p class="empty">Noch kein Spiel gestartet.</p>';
   else el.innerHTML = S.players.map((p, i) => {
     const c = CHARS[p.power];
-    const fx = [p.armed && 'scharf', p.sight > 0 && 'Fernrohr', p.bigBoat > 0 && 'Riesenboot', p.gold && 'Goldkugel', p.skin && 'Regenbogen', p.theme !== 'nacht' && THEMES[p.theme].name].filter(Boolean);
+    const fx = [p.armed && 'scharf', p.sight > 0 && 'Fernrohr', p.bigBoat > 0 && 'Riesenboot', p.gold && 'Goldkugel', p.skin && 'Regenbogen', p.theme !== 'nacht' && THEMES[p.theme].name, S.rogue && `${Object.values(p.perks || {}).reduce((a, b) => a + b, 0)} Upgrades`].filter(Boolean);
     return `<div class="pl ${i === S.cur && S.phase !== 'over' ? 'on' : ''}" style="--pc:${PCOL[i]}">
       <div class="pl-top"><span class="dot"></span><img class="pic" src="${ICON_URL[p.power]}" alt=""><span class="nm">${esc(p.name)}</span><span class="sc">${fmt(p.score)}</span></div>
       <div class="pl-sub"><span>Kugeln <b>${p.balls}</b></span><span class="cn" style="color:${c.ui}">${c.name}</span></div>
-      <div class="pl-sub"><span title="Ladungen">Ladungen <span class="pips">${pips(p.charges)}</span></span><span>${fx.join(' · ')}</span></div></div>`;
+      <div class="pl-sub"><span title="Ladungen">Ladungen <span class="pips">${pips(p.charges, p)}</span></span><span>${fx.join(' · ')}</span></div></div>`;
   }).join('');
   const left = orangeLeft();
   $('#orangeTxt').textContent = `${left} / ${S.orangeTotal}`;
@@ -1321,7 +1448,7 @@ function updatePanel() {
     ab.classList.toggle('pressed', !!cp.armed);
   } else { $('#abilName').textContent = 'Fähigkeit'; $('#abilSub').textContent = 'Startet mit dem Spiel'; ab.disabled = true; ab.classList.remove('pressed'); }
   const th = THEMES[curTheme()].name;
-  $('#stageTitle').textContent = S.phase === 'setup' ? 'Spielfeld' : `${ONLINE ? `Online: ${ONLINE.name} – ` : 'Spielfeld – '}${LEVELS[S.levelKey].name} – Runde ${S.round} – ${th}`;
+  $('#stageTitle').textContent = S.phase === 'setup' ? 'Spielfeld' : `${ONLINE ? `Online: ${ONLINE.name} – ` : S.rogue ? `Roguelike: Feld ${S.rogue.stage} – ` : 'Spielfeld – '}${LEVELS[S.levelKey].name} – Runde ${S.round} – ${th}`;
   $('#hostBtns').hidden = !(ONLINE && ONLINE.host && !isMine() && S.phase === 'aim');
   if (!$('#hostBtns').hidden && curP()) $('#kickBtn').textContent = `${curP().name} entfernen`;
   $('#taskTxt').textContent = cp && S.phase !== 'setup' ? `Plinko Nacht – ${cp.name}` : 'Plinko Nacht';
@@ -1582,7 +1709,8 @@ function previewChar(k) {
 }
 function renderCast() {
   const p = settings.players[castIdx];
-  $('#castChip').innerHTML = castOnly ? 'Alle Charaktere und ihre Fähigkeiten' : `<i style="--pc:${PCOL[castIdx]}"></i>Spieler ${castIdx + 1} von ${settings.count} wählt`;
+  const rogue = !castOnly && settings.mode === 'rogue';
+  $('#castChip').innerHTML = castOnly ? 'Alle Charaktere und ihre Fähigkeiten' : rogue ? 'Roguelike: Wähle deinen Charakter für den Run' : `<i style="--pc:${PCOL[castIdx]}"></i>Spieler ${castIdx + 1} von ${settings.count} wählt`;
   $('#castGrid').innerHTML = Object.entries(CHARS).map(([k, v]) => `<button class="dvd-tile ${!castOnly && k === p.power ? 'sel' : ''}" type="button" data-k="${k}"><img src="${ICON_URL[k]}" alt=""><span>${v.name}</span></button>`).join('');
   $('#castGrid').querySelectorAll('.dvd-tile').forEach(b => {
     b.addEventListener('focus', () => previewChar(b.dataset.k));
@@ -1592,8 +1720,8 @@ function renderCast() {
   $('#castName').value = p.name;
   $('#castNameWrap').hidden = castOnly;
   $('#castNext').hidden = castOnly;
-  $('#castBack').textContent = castOnly ? '◀ Hauptmenü' : '◀ Zurück';
-  $('#castNext').textContent = castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : 'Szenenauswahl ▶';
+  $('#castBack').textContent = castOnly || rogue ? '◀ Hauptmenü' : '◀ Zurück';
+  $('#castNext').textContent = rogue ? 'Run starten ▶' : castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : 'Szenenauswahl ▶';
   previewChar(castOnly ? 'fuchs' : p.power);
 }
 function pickChar(k) {
@@ -1603,11 +1731,12 @@ function pickChar(k) {
   previewChar(k); confirmTone();
 }
 function castNext() {
+  if (settings.mode === 'rogue') { startGame(); return; }
   if (castIdx < settings.count - 1) { castIdx++; renderCast(); showPage('pgCast', '.sel'); }
   else { renderMaps(); showPage('pgMap', '.sel'); }
 }
 function castBack() {
-  if (castOnly) { showPage('pgMain'); return; }
+  if (castOnly || settings.mode === 'rogue') { showPage('pgMain'); return; }
   if (castIdx > 0) { castIdx--; renderCast(); showPage('pgCast', '.sel'); }
   else { renderCount(); showPage('pgCount', '.sel'); }
 }
@@ -1652,12 +1781,14 @@ function openSetup() {
 }
 document.querySelectorAll('#setup [data-go]').forEach(b => b.addEventListener('click', () => {
   castOnly = false;
+  if (b.dataset.go === 'pgCount') settings.mode = 'normal';
   if (b.dataset.go === 'pgCount') { renderCount(); showPage('pgCount', '.sel'); } else showPage(b.dataset.go);
 }));
 document.querySelectorAll('#countGrid .dvd-tile').forEach(b => {
   b.addEventListener('focus', () => countNote(+b.dataset.n));
   b.addEventListener('click', () => { settings.count = +b.dataset.n; castOnly = false; castIdx = 0; confirmTone(); renderCast(); showPage('pgCast', '.sel'); });
 });
+$('#rogueMenuBtn').addEventListener('click', () => { settings.mode = 'rogue'; castOnly = false; castIdx = 0; renderCast(); showPage('pgCast', '.sel'); });
 $('#castMenuBtn').addEventListener('click', () => { castOnly = true; castIdx = 0; renderCast(); showPage('pgCast', '.dvd-tile'); });
 $('#castName').addEventListener('input', e => { settings.players[castIdx].name = e.target.value; });
 $('#castNext').addEventListener('click', castNext);
@@ -1766,7 +1897,7 @@ async function openBoard() {
   $('#boardInfo').textContent = 'Lädt …'; $('#boardList').innerHTML = '';
   const { where, list } = await Board.top(20);
   $('#boardInfo').textContent = where === 'global' ? 'Weltweite Top 20' : where === 'test' ? 'Testmodus: nur in diesem Browser' : 'Nur auf diesem Gerät gespeichert';
-  $('#boardList').innerHTML = list.length ? list.map((e, i) => `<li><span class="rk">${i + 1}</span><img src="${ICON_URL[e.char] || ICON_URL.fuchs}" alt=""><span class="bn">${esc(e.name || '?')}<span class="bm">${CHARS[e.char] ? CHARS[e.char].name : '?'} · ${LEVELS[e.map] ? LEVELS[e.map].name : '?'} · ${e.mode === 'online' ? 'Online' : 'Lokal'}${typeof e.ts === 'number' ? ' · ' + new Date(e.ts).toLocaleDateString('de-DE') : ''}</span></span><span class="bs">${fmt(e.score || 0)}</span></li>`).join('')
+  $('#boardList').innerHTML = list.length ? list.map((e, i) => `<li><span class="rk">${i + 1}</span><img src="${ICON_URL[e.char] || ICON_URL.fuchs}" alt=""><span class="bn">${esc(e.name || '?')}<span class="bm">${CHARS[e.char] ? CHARS[e.char].name : '?'} · ${LEVELS[e.map] ? LEVELS[e.map].name : '?'} · ${e.mode === 'online' ? 'Online' : e.mode === 'rogue' ? `Roguelike · Feld ${e.stage || 1}` : 'Lokal'}${typeof e.ts === 'number' ? ' · ' + new Date(e.ts).toLocaleDateString('de-DE') : ''}</span></span><span class="bs">${fmt(e.score || 0)}</span></li>`).join('')
     : '<li class="none">Noch keine Einträge. Spiel eine Runde!</li>';
 }
 
@@ -1958,6 +2089,7 @@ function hostStart() {
   S.levelKey = lvl === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : lvl;
   buildLevel(S.levelKey);
   S.players = list.map(p => ({ uid: p.uid, name: p.name || 'Gast', power: CHARS[p.power] ? p.power : 'fuchs', score: 0, balls: BALLS_BY_COUNT[list.length], charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, theme: 'nacht' }));
+  S.rogue = null;
   resetRun(); pickBonus();
   S.phase = 'aim';
   ONLINE.lootApplied = ONLINE.lootShown = ONLINE.lootDlRound = -1;
