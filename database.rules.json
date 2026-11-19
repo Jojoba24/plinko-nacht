@@ -1,0 +1,21 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$room": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".validate": "$room.length <= 80"
+      }
+    },
+    "leaderboard": {
+      ".read": "auth != null",
+      ".indexOn": ["score"],
+      "$entry": {
+        ".write": "auth != null && !data.exists()",
+        ".validate": "newData.hasChildren(['name', 'score', 'char', 'map', 'ts', 'uid']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 16 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 5000000 && newData.child('char').isString() && newData.child('map').isString() && newData.child('ts').val() <= now"
+      }
+    }
+  }
+}
