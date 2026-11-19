@@ -11,10 +11,19 @@
     },
     "leaderboard": {
       ".read": "auth != null",
-      ".indexOn": ["score"],
+      ".indexOn": [
+        "score"
+      ],
       "$entry": {
         ".write": "auth != null && !data.exists()",
         ".validate": "newData.hasChildren(['name', 'score', 'char', 'map', 'ts', 'uid']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 16 && newData.child('score').isNumber() && newData.child('score').val() >= 0 && newData.child('score').val() <= 5000000 && newData.child('char').isString() && newData.child('map').isString() && newData.child('ts').val() <= now"
+      }
+    },
+    "lobbies": {
+      ".read": "auth != null",
+      "$entry": {
+        ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)",
+        ".validate": "newData.hasChildren(['name', 'count', 'status', 'ts', 'uid']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 24 && newData.child('count').isNumber() && newData.child('count').val() >= 0 && newData.child('count').val() <= 4 && (newData.child('status').val() === 'lobby' || newData.child('status').val() === 'playing') && newData.child('ts').val() <= now && $entry.length <= 40"
       }
     }
   }
