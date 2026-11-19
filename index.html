@@ -1558,7 +1558,9 @@ async function openOnline() {
   const net = await getNet();
   $('#roomCreate').disabled = $('#roomJoin').disabled = !net;
   $('#netStatus').textContent = net ? (net.kind === 'local' ? 'Testmodus: Räume gehen nur zwischen Tabs in diesem Browser' : 'Verbunden')
-    : netError ? `Keine Verbindung zu Firebase (${netError}). Hinweise stehen in der README.` : 'Online ist in dieser Version nicht eingerichtet. Die GitHub-Version mit Firebase kann es.';
+    : netError === 'auth/admin-restricted-operation' || netError === 'auth/operation-not-allowed' ? 'Firebase: Die anonyme Anmeldung ist nicht aktiviert (Authentication → Anbieter → Anonym).'
+    : netError === 'auth/unauthorized-domain' ? `Firebase: Die Domain ${location.hostname} fehlt unter Authentication → Einstellungen → Autorisierte Domains.`
+    : netError ? `Keine Verbindung zu Firebase (${netError}). Hinweise stehen in der README.` : (window.firebase ? 'Online ist noch nicht eingerichtet: firebase-config.js enthält keine Firebase-Konfiguration.' : 'Online ist in dieser Version nicht verfügbar.');
 }
 async function sha256hex(s) {
   try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
