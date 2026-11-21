@@ -358,6 +358,56 @@ body{--cam:0}
   .abil b{font-size:16px}
   .item{width:80px}
 }
+/* ---------- Glanz-Look im Stil der Casual-Spiele um 2000: Lichtreflexe, Goldrahmen mit Nieten, Glasröhren ---------- */
+:root{
+  --gloss:linear-gradient(180deg,rgba(255,255,255,.42) 0%,rgba(255,255,255,.12) 48%,rgba(255,255,255,0) 50%,rgba(0,0,0,.18) 100%);
+  --metal:linear-gradient(135deg,#fff8d0 0%,#e2a63a 20%,#fff2a8 42%,#b3741a 64%,#ffe08a 82%,#c98a26 100%);
+  --rivet:radial-gradient(circle at 35% 30%,#fff9d8 0 18%,#d49a2a 45%,#6a4208 100%);
+}
+.btn,.hud-btn,.abil,.pl,.mult,.dvd-tile,.results li,.board li,.room-card{background-image:var(--gloss),var(--bgc,var(--panel))}
+.btn{--bgc:linear-gradient(180deg,#6a46c0,#3a1d80)}
+.btn.def{background-image:var(--gloss),linear-gradient(180deg,#ffe066,#ff9f1a)}
+.pl.on,.results li:first-child,.dvd-tile.sel,.board li:nth-child(1){--bgc:var(--panel-on)}
+.abil.pressed{--bgc:var(--panel-on)}
+.hud-btn{border-radius:50%}
+/* Metallrahmen: Verlauf im Rand, dunkle Kontur außen */
+.metal{border:9px solid transparent;background:var(--inner,linear-gradient(180deg,#361c70,#1c0e44)) padding-box,var(--metal) border-box;
+  box-shadow:0 0 0 3px var(--ink2),inset 0 0 0 2px rgba(26,11,54,.6),0 18px 40px rgba(0,0,0,.55)}
+.dlg,.dvd-page:not(#pgMain){border:9px solid transparent;background:linear-gradient(180deg,rgba(54,28,112,.97),rgba(28,14,68,.97)) padding-box,var(--metal) border-box;
+  box-shadow:0 0 0 3px var(--ink2),inset 0 0 0 2px rgba(26,11,54,.6),0 22px 40px rgba(0,0,0,.55)}
+.rivets::before,.rivets::after{content:"";position:absolute;inset:-6px;pointer-events:none;border-radius:inherit;
+  background:var(--rivet) 0 0/12px 12px no-repeat,var(--rivet) 100% 0/12px 12px no-repeat,var(--rivet) 0 100%/12px 12px no-repeat,var(--rivet) 100% 100%/12px 12px no-repeat}
+.rivets::after{display:none}
+/* Spielautomat: Kugelröhre links, Spielfeld im Goldrahmen, Laternenröhre rechts */
+.cab{display:flex;align-items:stretch;justify-content:center;gap:12px;height:100%}
+.board-frame{position:relative;border-radius:26px;padding:0;align-self:center;line-height:0}
+.board-frame canvas{border-radius:16px;box-shadow:inset 0 0 0 2px #000}
+canvas{box-shadow:none}
+.tube{position:relative;width:var(--tw);display:flex;flex-direction:column;align-items:center;gap:8px;align-self:center;height:var(--th,78%)}
+.tube-glass{position:relative;flex:1;width:100%;border-radius:calc(var(--tw) / 2);overflow:hidden;
+  background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.22) 25%,rgba(255,255,255,.04) 45%,rgba(0,0,0,.25)),rgba(14,6,40,.75);
+  border:4px solid transparent;background-clip:padding-box;box-shadow:0 0 0 3px var(--ink2),0 0 0 7px #d49a2a,0 0 0 10px var(--ink2)}
+.tube-glass::after{content:"";position:absolute;top:6px;bottom:6px;left:18%;width:16%;border-radius:8px;background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,.1));pointer-events:none}
+.ball-stack{position:absolute;inset:auto 0 4px 0;display:flex;flex-direction:column-reverse;align-items:center;gap:2px}
+.ball-stack i{width:calc(var(--tw) * .55);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 14%,var(--pc) 45%,#2a0a20 120%);box-shadow:0 2px 0 rgba(0,0,0,.4);animation:dropin .35s ease-out both}
+@keyframes dropin{from{transform:translateY(-30px);opacity:0}}
+.tube-fill{position:absolute;left:0;right:0;bottom:0;height:0;background:linear-gradient(90deg,#ff9a3d,#ffd08a 35%,#ff7a1f 60%,#c2410c);transition:height .5s cubic-bezier(.3,1.4,.5,1)}
+.tube-fill::before{content:"";position:absolute;left:0;right:0;top:-5px;height:10px;border-radius:50%;background:#ffe0a8;opacity:.8}
+.notch{position:absolute;left:0;right:0;bottom:var(--at);border-top:3px solid rgba(255,255,255,.6);font:400 13px/1 var(--toon);color:#fff;text-align:center;padding-top:3px;text-shadow:0 2px 0 var(--ink2);z-index:1}
+.notch.on{color:var(--gold);border-color:var(--gold)}
+.tube-lbl{font-family:var(--toon);font-size:22px;line-height:1;color:var(--gold);text-shadow:0 3px 0 var(--ink2),0 0 12px rgba(255,200,60,.6);white-space:nowrap}
+.tube-cap{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--lav);text-align:center;line-height:1.1}
+.plate{flex:0 1 auto;min-width:0;padding:8px 18px;border-radius:14px;border:3px solid var(--ink2);background-image:var(--gloss),var(--metal);color:var(--ink2);
+  font-family:var(--toon);font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 4px 0 var(--ink2);text-shadow:0 1px 0 rgba(255,255,255,.6)}
+.mult{display:none}
+.mini-meter{display:none;flex:none;align-items:center;gap:6px;height:42px;padding:0 12px;border-radius:14px;border:3px solid var(--ink2);background-image:var(--gloss),var(--panel);box-shadow:0 4px 0 var(--ink2);font-family:var(--toon);font-size:17px;color:var(--gold);text-shadow:0 2px 0 var(--ink2);white-space:nowrap}
+.mini-meter small{font:700 12px var(--ui);color:#ffb46a}
+@media (max-width:760px){
+  .tube{display:none}
+  .mini-meter{display:inline-flex!important}
+  .plate{font-size:14px;padding:6px 12px}
+  .board-frame{border-width:6px}
+}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -372,14 +422,26 @@ body{--cam:0}
   <header class="hud" aria-label="Spielstand">
     <button class="hud-btn" id="newBtn" type="button" aria-label="Hauptmenü" title="Hauptmenü">☰</button>
     <div class="players" id="players"></div>
-    <div class="goal">
-      <div class="goal-top"><span id="stageTitle">Spielfeld</span><b id="orangeTxt" title="Ziellaternen übrig">25</b></div>
-      <div class="bar" role="presentation"><i id="orangeBar" style="width:100%"></i></div>
-    </div>
-    <div class="mult" id="multRow" title="Multiplikator">×1</div>
+    <div class="plate" id="stageTitle">Spielfeld</div>
+    <div class="mini-meter" id="miniMeter" title="Multiplikator und Ziellaternen">×1 <small>25/25</small></div>
     <button class="hud-btn" id="muteBtn" type="button" aria-label="Ton an oder aus" title="Ton">♪</button>
   </header>
-  <main class="stage" id="stage"><canvas id="cv" aria-label="Spielfeld"></canvas></main>
+  <main class="stage" id="stage">
+    <div class="cab">
+      <div class="tube" aria-label="Kugeln übrig">
+        <span class="tube-cap">Kugeln</span>
+        <div class="tube-glass"><div class="ball-stack" id="ballStack"></div></div>
+        <span class="tube-lbl" id="ballLbl">0</span>
+      </div>
+      <div class="board-frame metal rivets"><canvas id="cv" aria-label="Spielfeld"></canvas></div>
+      <div class="tube" aria-label="Ziellaternen gelöscht">
+        <span class="tube-cap">Multi</span>
+        <div class="tube-glass"><i class="tube-fill" id="orangeBar"></i><div id="notches"></div></div>
+        <span class="tube-lbl"><b id="multRow">×1</b></span>
+        <span class="tube-cap" id="orangeTxt">25 / 25</span>
+      </div>
+    </div>
+  </main>
   <footer class="dock">
     <button class="abil" id="abilBtn" type="button" disabled><img id="abilIco" alt=""><span><b id="abilName">Fähigkeit</b><small id="abilSub">Taste F</small></span><i class="pips" id="abilPips"></i></button>
     <div class="host-btns" id="hostBtns" hidden>
@@ -702,6 +764,11 @@ function makeSprite(col, lit) {
   for (const k of [0.4, 0.75]) { g.beginPath(); g.ellipse(m, m, r * k, r * 0.98, 0, 0, Math.PI * 2); g.stroke(); }
   g.fillStyle = lit ? 'rgba(90,50,10,.55)' : 'rgba(10,8,25,.7)';
   g.fillRect(m - r * 0.42, m - r - 1, r * 0.84, 5); g.fillRect(m - r * 0.42, m + r - 4, r * 0.84, 5);
+  // Glanzlicht oben links und Reflex unten, wie bei glänzenden Spielsteinen um 2000
+  const hl = g.createLinearGradient(0, m - r, 0, m);
+  hl.addColorStop(0, 'rgba(255,255,255,.85)'); hl.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = hl; g.beginPath(); g.ellipse(m - r * 0.12, m - r * 0.42, r * 0.62, r * 0.38, -0.25, 0, Math.PI * 2); g.fill();
+  g.fillStyle = 'rgba(255,255,255,.35)'; g.beginPath(); g.ellipse(m + r * 0.2, m + r * 0.62, r * 0.42, r * 0.14, 0, 0, Math.PI * 2); g.fill();
   return c;
 }
 for (const k in TYPES) sprites[k] = [makeSprite(TYPES[k].c, false), makeSprite(TYPES[k].lit, true)];
@@ -1337,9 +1404,11 @@ function draw() {
     for (let i = 0; i < b.trail.length; i += 2) { const f = i / b.trail.length;
       ctx.fillStyle = b.skin === 'rainbow' && b.fire <= 0 ? `hsla(${(i * 14 + S.t * 240) % 360},95%,65%,${f * 0.7})` : rgba(col, f * 0.45);
       ctx.beginPath(); ctx.arc(b.trail[i], b.trail[i + 1], BR * (0.3 + f * 0.6), 0, Math.PI * 2); ctx.fill(); }
-    ctx.shadowColor = col; ctx.shadowBlur = b.fire > 0 || b.magnet > 0 ? 26 : 16; ctx.fillStyle = col;
+    const bg2 = ctx.createRadialGradient(b.x - 3, b.y - 3, 1, b.x, b.y, BR + 1);
+    bg2.addColorStop(0, '#ffffff'); bg2.addColorStop(0.35, mix(col, '#ffffff', 0.4)); bg2.addColorStop(0.8, col); bg2.addColorStop(1, mix(col, '#000000', 0.5));
+    ctx.shadowColor = col; ctx.shadowBlur = b.fire > 0 || b.magnet > 0 ? 26 : 16; ctx.fillStyle = bg2;
     ctx.beginPath(); ctx.arc(b.x, b.y, BR, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.beginPath(); ctx.arc(b.x - 2.5, b.y - 2.5, 2.6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.ellipse(b.x - 2.6, b.y - 3.2, 3, 2, -0.5, 0, Math.PI * 2); ctx.fill();
   }
 
   for (const q of S.parts) { ctx.fillStyle = rgba(q.col, Math.max(0, q.life / q.max)); ctx.fillRect(q.x - 1.5, q.y - 1.5, 3, 3); }
@@ -1366,9 +1435,12 @@ function draw() {
     const w = Math.max(280, ctx.measureText(q.text).width + 60), hh = q.sub ? 70 : 52;
     ctx.save(); ctx.translate(W / 2, y - 32 + hh / 2); ctx.rotate(-0.02 * (i % 2 ? -1 : 1)); ctx.scale(pop, pop);
     toonBox(-w / 2, -hh / 2, w, hh, '#2c1760', q.color);
-    ctx.textAlign = 'center'; ctx.fillStyle = '#ffd23f'; ctx.strokeStyle = '#1a0b36'; ctx.lineWidth = 6; ctx.lineJoin = 'round';
-    const ty = q.sub ? -4 : 10;
-    ctx.strokeText(q.text, 0, ty); ctx.fillText(q.text, 0, ty);
+    ctx.save(); ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(-w / 2 + 4, -hh / 2 + 4, w - 8, hh / 2 - 4, 12); else ctx.rect(-w / 2 + 4, -hh / 2 + 4, w - 8, hh / 2 - 4);
+    ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.fill(); ctx.restore();
+    ctx.textAlign = 'center'; ctx.strokeStyle = '#1a0b36'; ctx.lineWidth = 7; ctx.lineJoin = 'round';
+    const ty = q.sub ? -4 : 10, tg = ctx.createLinearGradient(0, ty - 24, 0, ty + 4);
+    tg.addColorStop(0, '#fffbe0'); tg.addColorStop(0.45, '#ffe066'); tg.addColorStop(0.55, '#ffb21f'); tg.addColorStop(1, '#ff7a1f');
+    ctx.strokeText(q.text, 0, ty); ctx.fillStyle = tg; ctx.fillText(q.text, 0, ty);
     if (q.sub) { ctx.fillStyle = '#e8dcff'; ctx.font = `600 15px ${UI_FONT}`; ctx.fillText(q.sub, 0, ty + 24); }
     ctx.restore();
   });
@@ -1391,7 +1463,9 @@ function frame(now) {
 /* ---------- Größe ---------- */
 function resize() {
   const st = $('#stage'), r = st.getBoundingClientRect();
-  const s = Math.max(0.2, Math.min((r.width - 30) / W, (r.height - 30) / H));
+  const narrow = window.innerWidth <= 760, tw = narrow ? 0 : 60;
+  document.documentElement.style.setProperty('--tw', tw + 'px');
+  const s = Math.max(0.2, Math.min((r.width - 2 * tw - (narrow ? 0 : 24) - (narrow ? 24 : 30)) / W, (r.height - 30) / H));
   const cw = Math.floor(W * s), ch = Math.floor(H * s), dpr = Math.min(2, window.devicePixelRatio || 1);
   cv.style.width = cw + 'px'; cv.style.height = ch + 'px';
   cv.width = Math.round(cw * dpr); cv.height = Math.round(ch * dpr);
@@ -1443,9 +1517,16 @@ function updatePanel() {
   }).join('');
   const left = orangeLeft();
   $('#orangeTxt').textContent = `${left} / ${S.orangeTotal}`;
-  $('#orangeBar').style.width = `${S.orangeTotal ? left / S.orangeTotal * 100 : 0}%`;
+  const done = S.orangeTotal ? 1 - left / S.orangeTotal : 0;
+  $('#orangeBar').style.height = `${done * 100}%`;
   const m = mult();
-  $('#multRow').textContent = `×${m}`; $('#multRow').classList.toggle('hot', m > 1 && S.phase !== 'setup');
+  $('#multRow').textContent = `×${m}`;
+  $('#miniMeter').innerHTML = `×${m} <small>${left}/${S.orangeTotal}</small>`;
+  $('#notches').innerHTML = [[2, 0.36], [3, 0.56], [5, 0.72], [10, 0.88]].map(([v, at]) => `<span class="notch ${m >= v ? 'on' : ''}" style="--at:${at * 100}%">×${v}</span>`).join('');
+  const bp = curP(), nb = bp && S.phase !== 'setup' ? bp.balls : 0, stack = $('#ballStack');
+  $('#ballLbl').textContent = nb;
+  const want = Math.min(nb, 12), col = PCOL[S.cur] || PCOL[0];
+  if (stack.children.length !== want || stack.dataset.col !== col) { stack.dataset.col = col; stack.innerHTML = Array.from({ length: want }, () => `<i style="--pc:${col}"></i>`).join(''); }
   const cp = curP(), ab = $('#abilBtn');
   if (cp && S.phase !== 'setup') {
     const c = CHARS[cp.power];
