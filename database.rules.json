@@ -25,6 +25,18 @@
         ".write": "auth != null && (!data.exists() || data.child('uid').val() === auth.uid)",
         ".validate": "newData.hasChildren(['name', 'count', 'status', 'ts', 'uid']) && newData.child('uid').val() === auth.uid && newData.child('name').isString() && newData.child('name').val().length <= 24 && newData.child('count').isNumber() && newData.child('count').val() >= 0 && newData.child('count').val() <= 4 && (newData.child('status').val() === 'lobby' || newData.child('status').val() === 'playing') && newData.child('ts').val() <= now && $entry.length <= 40"
       }
+    },
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid",
+        "progress": {
+          ".validate": "newData.hasChildren(['themes', 'active', 'boxes', 'shards', 'games']) && newData.child('active').isString() && newData.child('active').val().length <= 20 && newData.child('boxes').isNumber() && newData.child('boxes').val() >= 0 && newData.child('boxes').val() <= 999 && newData.child('shards').isNumber() && newData.child('games').isNumber()"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
     }
   }
 }

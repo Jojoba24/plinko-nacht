@@ -7,20 +7,22 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Lilita+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Fredoka:wght@500;600;700&family=Lilita+One&family=Orbitron:wght@700;900&family=Pacifico&family=Permanent+Marker&family=Russo+One&display=swap">
 <style>
 /* Spielbildschirm im selben Zeichentrick-Stil wie das DVD-Menü: Nachtszene im Hintergrund, schmale Leiste oben, Spielfeld mit Goldrahmen, Fähigkeit unten. */
 :root{
-  --ink2:#1a0b36;--cream:#fff4d6;--gold:#ffd23f;--rose:#e0365a;--lav:#d8c8ff;
-  --panel:linear-gradient(180deg,#4a2a8a,#2c1760);--panel-on:linear-gradient(180deg,#d8487a,#7a2470);
+  --ink2:#1a0b36;--cream:#fff4d6;--gold:#ffd23f;--rose:#e0365a;--lav:var(--lav);
+  --panel:var(--panel);--panel-on:var(--panel-on);
   --frame:0 0 0 4px var(--ink2),0 0 0 9px #e9a93a,0 0 0 13px var(--ink2);
   --ui:"Fredoka",Tahoma,Verdana,"Segoe UI",sans-serif;--toon:"Lilita One","Fredoka",Tahoma,sans-serif;
+  --inner:linear-gradient(180deg,rgba(54,28,112,.97),rgba(28,14,68,.97));--page-color:#120b3a;--page:none;--ptext:var(--cream);--item:var(--cream);
+  --field:var(--cream);--field-text:var(--ink2);--title1:linear-gradient(180deg,#fffbe0 0%,#ffe066 38%,#ffb21f 62%,#ff7a1f 100%);--title2:linear-gradient(180deg,#f4f0ff 0%,#b9c4ff 45%,#7c6cff 70%,#5a3ad8 100%);
   color-scheme:dark;
 }
 [hidden]{display:none!important}
 html,body{height:100%;margin:0}
 *{box-sizing:border-box}
-body{background:#120b3a;color:var(--cream);font-family:var(--ui);font-size:14px;overflow:hidden}
+body{background:var(--page-color);color:var(--cream);font-family:var(--ui);font-size:14px;overflow:hidden}
 button,select,input{font-family:var(--ui);font-size:14px;color:inherit}
 body:not([data-page=game]) .desk{visibility:hidden}
 .desk{position:relative;z-index:1;height:100%;height:100dvh;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:10px;
@@ -80,7 +82,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;border-radius:18px;box-s
 .overlay{position:fixed;inset:0;background:rgba(8,2,24,.62);backdrop-filter:blur(3px);display:flex;align-items:flex-start;justify-content:center;overflow:auto;z-index:20;
   padding-block:44px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .win{position:relative;display:flex;flex-direction:column;min-width:0}
-.dlg{margin:auto 0;width:100%;max-width:540px;flex:none;border-radius:26px;background:linear-gradient(180deg,rgba(54,28,112,.97),rgba(28,14,68,.97));box-shadow:var(--frame),0 22px 40px rgba(0,0,0,.5);
+.dlg{margin:auto 0;width:100%;max-width:540px;flex:none;border-radius:26px;background:var(--inner);box-shadow:var(--frame),0 22px 40px rgba(0,0,0,.5);
   animation:dlgin .45s cubic-bezier(.2,1.5,.45,1)}
 @keyframes dlgin{from{opacity:0;transform:scale(.85) translateY(14px)}}
 .dlg .tb{position:absolute;top:0;left:50%;transform:translate(-50%,-55%) rotate(-2deg);max-width:calc(100% - 20px);background:var(--rose);border:4px solid var(--ink2);border-radius:10px;
@@ -132,8 +134,8 @@ canvas{display:block;touch-action:none;cursor:crosshair;border-radius:18px;box-s
 @keyframes adpulse{50%{transform:scale(1.06) rotate(-1deg)}}
 /* ---------- DVD-Menü im Stil alter Animationsfilm-DVDs ----------
    Gezeichnete Nachtszene mit Parallax-Ebenen; jede Menüseite hat eine eigene Kameraposition (--cam). */
-.dvd{--ink2:#1a0b36;--cream:#fff4d6;--gold:#ffd23f;--rose:#e0365a;--cam:0;
-  position:fixed;inset:0;z-index:30;overflow:auto;color:var(--cream);font-family:"Fredoka",var(--ui);background:transparent;display:flex;flex-direction:column;align-items:center;
+.dvd{
+  position:fixed;inset:0;z-index:30;overflow:auto;color:var(--cream);font-family:var(--ui);background:transparent;display:flex;flex-direction:column;align-items:center;
   padding-block:44px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 body[data-page=pgCount]{--cam:-.55}
 body[data-page=pgCast]{--cam:.6}
@@ -195,26 +197,26 @@ body[data-page=game] .dvd-bg *{animation-play-state:paused!important}
 body{--cam:0}
 
 .dvd-page{position:relative;width:100%;max-width:1000px;margin:auto 0;display:flex;flex-direction:column;align-items:center;gap:22px;animation:pagein .6s cubic-bezier(.2,1.5,.45,1) both}
-.dvd-page:not(#pgMain){padding:46px 26px 24px;border-radius:30px;background:linear-gradient(180deg,rgba(44,22,96,.88),rgba(24,12,60,.9));
+.dvd-page:not(#pgMain){padding:46px 26px 24px;border-radius:30px;background:var(--inner);
   box-shadow:0 0 0 4px var(--ink2),0 0 0 9px #e9a93a,0 0 0 13px var(--ink2),0 22px 40px rgba(0,0,0,.5)}
 @keyframes pagein{from{opacity:0;transform:scale(.82) translateY(18px)}}
 #pgMain{gap:14px}
-.dvd-title{margin:0;display:flex;flex-direction:column;align-items:center;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;line-height:.9;text-align:center;margin-top:30px;transform:rotate(-3deg)}
+.dvd-title{margin:0;display:flex;flex-direction:column;align-items:center;font-family:var(--toon);font-weight:400;line-height:.9;text-align:center;margin-top:30px;transform:rotate(-3deg)}
 .dvd-title .w1{font-size:clamp(58px,14vw,140px)}
 .dvd-title .w2{font-size:clamp(46px,11vw,112px);margin-top:-.08em;transform:rotate(4deg) translateX(.4em)}
 .L{position:relative;display:inline-block;color:transparent;animation:letterin .8s cubic-bezier(.3,1.7,.5,1) both,wave 3.4s ease-in-out infinite;animation-delay:calc(var(--i) * 70ms),calc(1.2s + var(--i) * 120ms)}
 .L::before,.L::after{content:attr(data-l);position:absolute;left:0;top:0}
 .L::before{color:var(--ink2);-webkit-text-stroke:.2em var(--ink2);text-shadow:0 .07em 0 var(--ink2),0 .12em 0 #0c0420,0 .2em .2em rgba(0,0,0,.45)}
-.L::after{background:linear-gradient(180deg,#fffbe0 0%,#ffe066 38%,#ffb21f 62%,#ff7a1f 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
-.w2 .L::after{background:linear-gradient(180deg,#f4f0ff 0%,#b9c4ff 45%,#7c6cff 70%,#5a3ad8 100%);-webkit-background-clip:text;background-clip:text}
+.L::after{background:var(--title1);-webkit-background-clip:text;background-clip:text;color:transparent}
+.w2 .L::after{background:var(--title2);-webkit-background-clip:text;background-clip:text}
 .L.sp{width:.3em}
 @keyframes letterin{0%{opacity:0;transform:translateY(-120px) scale(.6)}60%{opacity:1;transform:translateY(8px) scale(1.08,.9)}100%{transform:none}}
 @keyframes wave{0%,100%{translate:0 0}50%{translate:0 -6px}}
-.dvd-sub{font-family:"Fredoka",var(--ui);font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--cream);text-align:center}
-#pgMain .dvd-sub{position:relative;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:clamp(15px,3.4vw,22px);letter-spacing:.08em;text-transform:uppercase;
-  background:var(--rose);color:var(--cream);padding:6px 30px 7px;margin-top:6px;border:4px solid var(--ink2);border-radius:6px;box-shadow:0 5px 0 var(--ink2);text-shadow:0 2px 0 var(--ink2);animation:pagein .7s cubic-bezier(.2,1.5,.45,1) .9s both}
+.dvd-sub{font-family:var(--ui);font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--cream);text-align:center}
+#pgMain .dvd-sub{position:relative;font-family:var(--toon);font-weight:400;font-size:clamp(15px,3.4vw,22px);letter-spacing:.08em;text-transform:uppercase;
+  background:var(--rose);color:var(--gold);padding:6px 30px 7px;margin-top:6px;border:4px solid var(--ink2);border-radius:6px;box-shadow:0 5px 0 var(--ink2);text-shadow:0 2px 0 var(--ink2);animation:pagein .7s cubic-bezier(.2,1.5,.45,1) .9s both}
 .dvd-menu{display:flex;flex-direction:column;gap:2px;align-items:center;margin-top:12px}
-.dvd-item{--o:var(--ink2);background:none;border:0;color:var(--cream);font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:clamp(21px,4.6vw,31px);letter-spacing:.03em;padding:8px 26px 8px 52px;cursor:pointer;position:relative;
+.dvd-item{--o:var(--ink2);background:none;border:0;color:var(--cream);font-family:var(--toon);font-weight:400;font-size:clamp(21px,4.6vw,31px);letter-spacing:.03em;padding:8px 26px 8px 52px;cursor:pointer;position:relative;
   text-shadow:-3px -3px 0 var(--o),3px -3px 0 var(--o),-3px 3px 0 var(--o),3px 3px 0 var(--o),0 -3px 0 var(--o),0 3px 0 var(--o),-3px 0 0 var(--o),3px 0 0 var(--o),0 7px 0 var(--o);
   transition:transform .2s cubic-bezier(.3,1.8,.5,1),color .15s}
 .dvd-menu .dvd-item{animation:pagein .6s cubic-bezier(.2,1.5,.45,1) both}
@@ -230,19 +232,19 @@ body{--cam:0}
 .dvd-tile:disabled{cursor:default}
 .dvd-tile:disabled:hover{transform:none}
 .dvd-h{position:absolute;top:0;left:50%;transform:translate(-50%,-58%) rotate(-2deg);white-space:nowrap;max-width:calc(100% + 20px);overflow:hidden;text-overflow:ellipsis;
-  font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:clamp(20px,5vw,36px);letter-spacing:.04em;margin:0;text-align:center;color:var(--gold);
+  font-family:var(--toon);font-weight:400;font-size:clamp(20px,5vw,36px);letter-spacing:.04em;margin:0;text-align:center;color:var(--gold);
   background:var(--rose);padding:6px 30px 8px;border:4px solid var(--ink2);border-radius:10px;box-shadow:0 6px 0 var(--ink2);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
 .dvd-chip{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--cream);text-align:center}
 .dvd-chip i{width:16px;height:16px;border-radius:50%;background:var(--pc);border:3px solid var(--ink2)}
-.dvd-tile{position:relative;overflow:hidden;background:linear-gradient(180deg,#5a35a0,#2f1868);border:4px solid var(--ink2);border-radius:20px;box-shadow:0 6px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18);
-  color:var(--cream);cursor:pointer;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:"Fredoka",var(--ui);transition:transform .2s cubic-bezier(.3,1.8,.5,1),background .2s;min-width:0}
+.dvd-tile{position:relative;overflow:hidden;background:var(--panel);border:4px solid var(--ink2);border-radius:20px;box-shadow:0 6px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18);
+  color:var(--cream);cursor:pointer;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--ui);transition:transform .2s cubic-bezier(.3,1.8,.5,1),background .2s;min-width:0}
 .dvd-tile img{filter:drop-shadow(0 3px 0 rgba(20,8,50,.6))}
 .dvd-tile:hover,.dvd-tile:focus-visible{outline:none;transform:translateY(-5px) scale(1.06) rotate(-1.5deg);box-shadow:0 0 0 4px var(--gold),0 11px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18);z-index:1}
-.dvd-tile.sel{background:linear-gradient(180deg,#d8487a,#7a2470)}
+.dvd-tile.sel{background:var(--panel-on)}
 .dvd-tile.sel::after{content:"★";position:absolute;top:5px;right:7px;font-size:20px;line-height:1;color:var(--gold);text-shadow:0 2px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
 .count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,150px));gap:18px}
 .count-grid .dvd-tile{padding:22px 10px}
-.count-grid b{font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:66px;line-height:1;color:var(--gold);text-shadow:0 4px 0 var(--ink2),-3px 0 0 var(--ink2),3px 0 0 var(--ink2),0 -3px 0 var(--ink2)}
+.count-grid b{font-family:var(--toon);font-weight:400;font-size:66px;line-height:1;color:var(--gold);text-shadow:0 4px 0 var(--ink2),-3px 0 0 var(--ink2),3px 0 0 var(--ink2),0 -3px 0 var(--ink2)}
 .count-grid span{font-size:15px;font-weight:600}
 .cast{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;width:100%;align-items:start}
 .cast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -251,45 +253,45 @@ body{--cam:0}
 .cast-info{--cc:#8cc8ff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:18px;border-radius:22px;background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.14),rgba(0,0,0,.2));border:4px solid var(--ink2)}
 .cast-big{width:170px;height:170px;max-width:100%;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 0 var(--ink2)) drop-shadow(0 0 22px var(--cc))}
 @keyframes bob{50%{transform:translateY(-8px) rotate(2deg)}}
-.cast-name{font-family:"Lilita One","Fredoka",var(--ui);font-size:clamp(24px,4.4vw,32px);letter-spacing:.03em;color:var(--cc);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
-.cast-kind{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#d8c8ff}
+.cast-name{font-family:var(--toon);font-size:clamp(24px,4.4vw,32px);letter-spacing:.03em;color:var(--cc);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+.cast-kind{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--lav)}
 .cast-bio{margin:0;font-size:15px;line-height:1.5;color:var(--cream);max-width:44ch}
 .cast-power{font-size:15px;line-height:1.5;background:rgba(10,4,30,.5);border-radius:14px;padding:10px 14px;max-width:44ch}
-.cast-power b{display:block;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;color:var(--cc);letter-spacing:.03em;font-size:17px;margin-bottom:2px}
-.cast-name-input{display:flex;flex-direction:column;gap:6px;width:100%;max-width:280px;font-size:14px;font-weight:600;color:#d8c8ff}
-.dvd input#castName,.dvd .dvd-field input{background:var(--cream);border:4px solid var(--ink2);border-radius:14px;color:var(--ink2);padding:8px 12px;font-family:"Fredoka",var(--ui);font-weight:600;font-size:17px;box-shadow:inset 0 3px 0 rgba(0,0,0,.12);letter-spacing:0;text-transform:none;width:100%}
+.cast-power b{display:block;font-family:var(--toon);font-weight:400;color:var(--cc);letter-spacing:.03em;font-size:17px;margin-bottom:2px}
+.cast-name-input{display:flex;flex-direction:column;gap:6px;width:100%;max-width:280px;font-size:14px;font-weight:600;color:var(--lav)}
+.dvd input#castName,.dvd .dvd-field input{background:var(--cream);border:4px solid var(--ink2);border-radius:14px;color:var(--ink2);padding:8px 12px;font-family:var(--ui);font-weight:600;font-size:17px;box-shadow:inset 0 3px 0 rgba(0,0,0,.12);letter-spacing:0;text-transform:none;width:100%}
 .dvd input#castName{text-align:center}
 .dvd input#castName:focus-visible,.dvd .dvd-field input:focus-visible{outline:4px solid var(--gold);outline-offset:1px}
 .dvd .dvd-field input::placeholder{color:#8a7aa8}
 .map-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;width:100%}
 .map-grid img{width:100%;max-width:100%;aspect-ratio:4/5;border-radius:12px;display:block;border:3px solid var(--ink2)}
-.map-grid .mn{font-family:"Lilita One","Fredoka",var(--ui);font-size:17px;letter-spacing:.03em;text-align:center}
-.map-grid .md{font-size:13px;color:#e8dcff;text-align:center;line-height:1.35}
+.map-grid .mn{font-family:var(--toon);font-size:17px;letter-spacing:.03em;text-align:center}
+.map-grid .md{font-size:13px;color:var(--lav);text-align:center;line-height:1.35}
 .room-list-wrap{width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.room-list-h{margin:0;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:22px;letter-spacing:.03em;color:var(--gold);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+.room-list-h{margin:0;font-family:var(--toon);font-weight:400;font-size:22px;letter-spacing:.03em;color:var(--gold);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
 .room-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;width:100%;max-height:260px;overflow:auto;padding:6px 6px 12px}
 .room-card{padding:10px 12px;gap:3px}
-.room-card .rn{font-family:"Lilita One","Fredoka",var(--ui);font-size:19px;letter-spacing:.02em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.room-card .rn{font-family:var(--toon);font-size:19px;letter-spacing:.02em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .room-card .rc{font-size:14px;font-weight:600;color:var(--gold);letter-spacing:.08em}
 .room-card .rs{font-size:13px;font-weight:600;color:#c8f5c0}
 .room-card .rs.busy{color:#ffb8c8}
 .room-card:disabled{opacity:.6}
-.room-none{grid-column:1/-1;margin:0;text-align:center;font-size:15px;font-weight:600;color:#e0d4ff;background:rgba(10,4,30,.35);border:3px dashed rgba(255,244,214,.3);border-radius:16px;padding:14px}
+.room-none{grid-column:1/-1;margin:0;text-align:center;font-size:15px;font-weight:600;color:var(--lav);background:rgba(10,4,30,.35);border:3px dashed rgba(255,244,214,.3);border-radius:16px;padding:14px}
 .extras{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;width:100%;align-items:start}
 .extra-chapters{display:flex;flex-direction:column;gap:10px}
 .extra-chapters .dvd-tile{flex-direction:row;justify-content:flex-start;gap:10px;padding:9px 12px;text-align:left}
 .extra-chapters .cs{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:50%;background:var(--gold);color:var(--ink2);font-weight:700;font-size:17px;border:3px solid var(--ink2)}
-.extra-chapters .cn{font-family:"Lilita One","Fredoka",var(--ui);font-size:17px;letter-spacing:.02em}
+.extra-chapters .cn{font-family:var(--toon);font-size:17px;letter-spacing:.02em}
 .extra-chapters .dvd-tile.sel::after{display:none}
 .extra-body{min-height:420px;max-height:min(62vh,560px);overflow:auto;padding:18px 20px;border-radius:22px;background:rgba(10,4,30,.45);border:4px solid var(--ink2);font-size:15px;line-height:1.5;animation:pagein .4s ease-out}
-.extra-body h3{margin:0 0 10px;font-family:"Lilita One","Fredoka",var(--ui);font-weight:400;font-size:26px;color:var(--gold);text-shadow:0 3px 0 var(--ink2)}
+.extra-body h3{margin:0 0 10px;font-family:var(--toon);font-weight:400;font-size:26px;color:var(--gold);text-shadow:0 3px 0 var(--ink2)}
 .extra-body p{margin:0 0 12px}
-.extra-body .xn{color:#d8c8ff;font-size:14px;margin-top:12px}
+.extra-body .xn{color:var(--lav);font-size:14px;margin-top:12px}
 .xl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
 .xl li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06)}
 .xl li div{display:flex;flex-direction:column;gap:2px;min-width:0}
 .xl li b{font-weight:700}
-.xl small{font-size:12px;color:#d8c8ff;font-weight:600}
+.xl small{font-size:12px;color:var(--lav);font-weight:600}
 .xl .xs{width:44px;height:44px;display:grid;place-items:center;border-radius:12px;background:#2f1868;border:3px solid var(--ink2);font-style:normal;font-weight:700;color:var(--gold);font-size:16px}
 .xl .xd{width:30px;height:30px;margin:7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 10%,var(--xc) 45%,#000 140%);border:3px solid var(--ink2)}
 .xc li{grid-template-columns:64px minmax(0,1fr)}
@@ -298,32 +300,32 @@ body{--cam:0}
 .xl .xt{color:#c8f5c0;font-size:14px}
 .dvd-nav{display:flex;justify-content:space-between;width:100%;gap:12px;flex-wrap:wrap}
 .online-form{display:flex;flex-direction:column;gap:14px;width:100%;max-width:560px;padding:20px;border-radius:22px;background:rgba(10,4,30,.35);border:4px solid var(--ink2)}
-.dvd-field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:#d8c8ff}
+.dvd-field{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600;color:var(--lav)}
 .mini-cast{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
 .mini-cast .dvd-tile{padding:6px;border-radius:14px}
 .mini-cast .dvd-tile.sel::after{font-size:14px;top:2px;right:3px}
 .mini-cast img{width:100%;max-width:56px;aspect-ratio:1}
-.dvd-err{margin:0;min-height:1.4em;font-size:15px;font-weight:600;color:#ffb8c8;text-align:center}
+.dvd-err{margin:0;min-height:1.4em;font-size:15px;font-weight:600;color:var(--gold);text-align:center;text-shadow:0 1px 0 var(--ink2)}
 .lobby-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%;max-width:760px}
 .lobby-list .dvd-tile{cursor:default}
 .lobby-list .dvd-tile:hover{transform:none;box-shadow:0 6px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18)}
 .lobby-list img{width:72px;height:72px}
-.lobby-list .kick{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:3px solid var(--ink2);background:var(--rose);color:var(--cream);font:700 15px/1 "Fredoka",var(--ui);cursor:pointer;box-shadow:0 3px 0 var(--ink2)}
+.lobby-list .kick{position:absolute;top:6px;right:6px;width:30px;height:30px;border-radius:50%;border:3px solid var(--ink2);background:var(--rose);color:var(--cream);font:700 15px/1 var(--ui);cursor:pointer;box-shadow:0 3px 0 var(--ink2)}
 .lobby-list .kick:hover,.lobby-list .kick:focus-visible{outline:none;background:#ff5a7a;transform:scale(1.12)}
 .host-btns{display:flex;gap:6px;flex-wrap:wrap}
 .lobby-list .who{font-size:17px;font-weight:700;text-align:center;overflow-wrap:anywhere;text-shadow:0 2px 0 var(--ink2)}
 .lobby-list .tag{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 .lobby-list .empty-slot{opacity:.45;border-style:dashed;min-height:140px;justify-content:center;background:rgba(10,4,30,.3)}
 .board{list-style:none;margin:0;padding:0;width:100%;max-width:720px;display:flex;flex-direction:column;gap:8px}
-.board li{display:grid;grid-template-columns:36px 40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 14px;border-radius:16px;background:linear-gradient(180deg,#4a2a8a,#2c1760);border:3px solid var(--ink2);box-shadow:0 4px 0 var(--ink2)}
-.board li:nth-child(1){background:linear-gradient(180deg,#d8487a,#7a2470)}
-.board .rk{font-family:"Lilita One","Fredoka",var(--ui);font-size:22px;color:#d8c8ff;text-shadow:0 2px 0 var(--ink2)}
+.board li{display:grid;grid-template-columns:36px 40px minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 14px;border-radius:16px;background:var(--panel);border:3px solid var(--ink2);box-shadow:0 4px 0 var(--ink2)}
+.board li:nth-child(1){background:var(--panel-on)}
+.board .rk{font-family:var(--toon);font-size:22px;color:var(--lav);text-shadow:0 2px 0 var(--ink2)}
 .board li:nth-child(1) .rk{color:var(--gold)}
 .board img{width:40px;height:40px}
 .board .bn{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700;font-size:16px}
-.board .bm{display:block;font-weight:500;font-size:13px;color:#e0d4ff}
-.board .bs{font-family:"Lilita One","Fredoka",var(--ui);font-size:22px;font-variant-numeric:tabular-nums;color:var(--gold);text-shadow:0 2px 0 var(--ink2)}
-.board .none{display:block;text-align:center;color:#e0d4ff;background:none;border:0;box-shadow:none}
+.board .bm{display:block;font-weight:500;font-size:13px;color:var(--lav)}
+.board .bs{font-family:var(--toon);font-size:22px;font-variant-numeric:tabular-nums;color:var(--gold);text-shadow:0 2px 0 var(--ink2)}
+.board .none{display:block;text-align:center;color:var(--lav);background:none;border:0;box-shadow:none}
 .dvd-hint{position:relative;margin-top:18px;font-size:13px;font-weight:600;color:var(--cream);text-align:center;background:rgba(10,4,30,.55);border-radius:20px;padding:5px 16px}
 @media (max-width:760px){
   .cast{grid-template-columns:minmax(0,1fr)}
@@ -365,7 +367,7 @@ body{--cam:0}
   --rivet:radial-gradient(circle at 35% 30%,#fff9d8 0 18%,#d49a2a 45%,#6a4208 100%);
 }
 .btn,.hud-btn,.abil,.pl,.mult,.dvd-tile,.results li,.board li,.room-card{background-image:var(--gloss),var(--bgc,var(--panel))}
-.btn{--bgc:linear-gradient(180deg,#6a46c0,#3a1d80)}
+.btn{--bgc:var(--panel)}
 .btn.def{background-image:var(--gloss),linear-gradient(180deg,#ffe066,#ff9f1a)}
 .pl.on,.results li:first-child,.dvd-tile.sel,.board li:nth-child(1){--bgc:var(--panel-on)}
 .abil.pressed{--bgc:var(--panel-on)}
@@ -373,7 +375,7 @@ body{--cam:0}
 /* Metallrahmen: Verlauf im Rand, dunkle Kontur außen */
 .metal{border:9px solid transparent;background:var(--inner,linear-gradient(180deg,#361c70,#1c0e44)) padding-box,var(--metal) border-box;
   box-shadow:0 0 0 3px var(--ink2),inset 0 0 0 2px rgba(26,11,54,.6),0 18px 40px rgba(0,0,0,.55)}
-.dlg,.dvd-page:not(#pgMain){border:9px solid transparent;background:linear-gradient(180deg,rgba(54,28,112,.97),rgba(28,14,68,.97)) padding-box,var(--metal) border-box;
+.dlg,.dvd-page:not(#pgMain){border:9px solid transparent;background:var(--inner) padding-box,var(--metal) border-box;
   box-shadow:0 0 0 3px var(--ink2),inset 0 0 0 2px rgba(26,11,54,.6),0 22px 40px rgba(0,0,0,.55)}
 .rivets::before,.rivets::after{content:"";position:absolute;inset:-6px;pointer-events:none;border-radius:inherit;
   background:var(--rivet) 0 0/12px 12px no-repeat,var(--rivet) 100% 0/12px 12px no-repeat,var(--rivet) 0 100%/12px 12px no-repeat,var(--rivet) 100% 100%/12px 12px no-repeat}
@@ -408,15 +410,70 @@ canvas{box-shadow:none}
   .plate{font-size:14px;padding:6px 12px}
   .board-frame{border-width:6px}
 }
+/* ---------- Theme-Ebene: Texte auf Flächen, Felder, Theme-Hintergrund ---------- */
+.dvd-tile,.pl,.btn:not(.def),.abil,.results li,.board li,.room-card,.hud-btn,.mini-meter,.lobby-list .who{color:var(--ptext)}
+.dvd-item{color:var(--item)}
+.dvd-item:hover,.dvd-item:focus-visible{color:var(--gold)}
+.dvd input#castName,.dvd .dvd-field input{background:var(--field);color:var(--field-text)}
+.theme-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background:var(--page);background-color:var(--page-color);overflow:hidden}
+.theme-bg::before,.theme-bg::after{content:"";position:absolute;inset:0}
+body[data-ui=nacht] .theme-bg{display:none}
+body:not([data-ui=nacht]) #dvdScene{display:none}
+/* Theme-Dekorationen im Hintergrund */
+body[data-ui=schleim] .theme-bg::before{background:linear-gradient(90deg,#5d1a8c,#c07aff 50%,#5d1a8c) 2% 0/26px 100% no-repeat,linear-gradient(90deg,#5d1a8c,#c07aff 50%,#5d1a8c) 98% 0/26px 100% no-repeat;opacity:.9}
+body[data-ui=schleim] .theme-bg::after{background:repeating-radial-gradient(circle at 80% 20%,transparent 0 60px,rgba(255,255,255,.07) 60px 64px)}
+body[data-ui=chrom] .theme-bg::before{background:repeating-radial-gradient(circle at 50% 35%,transparent 0 90px,rgba(160,210,255,.12) 90px 100px)}
+body[data-ui=chrom] .theme-bg::after{background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.12) 50%,transparent 60%)}
+body[data-ui=grunge] .theme-bg::before{background:radial-gradient(circle at 12% 18%,rgba(0,0,0,.35) 0 4px,transparent 5px),radial-gradient(circle at 16% 22%,rgba(0,0,0,.3) 0 9px,transparent 10px),radial-gradient(circle at 85% 80%,rgba(0,0,0,.3) 0 12px,transparent 13px),radial-gradient(circle at 80% 76%,rgba(0,0,0,.3) 0 5px,transparent 6px),repeating-linear-gradient(80deg,transparent 0 120px,rgba(0,0,0,.05) 120px 123px)}
+body[data-ui=glitzer] .theme-bg::before{background:radial-gradient(circle,#fff 0 1px,transparent 2px) 17px 11px/53px 47px;opacity:.8;animation:twinkle 2.4s ease-in-out infinite}
+body[data-ui=maerchen] .theme-bg::before{background:radial-gradient(ellipse 30% 22% at 10% 100%,#2a4a10 0 60%,transparent 61%),radial-gradient(ellipse 35% 25% at 90% 100%,#2a4a10 0 60%,transparent 61%),radial-gradient(circle at 85% 12%,rgba(255,250,210,.85) 0 40px,transparent 120px)}
+body[data-ui=aero] .theme-bg::before{background:radial-gradient(circle at 40% 20%,rgba(255,255,255,.5) 0 10px,transparent 12px),radial-gradient(circle at 10% 35%,rgba(255,255,255,.4) 0 18px,transparent 20px),radial-gradient(circle at 92% 62%,rgba(255,255,255,.45) 0 26px,transparent 28px),linear-gradient(170deg,transparent 60%,rgba(126,211,33,.35) 60.5%,rgba(60,150,20,.55) 100%)}
+body[data-ui=xp] .theme-bg::before{background:radial-gradient(ellipse 18% 6% at 30% 22%,rgba(255,255,255,.8) 0 50%,transparent 70%),radial-gradient(ellipse 14% 5% at 70% 15%,rgba(255,255,255,.7) 0 50%,transparent 70%)}
+body[data-ui=neon] .theme-bg::before{background:radial-gradient(circle at 30% 42%,rgba(190,255,90,.35) 0 60px,transparent 160px)}
+body[data-ui=neon] .dvd-item,body[data-ui=neon] .dvd-h,body[data-ui=neon] .tube-lbl{text-shadow:0 0 8px rgba(160,255,60,.9),0 0 18px rgba(120,230,40,.6)}
+body[data-ui=xp] .btn,body[data-ui=xp] .dvd-tile,body[data-ui=xp] .pl,body[data-ui=xp] .abil,body[data-ui=xp] .hud-btn{border-width:2px;box-shadow:0 2px 0 var(--ink2)}
+body[data-ui=xp] .dlg .tb,body[data-ui=xp] .dvd-h,body[data-ui=xp] #pgMain .dvd-sub{background:linear-gradient(180deg,#3a93ff,#0058e6 30%,#0a4ad0);transform:translate(-50%,-55%);border-radius:8px 8px 4px 4px}
+body[data-ui=xp] #pgMain .dvd-sub{transform:none}
+body[data-ui=grunge] .dvd-tile,body[data-ui=grunge] .btn,body[data-ui=grunge] .pl{border-radius:4px;transform:rotate(-.6deg)}
+body[data-ui=grunge] .dvd-tile:nth-child(even){transform:rotate(.8deg)}
+body[data-ui=maerchen] .dvd-tile img,body[data-ui=maerchen] .map-grid img{border:4px solid #fff}
+/* Themes & Boxen, Konto */
+.dvd-toggles{display:flex;gap:6px 18px;justify-content:center;flex-wrap:wrap;margin-top:4px}
+.dvd-toggles .dvd-item{font-size:clamp(15px,3.2vw,19px);padding:6px 10px 6px 42px}
+.box-bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;padding:12px 20px;border-radius:20px;border:3px solid var(--ink2);background-image:var(--gloss),var(--panel);color:var(--ptext);box-shadow:0 5px 0 var(--ink2)}
+.box-info{display:flex;flex-direction:column;gap:2px;font-size:13px;font-weight:600}
+.box-info b{font-family:var(--toon);font-weight:400;font-size:24px}
+.chest{position:relative;width:64px;height:52px;flex:none}
+.chest::before{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;border-radius:6px 6px 10px 10px;border:3px solid var(--ink2);background:linear-gradient(180deg,#c8792e,#7a3e12);box-shadow:inset 0 -6px 0 rgba(0,0,0,.2)}
+.chest::after{content:"";position:absolute;left:-2px;right:-2px;top:0;height:24px;border-radius:30px 30px 6px 6px;border:3px solid var(--ink2);background:linear-gradient(180deg,#e8a04a,#a85a1a);animation:lid 2.4s ease-in-out infinite}
+.chest i{position:absolute;left:50%;top:18px;width:14px;height:16px;margin-left:-7px;z-index:1;border-radius:3px;border:2px solid var(--ink2);background:var(--metal)}
+@keyframes lid{0%,80%,100%{transform:none}88%{transform:translateY(-5px) rotate(-4deg)}}
+.theme-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;width:100%}
+.theme-card{padding:10px 8px 12px;gap:4px}
+.th-prev{position:relative;width:100%;aspect-ratio:4/3;border-radius:12px;border:3px solid var(--ink2);overflow:hidden;display:grid;grid-template-columns:2fr 1fr 1fr}
+.th-prev i:nth-child(1){background:var(--a)}.th-prev i:nth-child(2){background:var(--b)}.th-prev i:nth-child(3){background:var(--c)}
+.th-prev b{position:absolute;inset:0;display:grid;place-items:center;font:400 34px var(--toon);color:#fff;background:rgba(0,0,0,.6);text-shadow:0 2px 0 #000}
+.theme-card.locked{filter:grayscale(.9);opacity:.72}
+.theme-card .mn{font-family:var(--toon);font-size:16px;text-align:center;line-height:1.1}
+.theme-card .th-rar{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 1px 0 rgba(0,0,0,.5)}
+.theme-card .md{font-size:12px;font-weight:600;opacity:.85}
+.acc-hint{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;font-weight:600;color:var(--cream);text-align:center}
+.acc-why{margin:0;line-height:1.5;color:var(--cream)}
+.acc-reset{align-self:center}
+.over-box{margin:0;text-align:center;font-family:var(--toon);font-size:20px;color:var(--gold);text-shadow:0 2px 0 var(--ink2)}
+#box{z-index:40}
+.dvd-hint{color:var(--item);background:rgba(0,0,0,.45)}
+@media (max-width:760px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script defer src="firebase-config.js"></script>
 </head>
-<body data-page="pgMain">
+<body data-page="pgMain" data-ui="nacht">
 
 <div class="dvd-bg" id="dvdScene" aria-hidden="true"></div>
+<div class="theme-bg" aria-hidden="true"></div>
 
 <div class="desk">
   <header class="hud" aria-label="Spielstand">
@@ -461,12 +518,12 @@ canvas{box-shadow:none}
       <button class="dvd-item" type="button" data-go="pgCount">Lokales Spiel</button>
       <button class="dvd-item" type="button" id="rogueMenuBtn">Roguelike-Modus</button>
       <button class="dvd-item" type="button" id="onlineMenuBtn">Online spielen</button>
+      <button class="dvd-item" type="button" id="themesMenuBtn">Themes &amp; Boxen</button>
+      <button class="dvd-item" type="button" id="accountMenuBtn">Konto</button>
       <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
       <button class="dvd-item" type="button" id="extrasMenuBtn">Bonusmaterial</button>
       <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
-      <button class="dvd-item" type="button" id="lootToggle">Lootboxen: Alle 3 Runden</button>
-      <button class="dvd-item" type="button" id="adsToggle">Werbepausen: An</button>
-      <button class="dvd-item" type="button" id="sndToggle">Ton: An</button>
+      <div class="dvd-toggles"><button class="dvd-item" type="button" id="adsToggle">Werbepausen: An</button><button class="dvd-item" type="button" id="sndToggle">Ton: An</button></div>
     </nav>
   </div>
 
@@ -542,6 +599,38 @@ canvas{box-shadow:none}
     <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
   </div>
 
+  <div class="dvd-page" id="pgThemes" hidden>
+    <h2 class="dvd-h">Themes &amp; Boxen</h2>
+    <div class="box-bar">
+      <div class="chest" aria-hidden="true"><i></i></div>
+      <div class="box-info"><b id="boxCount">0 Lootboxen</b><span>Splitter <span id="shardCount">0/3</span> · drei ergeben eine Box</span></div>
+      <button class="btn def" id="boxMenuOpen" type="button">Box öffnen</button>
+    </div>
+    <p class="dvd-chip" id="themeChip"></p>
+    <div class="theme-grid" id="themeGrid"></div>
+    <div class="acc-hint"><span id="themeAccHint"></span><button class="btn" id="themeAccBtn" type="button">Konto anlegen</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+  </div>
+
+  <div class="dvd-page" id="pgAccount" hidden>
+    <h2 class="dvd-h">Konto</h2>
+    <p class="dvd-chip" id="accStatus">Verbinde …</p>
+    <p class="dvd-sub" id="accStats"></p>
+    <div class="online-form" id="accOut">
+      <p class="acc-why">Mit einem Konto sind deine Themes, Boxen und Splitter gesichert und auf jedem Gerät da. Ohne Konto bleibt alles nur in diesem Browser.</p>
+      <label class="dvd-field" for="accEmail">E-Mail<input type="email" id="accEmail" autocomplete="email" maxlength="120"></label>
+      <label class="dvd-field" for="accPass">Passwort<input type="password" id="accPass" autocomplete="current-password" maxlength="100" placeholder="mindestens 6 Zeichen"></label>
+      <div class="dvd-nav"><button class="dvd-item" type="button" id="accRegister">Konto anlegen</button><button class="dvd-item" type="button" id="accLogin">Anmelden</button></div>
+      <button class="btn acc-reset" id="accReset" type="button">Passwort vergessen?</button>
+    </div>
+    <div class="online-form" id="accIn" hidden>
+      <p class="acc-why">Dein Fortschritt wird automatisch im Konto gespeichert. Auf einem anderen Gerät meldest du dich einfach mit derselben E-Mail an.</p>
+      <button class="btn" id="accLogout" type="button">Abmelden</button>
+    </div>
+    <p class="dvd-err" id="accErr" role="status"></p>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+  </div>
+
   <div class="dvd-page" id="pgBoard" hidden>
     <h2 class="dvd-h">Bestenliste</h2>
     <p class="dvd-chip" id="boardInfo"></p>
@@ -559,9 +648,28 @@ canvas{box-shadow:none}
       <h2 id="overTitle">Spielende</h2>
       <p class="lede" id="overSub"></p>
       <ol class="results" id="results"></ol>
+      <p class="over-box" id="overBox" hidden></p>
       <div class="btnrow">
         <button class="btn def" id="againBtn" type="button">Nochmal</button>
+        <button class="btn" id="overBoxBtn" type="button" hidden>Boxen öffnen</button>
         <button class="btn" id="setupBtn" type="button">Einstellungen…</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="overlay" id="box" hidden>
+  <section class="win dlg" aria-label="Lootbox">
+    <div class="tb"><span class="tb-ico"></span><span class="t">Lootbox</span></div>
+    <div class="wb">
+      <h2 id="boxHead">Was steckt drin?</h2>
+      <p class="lootfor" id="boxSub"></p>
+      <div class="reel"><div class="strip" id="boxStrip"></div></div>
+      <div class="prize" id="boxPrize"></div>
+      <div class="btnrow">
+        <button class="btn def" id="boxOpen" type="button">Box öffnen</button>
+        <button class="btn def" id="boxWear" type="button" hidden>Gleich anziehen</button>
+        <button class="btn" id="boxDone" type="button">Fertig</button>
       </div>
     </div>
   </section>
@@ -579,22 +687,6 @@ canvas{box-shadow:none}
   </section>
 </div>
 
-<div class="overlay" id="loot" hidden>
-  <section class="win dlg" aria-label="Lootbox">
-    <div class="tb"><span class="tb-ico"></span><span class="t" id="lootTitle">Lootbox</span><span class="tbb" aria-hidden="true">×</span></div>
-    <div class="wb">
-      <h2 id="lootHead">Runde vorbei</h2>
-      <p class="lootfor" id="lootSub"></p>
-      <div class="reel"><div class="strip" id="strip"></div></div>
-      <div class="prize" id="prize"></div>
-      <div class="btnrow">
-        <button class="btn def" id="lootOpen" type="button">Box öffnen</button>
-        <button class="btn def" id="lootNext" type="button" hidden>Weiter</button>
-      </div>
-      <p class="note">Am Rundenende bekommt jede Person eine Box (wie oft, stellst du im Hauptmenü ein). Drin sein können Punkte, Kugeln, Ladungen für die Fähigkeit, Spielfeld-Themes und leere Kartons.</p>
-    </div>
-  </section>
-</div>
 
 <div class="overlay" id="ad" hidden>
   <section class="win dlg" id="adSheet" aria-label="Werbung">
@@ -614,7 +706,7 @@ canvas{box-shadow:none}
 'use strict';
 const W = 800, H = 1000, LX = 400, LY = 74, PR = 11, BR = 8, GRAV = 950, SPEED = 740, E = 0.74;
 const BY = 958, BW = 120, MAX_CHARGES = 3;
-const UI_FONT = 'Fredoka, Tahoma, Verdana, sans-serif', TOON_FONT = '"Lilita One", Fredoka, Tahoma, sans-serif';
+const UI_FONT = 'Fredoka, Tahoma, Verdana, sans-serif', toonFont = () => TH().vars.toon || '"Lilita One", Fredoka, Tahoma, sans-serif';
 const TYPES = {
   plain:  { base: 10,  c: '#6f8ccc', lit: '#d6ebff' },
   target: { base: 100, c: '#ff7a3d', lit: '#ffd9a0' },
@@ -630,33 +722,121 @@ const CHARS = {
   quaxi:  { name: 'Quaxi',          kind: 'Kröte',        col: '#5fd36a', ui: '#1d6e2a', power: 'Riesenboot',     desc: 'Das Boot ist für diesen Schuss fast doppelt so breit.' },
   mira:   { name: 'Mondkatze Mira', kind: 'Katze',        col: '#b9c4ff', ui: '#3d45a0', power: 'Mondboden',      desc: 'Der Boden federt die Kugel einmal nach oben zurück.' },
 };
-const THEMES = {
-  nacht:    { name: 'Laternennacht', top: '#0e1030', mid: '#1b1740', bot: '#2c1738', deco: 'lanterns' },
-  tiefsee:  { name: 'Tiefsee',       top: '#021a30', mid: '#05385a', bot: '#0b5f70', deco: 'sea' },
-  wolken:   { name: 'Wolkenschloss', top: '#24479a', mid: '#4a78c8', bot: '#86aee6', deco: 'clouds' },
-  wueste:   { name: 'Wüstennacht',   top: '#160e2e', mid: '#45284a', bot: '#9a5636', deco: 'dunes' },
-  terminal: { name: 'Terminal',      top: '#000000', mid: '#001406', bot: '#00240b', deco: 'terminal' },
-  vapor:    { name: 'Vaporwave',     top: '#1d0838', mid: '#5a1670', bot: '#c2468f', deco: 'vapor' },
+/* ---------- UI-Themes ----------
+   Ein Theme verändert alles: Farben, Schriften, Rahmen, Knöpfe, Menü-Hintergrund und Spielfeld.
+   Inspiriert von Kinder-TV-Seiten, DVD-Menüs, Desktop- und Konsolen-Oberflächen um 2000 – ohne deren Logos oder Figuren. */
+const UI_THEMES = {
+  nacht: { name: 'Laternennacht', rar: 0, desc: 'Der Standard: Zeichentrick-Nacht mit Mond, Laternen und Goldrahmen.', scene: true,
+    vars: {}, swatch: ['#22125a', '#e0365a', '#ffd23f'],
+    board: { top: '#0e1030', mid: '#1b1740', bot: '#2c1738', deco: 'lanterns' },
+    cv: { ink: '#1a0b36', box: '#2c1760', sub: '#e8dcff', g: ['#fffbe0', '#ffe066', '#ffb21f', '#ff7a1f'] } },
+  schleim: { name: 'Schleimkanal', rar: 1, desc: 'Quietschgrün, lila Röhren und orange Knöpfe wie auf Kinderkanal-Seiten um 2006.', swatch: ['#7fcf12', '#8a2be2', '#ff8a00'],
+    vars: { ink2: '#2a0a4a', cream: '#ffffff', gold: '#ffe600', rose: '#ff7a00', lav: '#f3e6ff', item: '#ffffff', ptext: '#ffffff',
+      panel: 'linear-gradient(180deg,#a64ae0,#5d1a8c)', 'panel-on': 'linear-gradient(180deg,#ffa31a,#e05a00)',
+      inner: 'linear-gradient(180deg,rgba(124,196,22,.97),rgba(64,128,8,.97))',
+      metal: 'linear-gradient(135deg,#f1dcff 0%,#9b3fe0 22%,#f6e6ff 44%,#5a1a9a 66%,#d8b0ff 84%,#7a2ac8 100%)',
+      'page-color': '#5aa80e', page: 'radial-gradient(ellipse at 50% 30%,#a8ec3a 0,#6cc012 45%,#3a7a06 100%)',
+      title1: 'linear-gradient(180deg,#ffffe0,#ffe600 45%,#ff9a00)', title2: 'linear-gradient(180deg,#f6e6ff,#c07aff 50%,#7a1fd0)' },
+    board: { top: '#1f4a04', mid: '#2f6a08', bot: '#4a8e12', deco: 'slime' },
+    cv: { ink: '#2a0a4a', box: '#7a2ac0', sub: '#f3e6ff', g: ['#ffffe0', '#ffe600', '#ffb000', '#ff7a00'] } },
+  chrom: { name: 'Chromkanal', rar: 1, desc: 'Glänzendes Blau, Chromrahmen und runde Bullaugen wie auf Musik- und TV-Portalen um 2008.', swatch: ['#0a3a9a', '#c8d4e2', '#7fe3ff'],
+    vars: { ink2: '#021a3a', cream: '#ffffff', gold: '#8ae8ff', rose: '#0a5ad8', lav: '#c4e2ff', item: '#ffffff', ptext: '#ffffff', toon: '"Russo One","Fredoka",sans-serif',
+      panel: 'linear-gradient(180deg,#4a9af4,#0b3f9a)', 'panel-on': 'linear-gradient(180deg,#8ae8ff,#1a8ad0)',
+      inner: 'linear-gradient(180deg,rgba(12,58,140,.96),rgba(4,24,70,.97))',
+      metal: 'linear-gradient(135deg,#ffffff 0%,#9aa8b8 22%,#f4f8ff 45%,#6a7888 68%,#e4ecf6 86%,#8a98a8 100%)',
+      'page-color': '#0a2a6a', page: 'radial-gradient(circle at 50% 35%,#3a8ef0 0,#0f4aa8 40%,#061a48 85%)',
+      title1: 'linear-gradient(180deg,#ffffff,#d8f0ff 45%,#6ab8ff 55%,#2a6ad0)', title2: 'linear-gradient(180deg,#ffffff,#dfe6ee 48%,#9aa8b8 52%,#6a7888)' },
+    board: { top: '#020c24', mid: '#06225a', bot: '#0d4aa0', deco: 'chrome' },
+    cv: { ink: '#021a3a', box: '#0b3f9a', sub: '#c4e2ff', g: ['#ffffff', '#d8f0ff', '#6ab8ff', '#2a6ad0'] } },
+  grunge: { name: 'Grunge-Pink', rar: 2, desc: 'Pinke Rasterpunkte, schwarzes Klebeband und Edding-Schrift wie auf Teenie-DVDs.', swatch: ['#e8e4e4', '#111111', '#ff2d87'],
+    vars: { ink2: '#111111', cream: '#141414', gold: '#ff2d87', rose: '#111111', lav: '#555555', item: '#ffffff', ptext: '#111111', toon: '"Permanent Marker","Fredoka",sans-serif',
+      panel: 'linear-gradient(180deg,#ffffff,#e9e9e9)', 'panel-on': 'linear-gradient(180deg,#ff8ab8,#ff2d87)',
+      inner: 'linear-gradient(180deg,rgba(255,255,255,.97),rgba(238,236,236,.97))',
+      metal: 'linear-gradient(135deg,#111 0%,#3a3a3a 30%,#111 50%,#2a2a2a 75%,#111 100%)', gloss: 'linear-gradient(transparent,transparent)',
+      field: '#ffffff', 'field-text': '#111111', 'page-color': '#e8e4e4',
+      page: 'radial-gradient(circle,#ff4f9a 0 3px,transparent 3.6px) 60% 0/16px 16px,linear-gradient(100deg,#ebe7e7 0 52%,#f7c6dc 52% 100%)',
+      title1: 'linear-gradient(180deg,#ff2d87,#ff2d87)', title2: 'linear-gradient(180deg,#ffffff,#ffffff)' },
+    board: { top: '#f3efef', mid: '#ebe5e7', bot: '#e2d4da', deco: 'grunge' },
+    cv: { ink: '#111111', box: '#ffffff', sub: '#444444', g: ['#ff8ab8', '#ff2d87', '#e0106a', '#b0004f'] } },
+  glitzer: { name: 'Glitzerherz', rar: 2, desc: 'Pinker Satin, silberne Herzen und Glitzer – so schick wie ein 90er-DVD-Menü.', swatch: ['#e8358f', '#e4e4f0', '#ffffff'],
+    vars: { ink2: '#6a0a40', cream: '#ffffff', gold: '#fff2fa', rose: '#ff4fa8', lav: '#ffd6ec', item: '#ffffff', ptext: '#ffffff', toon: '"Pacifico","Fredoka",cursive',
+      panel: 'linear-gradient(180deg,#ff7ab8,#d81b7a)', 'panel-on': 'linear-gradient(180deg,#e8e8f4,#9a9ab0)',
+      inner: 'linear-gradient(180deg,rgba(255,110,180,.96),rgba(196,20,108,.97))',
+      metal: 'linear-gradient(135deg,#ffffff 0%,#d8d8e8 18%,#ffffff 36%,#a8a8c0 55%,#ffffff 72%,#c8c8dc 100%)',
+      'page-color': '#e8358f', page: 'radial-gradient(circle,#fff 0 1.2px,transparent 1.8px) 0 0/34px 34px,linear-gradient(160deg,#ffa8d4 0%,#e8358f 38%,#ff7ab8 58%,#b8106a 100%)',
+      title1: 'linear-gradient(180deg,#ffffff,#ffe0f0 50%,#ffb0d8)', title2: 'linear-gradient(180deg,#ffffff,#e4e4f2 50%,#b8b8d0)' },
+    board: { top: '#ff8cc6', mid: '#d82a82', bot: '#8a0a4a', deco: 'hearts' },
+    cv: { ink: '#6a0a40', box: '#d81b7a', sub: '#ffd6ec', g: ['#ffffff', '#fff0f8', '#ffc0e0', '#ff8ac4'] } },
+  maerchen: { name: 'Märchenwiese', rar: 2, desc: 'Lindgrün, weiß gerahmte Bilder und goldene Märchenschrift wie bei Animationsfilm-DVDs.', swatch: ['#a6d93a', '#3a7ae0', '#e8b020'],
+    vars: { ink2: '#2a2a0a', cream: '#fffbe6', gold: '#ffd84a', rose: '#7a4a1a', lav: '#f0ffd8', item: '#ffe9a0', ptext: '#ffffff', toon: '"Cinzel","Lilita One",serif',
+      panel: 'linear-gradient(180deg,#7ab8ff,#2a6ad8)', 'panel-on': 'linear-gradient(180deg,#ffe066,#d89a10)',
+      inner: 'linear-gradient(180deg,rgba(150,206,52,.97),rgba(90,150,24,.97))',
+      metal: 'linear-gradient(135deg,#ffffff 0%,#f2f2f2 40%,#ffffff 60%,#e2e2e2 100%)',
+      'page-color': '#8cc62a', page: 'linear-gradient(180deg,#b8e44a 0%,#a2d63a 48%,#4a7a1a 75%,#2a4a10 100%)',
+      title1: 'linear-gradient(180deg,#fff6b0,#f2c430 48%,#b87800)', title2: 'linear-gradient(180deg,#fff6b0,#f2c430 48%,#b87800)' },
+    board: { top: '#6ab4ff', mid: '#a8dcff', bot: '#4a8a20', deco: 'meadow' },
+    cv: { ink: '#2a2a0a', box: '#2a6ad8', sub: '#e8f4ff', g: ['#fff6b0', '#f2c430', '#d8a010', '#b87800'] } },
+  aero: { name: 'Frutiger Aero', rar: 3, desc: 'Himmelblau, Wasser, Luftblasen und Glas – der frische Computer-Look der späten 2000er.', swatch: ['#5ab8f0', '#ffffff', '#7ed321'],
+    vars: { ink2: '#0a4a8a', cream: '#06345a', gold: '#e8ffa0', rose: '#1a9ae0', lav: '#2a5a80', item: '#ffffff', ptext: '#ffffff',
+      panel: 'linear-gradient(180deg,#8fe0ff,#1a9ae0)', 'panel-on': 'linear-gradient(180deg,#c8f58a,#4ab020)',
+      inner: 'linear-gradient(180deg,rgba(255,255,255,.78),rgba(205,236,255,.72))',
+      metal: 'linear-gradient(135deg,#ffffff 0%,#cfefff 30%,#ffffff 50%,#8ad0ff 75%,#ffffff 100%)',
+      field: '#ffffff', 'field-text': '#06345a', 'page-color': '#4ab0e8',
+      page: 'radial-gradient(circle at 18% 70%,rgba(255,255,255,.55) 0 22px,transparent 24px),radial-gradient(circle at 82% 30%,rgba(255,255,255,.45) 0 34px,transparent 36px),radial-gradient(circle at 70% 80%,rgba(255,255,255,.4) 0 14px,transparent 16px),linear-gradient(180deg,#d6f2ff 0%,#6ac4f6 42%,#1a8ad0 70%,#0a5aa0 100%)',
+      title1: 'linear-gradient(180deg,#ffffff,#c8f0ff 45%,#3ab0ff 55%,#0a6ad0)', title2: 'linear-gradient(180deg,#ffffff,#e0ffc0 45%,#7ed321 55%,#3a8a10)' },
+    board: { top: '#cdeeff', mid: '#4ab0e8', bot: '#0a6ab0', deco: 'aero' },
+    cv: { ink: '#0a4a8a', box: '#1a9ae0', sub: '#e6f6ff', g: ['#ffffff', '#c8f0ff', '#3ab0ff', '#0a6ad0'] } },
+  xp: { name: 'Blauer Desktop', rar: 3, desc: 'Blaue Titelleisten, beige Fenster und eine grüne Wiese unter blauem Himmel.', swatch: ['#0a5ce8', '#ece9d8', '#3c9a31'],
+    vars: { ink2: '#0a246a', cream: '#000000', gold: '#ffffff', rose: '#0a5ce8', lav: '#333333', item: '#ffffff', ptext: '#000000',
+      toon: '"Trebuchet MS",Tahoma,sans-serif', ui: 'Tahoma,Verdana,"Segoe UI",sans-serif',
+      panel: 'linear-gradient(180deg,#ffffff,#ece9d8 80%,#d6d0b8)', 'panel-on': 'linear-gradient(180deg,#c8f0b8,#7ac860)',
+      inner: 'linear-gradient(180deg,#f6f4ea,#ece9d8)',
+      metal: 'linear-gradient(180deg,#3a93ff 0%,#0058e6 25%,#0a4ad0 70%,#0040b0 100%)',
+      field: '#ffffff', 'field-text': '#000000', 'page-color': '#3a8a20',
+      page: 'radial-gradient(ellipse 120% 40% at 30% 100%,#4aa82a 0 60%,transparent 61%),radial-gradient(ellipse 120% 45% at 80% 105%,#6ac03a 0 60%,transparent 61%),linear-gradient(180deg,#1a5ad8 0%,#5aa0f0 45%,#b8dcff 70%)',
+      title1: 'linear-gradient(180deg,#ffffff,#e4f2ff 50%,#a8d0ff)', title2: 'linear-gradient(180deg,#ffffff,#d6ffc4 50%,#6ad040)' },
+    board: { top: '#1a5ad8', mid: '#6aaef4', bot: '#3a8a20', deco: 'xp' },
+    cv: { ink: '#0a246a', box: '#0a5ce8', sub: '#e4f2ff', g: ['#ffffff', '#ffffff', '#e4f2ff', '#a8d0ff'] } },
+  neon: { name: 'Neon-Konsole', rar: 4, desc: 'Schwarz, giftgrünes Leuchten und Gitterlinien wie im Konsolen-Menü um 2002.', swatch: ['#000000', '#3a8a10', '#9aff3a'],
+    vars: { ink2: '#001a00', cream: '#d8ffb0', gold: '#a8ff3a', rose: '#1a4a0a', lav: '#8ac860', item: '#d8ffb0', ptext: '#e8ffd0', toon: '"Orbitron","Fredoka",sans-serif',
+      panel: 'linear-gradient(180deg,rgba(70,150,24,.6),rgba(10,40,4,.82))', 'panel-on': 'linear-gradient(180deg,#6ac018,#2a6a04)',
+      inner: 'linear-gradient(180deg,rgba(6,26,2,.93),rgba(0,10,0,.96))',
+      metal: 'linear-gradient(135deg,#d8ff9a 0%,#3a8a10 35%,#a8ff4a 55%,#1e5206 80%,#8ae830 100%)',
+      field: '#0a2004', 'field-text': '#d8ffb0', 'page-color': '#000000',
+      page: 'repeating-linear-gradient(0deg,rgba(90,200,30,.12) 0 1px,transparent 1px 46px),repeating-linear-gradient(90deg,rgba(90,200,30,.12) 0 1px,transparent 1px 46px),radial-gradient(circle at 30% 42%,#3a7a0a 0,#0c2a04 32%,#000 70%)',
+      title1: 'linear-gradient(180deg,#f4ffd8,#b8ff4a 50%,#4aa010)', title2: 'linear-gradient(180deg,#f4ffd8,#b8ff4a 50%,#4aa010)' },
+    board: { top: '#000000', mid: '#041804', bot: '#0a320a', deco: 'neon' },
+    cv: { ink: '#001a00', box: '#0a3004', sub: '#c8f0a0', g: ['#f4ffd8', '#d8ff8a', '#a8ff3a', '#4aa010'] } },
+  automat: { name: 'Goldautomat', rar: 4, desc: 'Tiefblau mit verschnörkeltem Goldrahmen und Leuchtziffern wie an einem Spielautomaten.', swatch: ['#1a3a9a', '#ffd23f', '#c8102e'],
+    vars: { ink2: '#0a1030', cream: '#fff8e0', gold: '#ffd23f', rose: '#c8102e', lav: '#c8d8ff', item: '#fff8e0', ptext: '#ffffff',
+      panel: 'linear-gradient(180deg,#3a6ae8,#0a2a8a)', 'panel-on': 'linear-gradient(180deg,#ffb04a,#c85a00)',
+      inner: 'linear-gradient(180deg,rgba(22,56,160,.97),rgba(8,20,72,.97))',
+      'page-color': '#08143a', page: 'radial-gradient(circle,#fff 0 1px,transparent 1.6px) 0 0/40px 40px,repeating-conic-gradient(from 0deg at 50% 45%,rgba(255,210,80,.07) 0 8deg,transparent 8deg 16deg),radial-gradient(circle at 50% 45%,#2a5ad8 0,#0e2470 45%,#050c2a 85%)',
+      title1: 'linear-gradient(180deg,#fffbe0,#ffe066 38%,#ffb21f 62%,#ff7a1f)', title2: 'linear-gradient(180deg,#ffffff,#c8dcff 50%,#4a7ae0)' },
+    board: { top: '#081650', mid: '#14308a', bot: '#2a1e6a', deco: 'slot' },
+    cv: { ink: '#0a1030', box: '#0a2a8a', sub: '#c8d8ff', g: ['#fffbe0', '#ffe066', '#ffb21f', '#ff7a1f'] } },
 };
+const RARITY = [
+  { n: 'Standard', c: '#8a7ad8', w: 0 }, { n: 'Gewöhnlich', c: '#3a8ef0', w: 10 }, { n: 'Selten', c: '#17b8a6', w: 6 },
+  { n: 'Episch', c: '#b04ae0', w: 3 }, { n: 'Legendär', c: '#ffb21f', w: 1.5 },
+];
+let uiTheme = 'nacht';
+const TH = () => UI_THEMES[uiTheme] || UI_THEMES.nacht;
+function applyUiTheme(id) {
+  uiTheme = UI_THEMES[id] ? id : 'nacht';
+  const t = TH(), root = document.documentElement.style;
+  for (const k of THEME_VAR_KEYS) root.removeProperty('--' + k);
+  for (const [k, v] of Object.entries(t.vars)) root.setProperty('--' + k, v);
+  document.body.dataset.ui = uiTheme;
+  const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.content = t.swatch[0];
+}
+const THEME_VAR_KEYS = [...new Set(Object.values(UI_THEMES).flatMap(t => Object.keys(t.vars)))];
 const BALLS_BY_COUNT = [0, 10, 8, 6, 5];
 const ZONES = [10000, 25000, 50000, 25000, 10000];
 const MULT_STEPS = [1, 2, 3, 5, 10];
 const RAR = [
   { n: 'Niete', c: '#707070' }, { n: 'Gewöhnlich', c: '#2f63a8' }, { n: 'Selten', c: '#007a7a' },
   { n: 'Episch', c: '#7a1d8f' }, { n: 'Legendär', c: '#b07800' },
-];
-const LOOT = [
-  { id: 'niete',  rar: 0, w: 14, sym: '—',   name: 'Leerer Karton',     desc: 'Leider nichts drin. Danke für Ihre Unterstützung!' },
-  { id: 'pts',    rar: 1, w: 22, sym: '250', name: 'Punktebeutel',      desc: '+250 Punkte, sofort gutgeschrieben' },
-  { id: 'skin',   rar: 1, w: 10, sym: '≈',   name: 'Regenbogenspur',    desc: 'Deine Kugel zieht ab jetzt eine Regenbogenspur' },
-  { id: 'charge', rar: 2, w: 16, sym: '+L',  name: 'Ladung',            desc: '+1 Ladung für die Fähigkeit deines Charakters' },
-  { id: 'ball',   rar: 2, w: 9,  sym: '+1',  name: 'Extrakugel',        desc: '+1 Kugel' },
-  { id: 'theme', theme: 'tiefsee',  rar: 2, w: 6, sym: '', name: 'Theme: Tiefsee' },
-  { id: 'theme', theme: 'wolken',   rar: 2, w: 6, sym: '', name: 'Theme: Wolkenschloss' },
-  { id: 'theme', theme: 'wueste',   rar: 3, w: 5, sym: '', name: 'Theme: Wüstennacht' },
-  { id: 'theme', theme: 'terminal', rar: 3, w: 4, sym: '', name: 'Theme: Terminal' },
-  { id: 'theme', theme: 'vapor',    rar: 4, w: 3, sym: '', name: 'Theme: Vaporwave' },
-  { id: 'gold',   rar: 4, w: 3,  sym: '×2',  name: 'Goldkugel',         desc: 'Doppelte Punkte beim nächsten Schuss' },
 ];
 /* Roguelike-Upgrades: Nach jeder Runde und jedem geschafften Feld eins von drei wählen. */
 const UPGRADES = [
@@ -725,10 +905,9 @@ const S = {
   phase: 'setup', pegs: [], players: [], cur: 0, balls: [], newBalls: [], shot: null,
   aim: Math.PI / 2, t: 0, bucketX: 400, finale: false, timeScale: 1, clearQ: [], clearT: 0, clearWait: 0,
   popups: [], parts: [], toasts: [], orangeTotal: 25, order: 0, lastMult: 1, levelKey: 'gasse',
-  adGap: 0, lastAd: -1, round: 1, turnInRound: 0, lootQ: [], lootFor: 0, lootAfter: null,
+  adGap: 0, lastAd: -1, round: 1, turnInRound: 0,
 };
-const LOOT_MODES = { selten: 'Alle 3 Runden', jede: 'Jede Runde', aus: 'Aus' };
-const settings = { mode: 'normal', count: 2, level: 'gasse', ads: true, loot: (() => { try { const v = localStorage.getItem('plinko-loot'); return LOOT_MODES[v] ? v : 'selten'; } catch (e) { return 'selten'; } })(), players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
+const settings = { mode: 'normal', count: 2, level: 'gasse', ads: true, players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
 let ONLINE = null;
 
 /* ---------- Audio ---------- */
@@ -774,6 +953,60 @@ function makeSprite(col, lit) {
 for (const k in TYPES) sprites[k] = [makeSprite(TYPES[k].c, false), makeSprite(TYPES[k].lit, true)];
 
 const DECO = {
+  slime(g) {
+    for (let i = 0; i < 26; i++) { const x = rand(0, W), y = rand(0, H), r = rand(6, 26); g.fillStyle = `rgba(190,255,80,${rand(0.08, 0.2)})`; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+      g.fillStyle = 'rgba(255,255,255,.18)'; g.beginPath(); g.arc(x - r * 0.35, y - r * 0.35, r * 0.25, 0, Math.PI * 2); g.fill(); }
+    g.fillStyle = 'rgba(150,240,40,.35)';
+    g.beginPath(); g.moveTo(0, 0); for (let x = 0; x <= W; x += 40) { const d = 30 + (x / 40 % 3 === 0 ? rand(40, 90) : rand(0, 25)); g.lineTo(x, d); g.arc(x, d, 9, 0, Math.PI); } g.lineTo(W, 0); g.fill();
+    for (const sx of [10, W - 26]) { const pg = g.createLinearGradient(sx, 0, sx + 16, 0); pg.addColorStop(0, '#5d1a8c'); pg.addColorStop(0.5, '#c07aff'); pg.addColorStop(1, '#5d1a8c'); g.fillStyle = pg; g.fillRect(sx, 120, 16, H - 240);
+      g.fillStyle = '#ffa31a'; for (const y of [120, H - 132]) { g.beginPath(); g.arc(sx + 8, y + 6, 12, 0, Math.PI * 2); g.fill(); } }
+  },
+  chrome(g) {
+    for (let i = 0; i < 7; i++) { g.strokeStyle = `rgba(140,200,255,${0.05 + i * 0.012})`; g.lineWidth = 18 - i * 2; g.beginPath(); g.arc(W / 2, H * 0.42, 120 + i * 70, 0, Math.PI * 2); g.stroke(); }
+    const fl = g.createRadialGradient(W * 0.72, 180, 0, W * 0.72, 180, 160); fl.addColorStop(0, 'rgba(200,240,255,.45)'); fl.addColorStop(1, 'rgba(200,240,255,0)'); g.fillStyle = fl; g.fillRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(255,255,255,.08)'; g.lineWidth = 2; for (let y = 60; y < H; y += 90) { g.beginPath(); g.moveTo(0, y); g.bezierCurveTo(W * 0.3, y - 40, W * 0.7, y + 40, W, y); g.stroke(); }
+  },
+  grunge(g) {
+    for (let y = 0; y < H; y += 16) for (let x = W * 0.45; x < W; x += 16) { const r = 2.6 * (x - W * 0.45) / (W * 0.55) + 0.3; g.fillStyle = 'rgba(255,45,135,.55)'; g.beginPath(); g.arc(x + (y / 16 % 2) * 8, y, r, 0, Math.PI * 2); g.fill(); }
+    for (let i = 0; i < 9; i++) { const x = rand(0, W), y = rand(0, H); g.fillStyle = 'rgba(20,20,20,.18)'; for (let k = 0; k < 14; k++) { g.beginPath(); g.arc(x + rand(-50, 50), y + rand(-50, 50), rand(1, 7), 0, Math.PI * 2); g.fill(); } }
+    for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(0,0,0,${rand(0.02, 0.08)})`; g.fillRect(rand(0, W), rand(0, H), 1.5, 1.5); }
+    g.strokeStyle = 'rgba(20,20,20,.25)'; g.lineWidth = 3; for (let i = 0; i < 6; i++) { g.beginPath(); const x = rand(0, W); g.moveTo(x, 0); g.lineTo(x + rand(-80, 80), H); g.stroke(); }
+  },
+  hearts(g) {
+    const heart = (x, y, s, c) => { g.fillStyle = c; g.beginPath(); g.moveTo(x, y + s * 0.3); g.bezierCurveTo(x, y, x - s / 2, y, x - s / 2, y + s * 0.3); g.bezierCurveTo(x - s / 2, y + s * 0.6, x, y + s * 0.8, x, y + s); g.bezierCurveTo(x, y + s * 0.8, x + s / 2, y + s * 0.6, x + s / 2, y + s * 0.3); g.bezierCurveTo(x + s / 2, y, x, y, x, y + s * 0.3); g.fill(); };
+    for (let i = 0; i < 9; i++) { const sh = g.createLinearGradient(0, rand(0, H), W, rand(0, H)); sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(0.5, 'rgba(255,220,240,.12)'); sh.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = sh; g.fillRect(0, i * 110, W, 90); }
+    for (let i = 0; i < 16; i++) heart(rand(0, W), rand(0, H), rand(26, 70), `rgba(255,255,255,${rand(0.06, 0.16)})`);
+    for (let i = 0; i < 140; i++) { const x = rand(0, W), y = rand(0, H), s = rand(1, 3.2); g.fillStyle = `rgba(255,255,255,${rand(0.3, 0.9)})`; g.fillRect(x - s / 2, y - s * 2, s, s * 4); g.fillRect(x - s * 2, y - s / 2, s * 4, s); }
+  },
+  meadow(g) {
+    const sun = g.createRadialGradient(650, 120, 10, 650, 120, 200); sun.addColorStop(0, 'rgba(255,250,210,.9)'); sun.addColorStop(1, 'rgba(255,250,210,0)'); g.fillStyle = sun; g.fillRect(0, 0, W, 400);
+    for (let i = 0; i < 6; i++) { const x = rand(0, W), y = rand(140, 420), s = rand(40, 80); g.fillStyle = 'rgba(255,255,255,.55)'; for (let k = 0; k < 4; k++) { g.beginPath(); g.ellipse(x + (k - 1.5) * s * 0.5, y + Math.sin(k * 2) * 6, s * 0.5, s * 0.3, 0, 0, Math.PI * 2); g.fill(); } }
+    [['#7ab83a', 760], ['#5a9a2a', 850], ['#3a7a1a', 930]].forEach(([c, y0], k) => { g.fillStyle = c; g.beginPath(); g.moveTo(0, H); for (let x = 0; x <= W; x += 20) g.lineTo(x, y0 + Math.sin(x / (120 + k * 50) + k) * 26); g.lineTo(W, H); g.fill(); });
+    for (let i = 0; i < 9; i++) { const x = rand(0, W), y = rand(780, 900); g.fillStyle = '#2a5a12'; g.beginPath(); g.moveTo(x, y - 70); g.lineTo(x - 26, y); g.lineTo(x + 26, y); g.fill(); g.fillStyle = '#5a3a1a'; g.fillRect(x - 4, y, 8, 14); }
+  },
+  aero(g) {
+    for (let i = 0; i < 5; i++) { g.fillStyle = 'rgba(255,255,255,.08)'; const x = rand(-100, W); g.beginPath(); g.moveTo(x, 0); g.lineTo(x + 90, 0); g.lineTo(x + 300, H); g.lineTo(x + 140, H); g.fill(); }
+    for (let i = 0; i < 40; i++) { const x = rand(0, W), y = rand(0, H), r = rand(5, 30), bg = g.createRadialGradient(x - r * 0.3, y - r * 0.3, 1, x, y, r); bg.addColorStop(0, 'rgba(255,255,255,.7)'); bg.addColorStop(0.6, 'rgba(255,255,255,.08)'); bg.addColorStop(1, 'rgba(255,255,255,.4)'); g.fillStyle = bg; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill(); }
+    for (let i = 0; i < 8; i++) { const x = rand(0, W), y = rand(H * 0.6, H); g.fillStyle = `rgba(126,211,33,${rand(0.4, 0.7)})`; g.beginPath(); g.ellipse(x, y, 34, 12, rand(-1, 1), 0, Math.PI * 2); g.fill(); }
+  },
+  xp(g) {
+    const sky = g.createRadialGradient(560, 140, 20, 560, 140, 360); sky.addColorStop(0, 'rgba(255,255,255,.35)'); sky.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    for (let i = 0; i < 5; i++) { const x = rand(0, W), y = rand(120, 380), s = rand(50, 100); g.fillStyle = 'rgba(255,255,255,.5)'; for (let k = 0; k < 4; k++) { g.beginPath(); g.ellipse(x + (k - 1.5) * s * 0.5, y + Math.sin(k) * 8, s * 0.5, s * 0.25, 0, 0, Math.PI * 2); g.fill(); } }
+    const hill = g.createLinearGradient(0, 700, 0, H); hill.addColorStop(0, '#6ac83a'); hill.addColorStop(1, '#2a7a14');
+    g.fillStyle = hill; g.beginPath(); g.moveTo(0, H); g.lineTo(0, 820); g.quadraticCurveTo(W * 0.45, 640, W, 800); g.lineTo(W, H); g.fill();
+  },
+  neon(g) {
+    g.strokeStyle = 'rgba(110,230,40,.16)'; g.lineWidth = 1;
+    for (let k = 0; k < 18; k++) { const y = 560 + k * k * 1.5; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+    for (let x = -800; x <= W + 800; x += 60) { g.beginPath(); g.moveTo(W / 2, 560); g.lineTo(x, H); g.stroke(); }
+    const orb = g.createRadialGradient(W / 2, 360, 10, W / 2, 360, 300); orb.addColorStop(0, 'rgba(170,255,60,.35)'); orb.addColorStop(0.4, 'rgba(60,160,20,.12)'); orb.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = orb; g.fillRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(160,255,60,.12)'; g.lineWidth = 3; for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(W / 2, 360, 120 + i * 60, -0.6 + i, 0.9 + i); g.stroke(); }
+  },
+  slot(g) {
+    for (let i = 0; i < 120; i++) { g.fillStyle = `rgba(255,255,255,${rand(0.2, 0.8)})`; const s = rand(0.6, 2); g.fillRect(rand(0, W), rand(0, H), s, s); }
+    g.save(); g.translate(W / 2, H * 0.4); for (let i = 0; i < 24; i++) { g.rotate(Math.PI / 12); g.fillStyle = 'rgba(255,210,80,.05)'; g.beginPath(); g.moveTo(0, 0); g.lineTo(-60, -900); g.lineTo(60, -900); g.fill(); } g.restore();
+    g.strokeStyle = 'rgba(255,210,80,.25)'; g.lineWidth = 6; g.strokeRect(14, 14, W - 28, H - 28); g.lineWidth = 2; g.strokeRect(26, 26, W - 52, H - 52);
+  },
   lanterns(g) {
     for (let i = 0; i < 18; i++) { const x = rand(0, W), y = rand(120, H), r = rand(30, 90), h = g.createRadialGradient(x, y, 0, x, y, r);
       h.addColorStop(0, `rgba(255,170,90,${rand(0.04, 0.08)})`); h.addColorStop(1, 'rgba(255,170,90,0)'); g.fillStyle = h; g.fillRect(x - r, y - r, r * 2, r * 2); }
@@ -822,7 +1055,7 @@ const DECO = {
 const bgCache = {};
 function bgFor(key) {
   if (bgCache[key]) return bgCache[key];
-  const th = THEMES[key], c = document.createElement('canvas'); c.width = W; c.height = H;
+  const th = UI_THEMES[key].board, c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d'), gr = g.createLinearGradient(0, 0, 0, H);
   gr.addColorStop(0, th.top); gr.addColorStop(0.55, th.mid); gr.addColorStop(1, th.bot);
   g.fillStyle = gr; g.fillRect(0, 0, W, H); DECO[th.deco](g);
@@ -856,7 +1089,7 @@ function mult() {
 }
 const curP = () => S.players[S.cur];
 const boatW = () => { const p = curP(); return (p && (p.bigBoat > 0 || (p.armed && p.power === 'quaxi')) ? BW * 1.9 : BW) * (1 + 0.25 * perk('boot')); };
-const curTheme = () => (S.phase !== 'setup' && curP() ? curP().theme : 'nacht');
+const curTheme = () => uiTheme;
 
 /* ---------- Effekte ---------- */
 function toast(text, color = '#7c5cff', sub = '') { S.toasts.push({ text, sub, color, t: 1.9, max: 1.9 }); if (S.toasts.length > 3) S.toasts.shift(); }
@@ -868,12 +1101,12 @@ function burst(x, y, col, n = 10, sp = 160) {
 function startGame() {
   if (ONLINE) { hostStart(); return; }
   const rogue = settings.mode === 'rogue', n = rogue ? 1 : settings.count;
-  S.rogue = rogue ? { stage: 1, picks: 0 } : null;
+  S.rogue = rogue ? { stage: 1, picks: 0 } : null; S.awarded = false;
   S.levelKey = rogue || settings.level === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : settings.level;
   if (rogue) buildLevel(S.levelKey, rogueOrange(1)); else buildLevel(S.levelKey);
   S.players = settings.players.slice(0, n).map((p, i) => ({
     name: p.name.trim() || `Spieler ${i + 1}`, power: p.power, score: 0, balls: rogue ? 10 : BALLS_BY_COUNT[n],
-    charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, theme: 'nacht', perks: {},
+    charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, perks: {},
   }));
   S.cur = 0; S.finale = false; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.toasts = [];
   S.order = 0; S.lastMult = 1; S.timeScale = 1; S.adGap = 0; S.round = 1; S.turnInRound = 0;
@@ -886,12 +1119,12 @@ function startGame() {
   updatePanel();
 }
 function hideOverlays() {
-  for (const id of ['#setup', '#over', '#loot', '#ad', '#upg']) $(id).hidden = true;
+  for (const id of ['#setup', '#over', '#ad', '#upg']) $(id).hidden = true;
   document.body.dataset.page = 'game';
-  clearInterval(adTimer); lootBusy = false; S.lootAfter = null; adAfter = null;
+  clearInterval(adTimer); adAfter = null;
 }
 const isMine = () => !ONLINE || (!!curP() && curP().uid === ONLINE.uid);
-const canAct = () => S.phase === 'aim' && isMine() && $('#ad').hidden && $('#loot').hidden && $('#upg').hidden && $('#over').hidden && $('#setup').hidden;
+const canAct = () => S.phase === 'aim' && isMine() && $('#ad').hidden && $('#upg').hidden && $('#over').hidden && $('#setup').hidden;
 function toggleAbility() {
   if (!canAct()) return;
   const p = curP(); if (!p) return;
@@ -983,11 +1216,9 @@ function finishTurn() {
   pickBonus();
   if (ONLINE) {
     if (roundOver) { S.turnInRound = 0; S.round++; }
-    if (roundOver && lootDue(S.round - 1, (ONLINE.meta && ONLINE.meta.loot) || 'selten')) { S.lootRound = S.round - 1; S.phase = 'loot'; }
-    else S.phase = 'aim';
+    S.phase = 'aim';
     pushState();
-    if (S.phase === 'loot') openOnlineLoot(S.lootRound);
-    else announceTurn();
+    announceTurn();
     updatePanel();
     return;
   }
@@ -996,14 +1227,10 @@ function finishTurn() {
     if (n > 1) toast(`${curP().name} ist dran`, PCOL[S.cur], `Runde ${S.round}`);
     updatePanel();
   };
-  const afterLoot = () => maybeAd(announce);
   if (roundOver) { S.turnInRound = 0; S.round++; }
-  if (roundOver && lootDue(S.round - 1, settings.loot)) startRoundLoot(afterLoot);
-  else afterLoot();
+  maybeAd(announce);
   updatePanel();
 }
-/* Lootboxen gibt es je nach Einstellung nach jeder Runde, nach jeder dritten oder gar nicht. */
-const lootDue = (done, mode) => mode === 'jede' || (mode === 'selten' && done > 0 && done % 3 === 0);
 function maybeAd(next) {
   S.adGap++;
   if (settings.ads && S.adGap >= 2 && Math.random() < 0.35) { S.adGap = 0; showAd(next); }
@@ -1036,6 +1263,9 @@ function endGame() {
   const entries = S.players.filter(p => p.score > 0 && (!ONLINE || p.uid === ONLINE.uid)).map(p => ({
     name: p.name.slice(0, 16), score: Math.round(p.score), char: p.power, map: S.levelKey, players: S.players.length, mode: ONLINE ? 'online' : S.rogue ? 'rogue' : 'lokal', ...(S.rogue ? { stage: S.rogue.stage } : {}),
   }));
+  const won = awardBoxes();
+  $('#overBox').hidden = !won; $('#overBoxBtn').hidden = !won || !!ONLINE;
+  if (won) $('#overBox').textContent = `+${won} ${won === 1 ? 'Lootbox' : 'Lootboxen'}! ${ONLINE ? 'Öffne sie im Hauptmenü unter „Themes & Boxen“.' : 'Darin stecken neue Themes.'}`;
   if (entries.length) Board.submitAll(entries).then(where => { $('#overSub').textContent = `${sub} Eingetragen in die Bestenliste${where === 'local' ? ' auf diesem Gerät' : ''}.`; }).catch(() => {});
   setTimeout(() => { if (S.phase === 'over') { $('#over').hidden = false; (again.disabled ? $('#setupBtn') : again).focus(); } }, 900);
 }
@@ -1150,81 +1380,6 @@ function closeAd() {
   updatePanel();
 }
 
-/* ---------- Lootboxen am Rundenende ---------- */
-let lootBusy = false;
-const rollLoot = () => { let r = Math.random() * LOOT.reduce((s, l) => s + l.w, 0); for (const l of LOOT) if ((r -= l.w) < 0) return l; return LOOT[0]; };
-const itemHTML = l => {
-  const ob = l.theme ? `--ob:linear-gradient(135deg,${THEMES[l.theme].top},${THEMES[l.theme].mid} 50%,${THEMES[l.theme].bot})` : '';
-  return `<div class="item" style="--rc:${RAR[l.rar].c};${ob}"><span class="orb">${l.sym}</span><span>${l.name}</span></div>`;
-};
-function startRoundLoot(after) {
-  S.phase = 'loot'; S.lootQ = S.players.map((_, i) => i); S.lootAfter = after;
-  $('#loot').hidden = false; nextLoot();
-}
-function nextLoot(idx) {
-  S.lootFor = idx != null ? idx : S.lootQ.shift();
-  const p = S.players[S.lootFor], done = S.round - 1;
-  $('#lootTitle').textContent = `Lootbox · Runde ${done}`;
-  $('#lootHead').textContent = `Runde ${done} ist vorbei`;
-  $('#lootSub').innerHTML = S.players.length > 1 ? `Box für <b style="color:${PCOL[S.lootFor]}">${esc(p.name)}</b>` : 'Deine Box für diese Runde';
-  const strip = $('#strip'); strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
-  strip.innerHTML = Array.from({ length: 9 }, rollLoot).map(itemHTML).join('');
-  $('#prize').className = 'prize'; $('#prize').innerHTML = '<p class="note">Alles ist möglich. Vor allem ein leerer Karton.</p>';
-  $('#lootOpen').hidden = false; $('#lootOpen').disabled = false; $('#lootNext').hidden = true;
-  $('#lootOpen').focus();
-}
-function spinLoot() {
-  if (lootBusy || S.phase !== 'loot') return;
-  lootBusy = true; $('#lootOpen').disabled = true;
-  const win = rollLoot(), WIN_AT = 38, items = Array.from({ length: 44 }, rollLoot); items[WIN_AT] = win;
-  const strip = $('#strip');
-  strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
-  strip.innerHTML = items.map(itemHTML).join('');
-  $('#prize').className = 'prize'; $('#prize').innerHTML = '<p class="note">Dreht …</p>';
-  const first = strip.children[0], step = first.offsetWidth + 8;
-  const target = WIN_AT * step + first.offsetWidth / 2 - strip.parentElement.clientWidth / 2 + rand(-step * 0.35, step * 0.35);
-  void strip.offsetWidth;
-  const dur = reducedMotion ? 0.4 : 4;
-  strip.style.transition = `transform ${dur}s cubic-bezier(.12,.72,.14,1)`;
-  strip.style.transform = `translateX(${-target}px)`;
-  if (!reducedMotion) for (let i = 0; i < 26; i++) tone(1300 + i * 10, 0.03, 'square', 0.018, dur * Math.pow(i / 26, 2.4));
-  setTimeout(() => revealLoot(win), dur * 1000 + 200);
-}
-function applyLoot(p, l) {
-  let desc = l.desc;
-  if (l.id === 'pts') p.score += 250;
-  else if (l.id === 'skin') p.skin = 'rainbow';
-  else if (l.id === 'charge') { if (p.charges < maxCh(p)) p.charges++; else desc = `Schon ${maxCh(p)} Ladungen. Mehr passt nicht rein.`; }
-  else if (l.id === 'ball') p.balls++;
-  else if (l.id === 'gold') p.gold = true;
-  else if (l.id === 'theme') { const had = p.theme === l.theme; p.theme = l.theme; desc = had ? 'Hattest du schon. Bleibt aktiv.' : `Dein Spielfeld sieht in deinen Zügen jetzt aus wie ${THEMES[l.theme].name}.`; }
-  return desc;
-}
-function revealLoot(l) {
-  const p = S.players[S.lootFor];
-  let desc;
-  if (ONLINE) {
-    desc = applyLoot({ ...p }, l);
-    ONLINE.net.set(`${ONLINE.path}/loot/${S.lootRound}/${ONLINE.uid}`, LOOT.indexOf(l));
-  } else desc = applyLoot(p, l);
-  const r = RAR[l.rar];
-  const pr = $('#prize'); pr.className = 'prize win'; pr.style.setProperty('--rc', r.c);
-  pr.innerHTML = `<span class="rar">${r.n}</span><span class="pn">${l.name}</span><span class="pd">${desc}</span>`;
-  if (l.rar === 0) { tone(220, 0.35, 'sawtooth', 0.05); tone(165, 0.5, 'sawtooth', 0.05, 0.2); }
-  else [0, 4, 7, 12, 16].slice(0, l.rar + 1).forEach((k, i) => tone(noteFreq(5 + k), 0.4, 'triangle', 0.08, i * 0.09));
-  $('#lootOpen').hidden = true;
-  const nx = $('#lootNext'); nx.hidden = false;
-  if (ONLINE) { nx.textContent = 'Warte auf die anderen …'; nx.disabled = true; }
-  else { nx.disabled = false; nx.textContent = S.lootQ.length ? `Weiter: ${S.players[S.lootQ[0]].name}` : 'Weiterspielen'; nx.focus(); }
-  lootBusy = false; updatePanel();
-}
-function lootNext() {
-  if (lootBusy) return;
-  if (S.lootQ.length) { nextLoot(); return; }
-  $('#loot').hidden = true;
-  const a = S.lootAfter; S.lootAfter = null;
-  if (a) a();
-}
 
 /* ---------- Physik ---------- */
 function collideCircle(b, cx, cy, r) {
@@ -1351,10 +1506,11 @@ function update(dt) {
 function toonBox(x, y, w, h, fill, accent) {
   const r = Math.min(16, h / 2);
   const path = () => { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); };
-  ctx.fillStyle = '#1a0b36'; ctx.save(); ctx.translate(0, 5); path(); ctx.fill(); ctx.restore();
+  const ink = TH().cv.ink;
+  ctx.fillStyle = ink; ctx.save(); ctx.translate(0, 5); path(); ctx.fill(); ctx.restore();
   path(); ctx.fillStyle = fill; ctx.fill();
   if (accent) { ctx.save(); path(); ctx.clip(); ctx.fillStyle = accent; ctx.fillRect(x, y, 10, h); ctx.restore(); }
-  path(); ctx.strokeStyle = '#1a0b36'; ctx.lineWidth = 4; ctx.stroke();
+  path(); ctx.strokeStyle = ink; ctx.lineWidth = 4; ctx.stroke();
 }
 function draw() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
@@ -1365,7 +1521,7 @@ function draw() {
       const x = i * W / 5, v = ZONES[i], hot = v === 50000;
       ctx.fillStyle = hot ? 'rgba(255,122,61,.55)' : i % 2 ? 'rgba(176,106,224,.45)' : 'rgba(111,140,204,.45)';
       ctx.fillRect(x + 3, 952, W / 5 - 6, 48);
-      ctx.font = `20px ${TOON_FONT}`; ctx.textAlign = 'center'; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a0b36';
+      ctx.font = `20px ${toonFont()}`; ctx.textAlign = 'center'; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a0b36';
       ctx.strokeText(fmt(v), x + W / 10, 983); ctx.fillStyle = '#fff4d6'; ctx.fillText(fmt(v), x + W / 10, 983);
     }
   } else {
@@ -1413,7 +1569,7 @@ function draw() {
 
   for (const q of S.parts) { ctx.fillStyle = rgba(q.col, Math.max(0, q.life / q.max)); ctx.fillRect(q.x - 1.5, q.y - 1.5, 3, 3); }
 
-  ctx.textAlign = 'center'; ctx.font = `19px ${TOON_FONT}`; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1a0b36';
+  ctx.textAlign = 'center'; ctx.font = `19px ${toonFont()}`; ctx.lineWidth = 5; ctx.lineJoin = 'round'; ctx.strokeStyle = TH().cv.ink;
   for (const q of S.popups) { ctx.globalAlpha = Math.min(1, q.t * 2); ctx.strokeText(q.text, q.x, q.y); ctx.fillStyle = q.col; ctx.fillText(q.text, q.x, q.y); }
   ctx.globalAlpha = 1;
 
@@ -1421,9 +1577,9 @@ function draw() {
     const p = curP();
     const label = S.phase === 'shot' && S.shot ? `Schuss: ${fmt(S.shot.score)}` : !isMine() && S.phase === 'aim' ? `${p.name} zielt …` : '';
     if (label) {
-      ctx.font = `20px ${TOON_FONT}`; const w = ctx.measureText(label).width + 36;
-      toonBox(14, 14, w, 40, '#2c1760', PCOL[S.cur]);
-      ctx.textAlign = 'left'; ctx.fillStyle = '#fff4d6'; ctx.fillText(label, 32, 41);
+      ctx.font = `20px ${toonFont()}`; const w = ctx.measureText(label).width + 36;
+      toonBox(14, 14, w, 40, TH().cv.box, PCOL[S.cur]);
+      ctx.textAlign = 'left'; ctx.fillStyle = TH().cv.sub; ctx.fillText(label, 32, 41);
     }
   }
 
@@ -1431,17 +1587,18 @@ function draw() {
   S.toasts.forEach((q, i) => {
     const a = Math.min(1, q.t * 2.5, (q.max - q.t) * 6), y = 330 + i * 80, pop = 0.8 + 0.2 * Math.min(1, (q.max - q.t) * 8);
     ctx.globalAlpha = a;
-    ctx.font = `28px ${TOON_FONT}`;
+    ctx.font = `28px ${toonFont()}`;
     const w = Math.max(280, ctx.measureText(q.text).width + 60), hh = q.sub ? 70 : 52;
     ctx.save(); ctx.translate(W / 2, y - 32 + hh / 2); ctx.rotate(-0.02 * (i % 2 ? -1 : 1)); ctx.scale(pop, pop);
-    toonBox(-w / 2, -hh / 2, w, hh, '#2c1760', q.color);
+    const cvt = TH().cv;
+    toonBox(-w / 2, -hh / 2, w, hh, cvt.box, q.color);
     ctx.save(); ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(-w / 2 + 4, -hh / 2 + 4, w - 8, hh / 2 - 4, 12); else ctx.rect(-w / 2 + 4, -hh / 2 + 4, w - 8, hh / 2 - 4);
     ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.fill(); ctx.restore();
-    ctx.textAlign = 'center'; ctx.strokeStyle = '#1a0b36'; ctx.lineWidth = 7; ctx.lineJoin = 'round';
+    ctx.textAlign = 'center'; ctx.strokeStyle = cvt.ink; ctx.lineWidth = 7; ctx.lineJoin = 'round';
     const ty = q.sub ? -4 : 10, tg = ctx.createLinearGradient(0, ty - 24, 0, ty + 4);
-    tg.addColorStop(0, '#fffbe0'); tg.addColorStop(0.45, '#ffe066'); tg.addColorStop(0.55, '#ffb21f'); tg.addColorStop(1, '#ff7a1f');
+    tg.addColorStop(0, cvt.g[0]); tg.addColorStop(0.45, cvt.g[1]); tg.addColorStop(0.55, cvt.g[2]); tg.addColorStop(1, cvt.g[3]);
     ctx.strokeText(q.text, 0, ty); ctx.fillStyle = tg; ctx.fillText(q.text, 0, ty);
-    if (q.sub) { ctx.fillStyle = '#e8dcff'; ctx.font = `600 15px ${UI_FONT}`; ctx.fillText(q.sub, 0, ty + 24); }
+    if (q.sub) { ctx.fillStyle = cvt.sub; ctx.font = `600 15px ${UI_FONT}`; ctx.fillText(q.sub, 0, ty + 24); }
     ctx.restore();
   });
   ctx.globalAlpha = 1;
@@ -1509,7 +1666,7 @@ function updatePanel() {
   if (!S.players.length) el.innerHTML = '<p class="empty">Noch kein Spiel gestartet.</p>';
   else el.innerHTML = S.players.map((p, i) => {
     const c = CHARS[p.power], on = i === S.cur && S.phase !== 'over';
-    const fx = [p.armed && 'scharf', p.sight > 0 && 'Fernrohr', p.bigBoat > 0 && 'Riesenboot', p.gold && 'Goldkugel', p.skin && 'Regenbogen', p.theme !== 'nacht' && THEMES[p.theme].name, S.rogue && `${Object.values(p.perks || {}).reduce((a, b) => a + b, 0)} Upgrades`].filter(Boolean);
+    const fx = [p.armed && 'scharf', p.sight > 0 && 'Fernrohr', p.bigBoat > 0 && 'Riesenboot', p.gold && 'Goldkugel', p.skin && 'Regenbogen', S.rogue && `${Object.values(p.perks || {}).reduce((a, b) => a + b, 0)} Upgrades`].filter(Boolean);
     return `<div class="pl ${on ? 'on' : ''}" style="--pc:${PCOL[i]}" title="${esc(p.name)} · ${c.name}${fx.length ? ' · ' + fx.join(' · ') : ''}">
       <img class="pic" src="${ICON_URL[p.power]}" alt="">
       <div class="pl-top"><span class="nm">${esc(p.name)}</span><span class="sc">${fmt(p.score)}</span></div>
@@ -1673,7 +1830,7 @@ for (const k in CHARS) { ICONS[k] = drawIcon(k); try { ICON_URL[k] = ICONS[k].to
 function mapThumb(key) {
   const c = document.createElement('canvas'); c.width = 200; c.height = 250;
   const g = c.getContext('2d');
-  g.drawImage(bgFor(key === 'zufall' ? 'vapor' : 'nacht'), 0, 0, 200, 250);
+  g.drawImage(bgFor(key === 'zufall' ? 'automat' : 'nacht'), 0, 0, 200, 250);
   if (key === 'zufall') {
     g.fillStyle = '#fff'; g.font = '120px "Lilita One", Tahoma, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.shadowColor = '#8cc8ff'; g.shadowBlur = 20; g.fillText('?', 100, 120);
@@ -1762,9 +1919,10 @@ function menuMusicTick() {
     tuneTime += len * beat; tuneStep++;
   }
 }
+applyUiTheme((() => { try { return new URLSearchParams(location.search).get('ui') || JSON.parse(localStorage.getItem('plinko-progress') || '{}').active; } catch (e) { return 'nacht'; } })());
 buildScene(); splitTitle(); setTimeout(syncRejoin, 0);
 tuneTimer = setInterval(menuMusicTick, 250);
-const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras'];
+const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'];
 let castIdx = 0, castOnly = false;
 const curPage = () => PAGES.find(p => !$('#' + p).hidden);
 function showPage(id, focusSel) {
@@ -1779,7 +1937,6 @@ const blip = () => tone(1046, 0.05, 'sine', 0.035);
 const confirmTone = () => { tone(784, 0.08, 'triangle', 0.06); tone(1175, 0.12, 'triangle', 0.06, 0.07); };
 function syncToggles() {
   $('#adsToggle').textContent = `Werbepausen: ${settings.ads ? 'An' : 'Aus'}`;
-  $('#lootToggle').textContent = `Lootboxen: ${LOOT_MODES[settings.loot]}`;
   $('#sndToggle').textContent = `Ton: ${muted ? 'Aus' : 'An'}`;
   $('#muteBtn').textContent = muted ? '✕' : '♪'; $('#muteBtn').setAttribute('aria-label', muted ? 'Ton ist aus' : 'Ton ist an');
 }
@@ -1842,7 +1999,7 @@ function goBack() {
   if (pg === 'pgCount') showPage('pgMain');
   else if (pg === 'pgCast') castBack();
   else if (pg === 'pgMap') mapBack();
-  else if (pg === 'pgOnline' || pg === 'pgBoard' || pg === 'pgExtras') showPage('pgMain');
+  else if (['pgOnline', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'].includes(pg)) showPage('pgMain');
 }
 function spatialMove(dir) {
   const pg = $('#' + curPage());
@@ -1883,16 +2040,12 @@ $('#castBack').addEventListener('click', castBack);
 $('#mapBack').addEventListener('click', mapBack);
 $('#mapStart').addEventListener('click', startGame);
 $('#adsToggle').addEventListener('click', () => { settings.ads = !settings.ads; syncToggles(); });
-$('#lootToggle').addEventListener('click', () => {
-  const ks = Object.keys(LOOT_MODES); settings.loot = ks[(ks.indexOf(settings.loot) + 1) % ks.length];
-  try { localStorage.setItem('plinko-loot', settings.loot); } catch (e) {}
-  syncToggles();
-});
 $('#sndToggle').addEventListener('click', () => { muted = !muted; syncToggles(); });
 $('#setup').addEventListener('focusin', e => { if (e.target.tagName === 'BUTTON') { blip(); if (Math.random() < 0.35) hopSomeone(); } });
 $('#setup').addEventListener('click', e => { if (e.target.closest('button')) hopSomeone(); });
 window.addEventListener('keydown', e => {
   if ($('#setup').hidden) return;
+  if (!$('#box').hidden) { if (e.key === 'Escape') { e.preventDefault(); closeBox(); } return; }
   const dirs = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' };
   const inInput = document.activeElement && document.activeElement.tagName === 'INPUT';
   if (dirs[e.key] && !(inInput && (e.key === 'ArrowLeft' || e.key === 'ArrowRight'))) { e.preventDefault(); spatialMove(dirs[e.key]); }
@@ -1912,7 +2065,7 @@ const EXTRA_CHAPTERS = [
   { id: 'regeln', sym: '?', name: 'So wird gespielt' },
   { id: 'laternen', sym: '●', name: 'Die Laternen' },
   { id: 'figuren', sym: '★', name: 'Charaktere' },
-  { id: 'loot', sym: '▣', name: 'Lootboxen' },
+  { id: 'loot', sym: '▣', name: 'Themes & Boxen' },
   { id: 'rogue', sym: '↯', name: 'Roguelike' },
   { id: 'online', sym: '⇄', name: 'Online' },
 ];
@@ -1935,8 +2088,7 @@ function extraHTML(id) {
     ${li(dot(TYPES.bonus.c), 'Lila: Bonuslaterne', `${TYPES.bonus.base} Punkte. Wechselt nach jedem Zug den Platz.`)}
   </ul><p class="xn">Bleibt eine Kugel hängen, räumt das Spiel die getroffenen Laternen um sie herum nach kurzer Zeit ab.</p>`;
   if (id === 'figuren') return `<h3>Charaktere und ihre Fähigkeiten</h3><ul class="xl xc">${Object.entries(CHARS).map(([k, c]) => `<li><img src="${ICON_URL[k]}" alt=""><div><b style="color:${c.col}">${c.name}</b> <small>${c.kind}</small><span class="xp">Fähigkeit: <b>${c.power}</b> – ${c.desc}</span><span>${BIO[k]}</span><span class="xt">Tipp: ${TIPS[k]}</span></div></li>`).join('')}</ul>`;
-  if (id === 'loot') return `<h3>Lootboxen</h3><p>Am Ende einer Runde öffnet jede Person eine Box. Wie oft das passiert, stellst du im Hauptmenü ein: jede Runde, alle 3 Runden (Standard) oder gar nicht. Online öffnet jede Person ihre Box auf dem eigenen Gerät.</p><ul class="xl">${LOOT.filter(l => l.id !== 'theme').map(l => li(sym(l.sym || '·'), l.name, l.desc)).join('')}
-    ${li(sym('▦'), 'Themes', `Ändern das Aussehen des Spielfelds in deinen Zügen: ${LOOT.filter(l => l.id === 'theme').map(l => THEMES[l.theme].name).join(', ')}. Je seltener, desto schicker.`)}</ul>`;
+  if (id === 'loot') return `<h3>Themes &amp; Lootboxen</h3><p>Nach jedem Spiel bekommst du eine Lootbox, für einen Sieg, ein geschafftes Feld oder Feld 3 im Roguelike eine zweite. Geöffnet wird im Hauptmenü unter <b>Themes &amp; Boxen</b>. In jeder Box steckt ein Theme. Ein Theme verändert das ganze Spiel: Farben, Schrift, Knöpfe, Rahmen, Hintergrund und Spielfeld. Doppelte Themes werden zu Splittern, drei Splitter ergeben eine neue Box.</p><p>Mit einem <b>Konto</b> (Hauptmenü → Konto) sind deine Themes gesichert und auf jedem Gerät da.</p><ul class="xl">${Object.values(UI_THEMES).map(t => li(`<i class="xs" style="background:${swatchBg(t)}"></i>`, `${t.name} <small style="color:${RARITY[t.rar].c}">${RARITY[t.rar].n}</small>`, t.desc)).join('')}</ul>`;
   if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Ein Run für eine Person. Du startest mit 10 Kugeln auf einem zufälligen Feld. Nach jeder Runde (3 Schüsse) und nach jedem geschafften Feld wählst du <b>eins von drei Upgrades</b>. Geschaffte Felder geben +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn die Kugeln ausgehen.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
   return `<h3>Online spielen</h3><ul class="xl">
     ${li(sym('⌂'), 'Räume', 'Erstell einen Raum mit Name und Passwort. 2 bis 4 Personen spielen abwechselnd, alle sehen Zielen und Flugbahn live.')}
@@ -1957,12 +2109,214 @@ function openExtras() {
 }
 $('#extrasMenuBtn').addEventListener('click', openExtras);
 
+/* ---------- Fortschritt: freigeschaltete Themes, Lootboxen, Splitter ----------
+   Liegt immer im Browser. Mit Konto zusätzlich in Firebase unter users/<uid>/progress, damit er auf jedem Gerät da ist. */
+const PROG_KEY = 'plinko-progress';
+const progDefault = () => ({ v: 1, themes: { nacht: 1 }, active: 'nacht', boxes: 1, shards: 0, games: 0 });
+function cleanProg(p) {
+  const d = progDefault(), o = Object.assign(d, p || {});
+  o.themes = Object.assign({ nacht: 1 }, ...Object.keys(o.themes || {}).filter(k => UI_THEMES[k]).map(k => ({ [k]: 1 })));
+  if (!o.themes[o.active]) o.active = 'nacht';
+  o.boxes = Math.max(0, Math.min(999, o.boxes | 0)); o.shards = Math.max(0, Math.min(2, o.shards | 0)); o.games = Math.max(0, o.games | 0);
+  return o;
+}
+let PROG = cleanProg((() => { try { return JSON.parse(localStorage.getItem(PROG_KEY) || 'null'); } catch (e) { return null; } })());
+let progTimer = null;
+function saveProg() {
+  try { localStorage.setItem(PROG_KEY, JSON.stringify(PROG)); } catch (e) {}
+  syncBoxBadge();
+  clearTimeout(progTimer);
+  progTimer = setTimeout(async () => { const net = await getNet(); if (net && net.account()) net.saveProgress(PROG).catch(e => console.warn('Fortschritt:', e)); }, 400);
+}
+function mergeProg(a, b) {
+  if (!b) return cleanProg(a);
+  return cleanProg({ themes: Object.assign({}, a.themes, b.themes), active: b.active || a.active, boxes: Math.max(a.boxes, b.boxes), shards: Math.max(a.shards, b.shards), games: Math.max(a.games, b.games) });
+}
+function setActiveTheme(id) {
+  if (!PROG.themes[id]) return;
+  PROG.active = id; applyUiTheme(id); saveProg();
+}
+function syncBoxBadge() {
+  const b = $('#themesMenuBtn'); if (b) b.textContent = PROG.boxes > 0 ? `Themes & Boxen (${PROG.boxes})` : 'Themes & Boxen';
+}
+/* Boxen am Spielende: eine pro Spiel, eine zweite für Sieg, geschafftes Feld oder Feld 3 im Roguelike */
+function awardBoxes() {
+  if (S.awarded) return 0;
+  S.awarded = true;
+  let n = 1;
+  if (S.rogue) { if (S.rogue.stage >= 3) n++; }
+  else if (ONLINE) { const best = Math.max(...S.players.map(p => p.score)), me = S.players.find(p => p.uid === ONLINE.uid); if (me && me.score === best && best > 0) n++; }
+  else if (S.players.length === 1) { if (S.finale) n++; }
+  PROG.boxes += n; PROG.games++; saveProg();
+  return n;
+}
+
+/* ---------- Lootbox öffnen: Walze mit Themes, doppelte geben Splitter ---------- */
+let boxBusy = false, boxWin = null;
+const rollTheme = () => {
+  const pool = Object.entries(UI_THEMES).filter(([, t]) => t.rar > 0), tot = pool.reduce((s, [, t]) => s + RARITY[t.rar].w, 0);
+  let r = Math.random() * tot; for (const [k, t] of pool) if ((r -= RARITY[t.rar].w) < 0) return k; return pool[0][0];
+};
+const swatchBg = t => `linear-gradient(135deg,${t.swatch[0]} 0 45%,${t.swatch[1]} 45% 72%,${t.swatch[2]} 72%)`;
+const boxItemHTML = k => { const t = UI_THEMES[k]; return `<div class="item" style="--rc:${RARITY[t.rar].c};--ob:${swatchBg(t)}"><span class="orb"></span><span>${t.name}</span></div>`; };
+function openBoxDialog() {
+  boxWin = null;
+  $('#boxHead').textContent = PROG.boxes > 0 ? 'Was steckt drin?' : 'Keine Boxen mehr';
+  $('#boxSub').textContent = PROG.boxes > 0 ? `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3` : 'Spiel eine Runde, dann gibt es neue Boxen.';
+  const strip = $('#boxStrip'); strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
+  strip.innerHTML = Array.from({ length: 9 }, rollTheme).map(boxItemHTML).join('');
+  $('#boxPrize').className = 'prize'; $('#boxPrize').innerHTML = '<p class="note">Jedes Theme verändert das ganze Spiel. Doppelte werden zu Splittern, drei Splitter ergeben eine Box.</p>';
+  $('#boxOpen').hidden = PROG.boxes <= 0; $('#boxOpen').disabled = false; $('#boxOpen').textContent = 'Box öffnen';
+  $('#boxWear').hidden = true; $('#boxDone').textContent = 'Fertig';
+  $('#box').hidden = false;
+  (PROG.boxes > 0 ? $('#boxOpen') : $('#boxDone')).focus();
+}
+function spinBox() {
+  if (boxBusy || PROG.boxes <= 0) return;
+  boxBusy = true; $('#boxOpen').disabled = true; $('#boxWear').hidden = true;
+  PROG.boxes--;
+  const win = rollTheme(), WIN_AT = 38, items = Array.from({ length: 44 }, rollTheme); items[WIN_AT] = win;
+  const strip = $('#boxStrip');
+  strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
+  strip.innerHTML = items.map(boxItemHTML).join('');
+  $('#boxPrize').className = 'prize'; $('#boxPrize').innerHTML = '<p class="note">Dreht …</p>';
+  const first = strip.children[0], step = first.offsetWidth + 8;
+  const target = WIN_AT * step + first.offsetWidth / 2 - strip.parentElement.clientWidth / 2 + rand(-step * 0.35, step * 0.35);
+  void strip.offsetWidth;
+  const dur = reducedMotion ? 0.4 : 4;
+  strip.style.transition = `transform ${dur}s cubic-bezier(.12,.72,.14,1)`;
+  strip.style.transform = `translateX(${-target}px)`;
+  if (!reducedMotion) for (let i = 0; i < 26; i++) tone(1300 + i * 10, 0.03, 'square', 0.018, dur * Math.pow(i / 26, 2.4));
+  setTimeout(() => revealBox(win), dur * 1000 + 200);
+}
+function revealBox(k) {
+  const t = UI_THEMES[k], r = RARITY[t.rar], dup = !!PROG.themes[k];
+  let extra = '';
+  if (dup) { PROG.shards++; if (PROG.shards >= 3) { PROG.shards = 0; PROG.boxes++; extra = ' Drei Splitter zusammen: +1 Box!'; } }
+  else PROG.themes[k] = 1;
+  saveProg();
+  boxWin = dup ? null : k;
+  const pr = $('#boxPrize'); pr.className = 'prize win'; pr.style.setProperty('--rc', r.c);
+  pr.innerHTML = `<span class="rar">${r.n}${dup ? ' · schon da' : ' · neu!'}</span><span class="pn">${t.name}</span><span class="pd">${dup ? `Doppelt: +1 Splitter (${PROG.shards}/3).${extra}` : t.desc}</span>`;
+  [0, 4, 7, 12, 16].slice(0, t.rar + 1).forEach((n, i) => tone(noteFreq(5 + n), 0.4, 'triangle', 0.08, i * 0.09));
+  $('#boxSub').textContent = `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3`;
+  $('#boxOpen').disabled = false; $('#boxOpen').hidden = PROG.boxes <= 0; $('#boxOpen').textContent = 'Noch eine öffnen';
+  $('#boxWear').hidden = !boxWin;
+  boxBusy = false;
+  (boxWin ? $('#boxWear') : PROG.boxes > 0 ? $('#boxOpen') : $('#boxDone')).focus();
+  if (curPage() === 'pgThemes') renderThemes();
+}
+function closeBox() { if (boxBusy) return; $('#box').hidden = true; if (curPage() === 'pgThemes') { renderThemes(); const f = $('#pgThemes .sel') || $('#boxMenuOpen'); if (f) f.focus(); } }
+$('#boxOpen').addEventListener('click', spinBox);
+$('#boxWear').addEventListener('click', () => { if (boxWin) { setActiveTheme(boxWin); $('#boxWear').hidden = true; closeBox(); } });
+$('#boxDone').addEventListener('click', closeBox);
+
+/* ---------- Menüseite Themes ---------- */
+function renderThemes() {
+  $('#boxCount').textContent = `${PROG.boxes} ${PROG.boxes === 1 ? 'Lootbox' : 'Lootboxen'}`;
+  $('#shardCount').textContent = `${PROG.shards}/3`;
+  $('#boxMenuOpen').disabled = PROG.boxes <= 0;
+  const owned = Object.keys(PROG.themes).length, all = Object.keys(UI_THEMES).length;
+  $('#themeChip').textContent = `${owned} von ${all} Themes gesammelt`;
+  $('#themeGrid').innerHTML = Object.entries(UI_THEMES).map(([k, t]) => {
+    const have = !!PROG.themes[k], on = PROG.active === k, r = RARITY[t.rar];
+    return `<button class="dvd-tile theme-card ${on ? 'sel' : ''} ${have ? '' : 'locked'}" type="button" data-k="${k}" ${have ? '' : 'aria-disabled="true"'} title="${have ? t.desc : 'Noch nicht gefunden – steckt in Lootboxen'}">
+      <span class="th-prev" style="--a:${t.swatch[0]};--b:${t.swatch[1]};--c:${t.swatch[2]}"><i></i><i></i><i></i>${have ? '' : '<b>?</b>'}</span>
+      <span class="mn">${have ? t.name : '???'}</span><span class="th-rar" style="color:${r.c}">${r.n}</span><span class="md">${on ? 'Aktiv' : have ? 'Auswählen' : 'Noch nicht gefunden'}</span></button>`;
+  }).join('');
+  $('#themeGrid').querySelectorAll('.theme-card').forEach(b => b.addEventListener('click', () => {
+    if (b.classList.contains('locked')) { $('#themeChip').textContent = 'Dieses Theme steckt noch in einer Lootbox.'; return; }
+    setActiveTheme(b.dataset.k); confirmTone(); renderThemes();
+    const f = $(`#themeGrid [data-k="${b.dataset.k}"]`); if (f) f.focus({ preventScroll: true });
+  }));
+  renderAccountHint();
+}
+function openThemes(andOpenBox) { renderThemes(); showPage('pgThemes', '#boxMenuOpen:not(:disabled), .theme-card.sel'); if (andOpenBox && PROG.boxes > 0) openBoxDialog(); }
+$('#themesMenuBtn').addEventListener('click', () => openThemes(false));
+$('#boxMenuOpen').addEventListener('click', openBoxDialog);
+$('#themeAccBtn').addEventListener('click', openAccount);
+
+/* ---------- Konto ---------- */
+const AUTH_ERR = {
+  'auth/email-already-in-use': 'Zu dieser E-Mail gibt es schon ein Konto. Melde dich an.',
+  'auth/credential-already-in-use': 'Zu dieser E-Mail gibt es schon ein Konto. Melde dich an.',
+  'auth/invalid-email': 'Die E-Mail-Adresse sieht nicht richtig aus.',
+  'auth/weak-password': 'Das Passwort braucht mindestens 6 Zeichen.',
+  'auth/wrong-password': 'E-Mail oder Passwort stimmt nicht.',
+  'auth/user-not-found': 'E-Mail oder Passwort stimmt nicht.',
+  'auth/invalid-credential': 'E-Mail oder Passwort stimmt nicht.',
+  'auth/invalid-login-credentials': 'E-Mail oder Passwort stimmt nicht.',
+  'auth/too-many-requests': 'Zu viele Versuche. Warte kurz und versuch es nochmal.',
+  'auth/network-request-failed': 'Keine Verbindung. Prüf dein Internet.',
+  'auth/operation-not-allowed': 'Konten sind in Firebase noch nicht freigeschaltet (Authentication → Anmeldemethode → E-Mail/Passwort).',
+  'auth/admin-restricted-operation': 'Konten sind in Firebase noch nicht freigeschaltet (Authentication → Anmeldemethode → E-Mail/Passwort).',
+};
+const authMsg = e => AUTH_ERR[e && e.code] || (e && e.message) || 'Das hat nicht geklappt.';
+function renderAccountHint() {
+  getNet().then(net => {
+    const acc = net && net.account();
+    $('#themeAccHint').textContent = acc ? `Gespeichert im Konto ${acc.email}.` : 'Ohne Konto bleiben deine Themes nur auf diesem Gerät.';
+    $('#themeAccBtn').textContent = acc ? 'Konto' : 'Konto anlegen';
+  });
+}
+async function renderAccount() {
+  const net = await getNet(), acc = net && net.account();
+  $('#accOut').hidden = !!acc; $('#accIn').hidden = !acc;
+  $('#accStatus').textContent = !net ? 'Konten brauchen eine Online-Verbindung.' : acc ? `Angemeldet als ${acc.email}` : 'Nicht angemeldet. Dein Fortschritt liegt nur auf diesem Gerät.';
+  $('#accStats').textContent = `${Object.keys(PROG.themes).length} von ${Object.keys(UI_THEMES).length} Themes · ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · ${PROG.games} ${PROG.games === 1 ? 'Spiel' : 'Spiele'}`;
+  for (const id of ['#accRegister', '#accLogin', '#accReset']) $(id).disabled = !net;
+}
+async function openAccount() { $('#accErr').textContent = ''; showPage('pgAccount', '#accEmail'); await renderAccount(); if (!$('#accIn').hidden) $('#accLogout').focus(); }
+async function accountAction(kind) {
+  const err = $('#accErr'), email = $('#accEmail').value.trim(), pass = $('#accPass').value;
+  if (ONLINE) { err.textContent = 'Verlass zuerst den Online-Raum.'; return; }
+  if (kind !== 'reset' && (!email || pass.length < 6)) { err.textContent = 'Gib E-Mail und ein Passwort mit mindestens 6 Zeichen ein.'; return; }
+  if (kind === 'reset' && !email) { err.textContent = 'Gib zuerst deine E-Mail ein.'; $('#accEmail').focus(); return; }
+  const net = await getNet(); if (!net) { err.textContent = 'Keine Online-Verbindung.'; return; }
+  err.textContent = kind === 'register' ? 'Lege Konto an …' : kind === 'login' ? 'Melde an …' : 'Sende E-Mail …';
+  try {
+    if (kind === 'reset') { await net.resetPassword(email); err.textContent = 'Falls es das Konto gibt, ist eine E-Mail zum Zurücksetzen unterwegs.'; return; }
+    if (kind === 'register') await net.register(email, pass); else await net.login(email, pass);
+    const remote = await net.loadProgress().catch(() => null);
+    PROG = mergeProg(PROG, remote); applyUiTheme(PROG.active); saveProg();
+    await net.saveProgress(PROG);
+    $('#accPass').value = '';
+    err.textContent = kind === 'register' ? 'Konto angelegt. Dein Fortschritt ist jetzt gesichert.' : 'Angemeldet. Fortschritt geladen.';
+    await renderAccount(); $('#accLogout').focus();
+  } catch (e) { console.warn(e); err.textContent = authMsg(e); }
+}
+async function logoutAccount() {
+  if (ONLINE) { $('#accErr').textContent = 'Verlass zuerst den Online-Raum.'; return; }
+  const net = await getNet(); if (!net) return;
+  try { await net.logout(); } catch (e) { console.warn(e); }
+  PROG = progDefault(); PROG.boxes = 0; applyUiTheme('nacht'); saveProg();
+  $('#accErr').textContent = 'Abgemeldet. Dein Fortschritt bleibt im Konto gespeichert.';
+  await renderAccount(); $('#accEmail').focus();
+}
+$('#accountMenuBtn').addEventListener('click', openAccount);
+$('#accRegister').addEventListener('click', () => accountAction('register'));
+$('#accLogin').addEventListener('click', () => accountAction('login'));
+$('#accReset').addEventListener('click', () => accountAction('reset'));
+$('#accLogout').addEventListener('click', logoutAccount);
+$('#accPass').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); accountAction('login'); } });
+/* Beim Start: Ist noch eine Anmeldung vom letzten Mal aktiv, Fortschritt aus dem Konto holen. */
+async function restoreAccount() {
+  const net = await getNet(); if (!net || !net.account()) return;
+  const remote = await net.loadProgress().catch(() => null);
+  PROG = mergeProg(PROG, remote); applyUiTheme(PROG.active); saveProg();
+}
+
 /* ---------- Netz: Firebase oder Testmodus (?net=local) ---------- */
 let netPromise = null, netError = '';
 function makeLocalNet() {
   const KEY = 'plinko-localnet';
   let uid = '';
   try { uid = sessionStorage.getItem('plinko-uid') || ''; if (!uid) { uid = 'u' + Math.random().toString(36).slice(2, 10); sessionStorage.setItem('plinko-uid', uid); } } catch (e) { uid = 'u' + Math.random().toString(36).slice(2, 10); }
+  const ACC = 'plinko-localnet-accounts';
+  const accAll = () => { try { return JSON.parse(localStorage.getItem(ACC) || '{}'); } catch (e) { return {}; } };
+  const accSave = a => { try { localStorage.setItem(ACC, JSON.stringify(a)); } catch (e) {} };
+  let acc = null; try { acc = sessionStorage.getItem('plinko-acc'); } catch (e) {}
+  const setAcc = e => { acc = e; try { if (e) sessionStorage.setItem('plinko-acc', e); else sessionStorage.removeItem('plinko-acc'); } catch (x) {} };
   const ch = 'BroadcastChannel' in window ? new BroadcastChannel(KEY) : null;
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { return {}; } };
   const save = t => { try { localStorage.setItem(KEY, JSON.stringify(t)); } catch (e) {} };
@@ -1982,7 +2336,22 @@ function makeLocalNet() {
   const leaving = [];
   window.addEventListener('pagehide', () => { if (leaving.length) write(t => leaving.forEach(p => setAt(t, p, null))); });
   return {
-    uid, kind: 'local', stamp: () => Date.now(),
+    get uid() { return uid; }, kind: 'local', stamp: () => Date.now(),
+    // Testmodus: Konten nur in diesem Browser nachgebaut, damit sich der Ablauf ohne Firebase ausprobieren lässt
+    account() { return acc ? { email: acc } : null; },
+    async register(email, pass) {
+      const all = accAll(); if (all[email]) throw { code: 'auth/email-already-in-use' };
+      if (pass.length < 6) throw { code: 'auth/weak-password' };
+      all[email] = { pass: await sha256hex(pass), uid }; accSave(all); setAcc(email);
+    },
+    async login(email, pass) {
+      const a = accAll()[email]; if (!a || a.pass !== await sha256hex(pass)) throw { code: 'auth/invalid-credential' };
+      uid = a.uid; try { sessionStorage.setItem('plinko-uid', uid); } catch (e) {} setAcc(email);
+    },
+    async logout() { setAcc(null); uid = 'u' + Math.random().toString(36).slice(2, 10); try { sessionStorage.setItem('plinko-uid', uid); } catch (e) {} },
+    async resetPassword() {},
+    async loadProgress() { const v = getAt(load(), `users/${uid}/progress`); return v === undefined ? null : v; },
+    async saveProgress(p) { write(t => setAt(t, `users/${uid}/progress`, p)); },
     get: async p => { const v = getAt(load(), p); return v === undefined ? null : JSON.parse(JSON.stringify(v)); },
     set: async (p, v) => write(t => setAt(t, p, v)),
     update: async (p, o) => write(t => { for (const k in o) setAt(t, p + '/' + k, o[k]); }),
@@ -1997,10 +2366,24 @@ function makeLocalNet() {
 async function makeFirebaseNet(cfg) {
   if (!firebase.apps.length) firebase.initializeApp(cfg);
   const auth = firebase.auth();
-  const user = auth.currentUser || (await auth.signInAnonymously()).user;
-  const db = firebase.database(), disc = [];
+  // Erst abwarten, ob vom letzten Besuch noch eine Anmeldung (anonym oder Konto) gespeichert ist, sonst anonym anmelden.
+  const restored = await new Promise(res => { const off = auth.onAuthStateChanged(u => { off(); res(u); }); });
+  if (!restored) await auth.signInAnonymously();
+  const db = firebase.database(), disc = [], me = () => auth.currentUser;
+  const progRef = () => db.ref(`users/${me().uid}/progress`);
   return {
-    uid: user.uid, kind: 'firebase', stamp: () => firebase.database.ServerValue.TIMESTAMP,
+    get uid() { return me() ? me().uid : ''; }, kind: 'firebase', stamp: () => firebase.database.ServerValue.TIMESTAMP,
+    account() { const u = me(); return u && !u.isAnonymous ? { email: u.email } : null; },
+    async register(email, pass) {
+      const u = me(), cred = firebase.auth.EmailAuthProvider.credential(email, pass);
+      // Anonymes Konto wird zum echten Konto: gleiche uid, Bestenliste und Fortschritt bleiben erhalten.
+      if (u && u.isAnonymous) await u.linkWithCredential(cred); else await auth.createUserWithEmailAndPassword(email, pass);
+    },
+    login: (email, pass) => auth.signInWithEmailAndPassword(email, pass),
+    async logout() { await auth.signOut(); await auth.signInAnonymously(); },
+    resetPassword: email => auth.sendPasswordResetEmail(email),
+    loadProgress: () => progRef().get().then(s => s.val()),
+    saveProgress: p => progRef().set(p),
     get: p => db.ref(p).get().then(s => s.val()),
     set: (p, v) => db.ref(p).set(v),
     update: (p, o) => db.ref(p).update(o),
@@ -2138,7 +2521,7 @@ async function enterRoom(create) {
     const meta = await net.get(path + '/meta');
     if (create && meta) { err.textContent = 'Diesen Raum gibt es schon. Tritt bei oder nimm einen anderen Namen.'; return; }
     if (!create && !meta) { err.textContent = 'Kein Raum gefunden. Prüf Raumname und Passwort.'; return; }
-    if (create) await net.set(path, { meta: { name: room, host: net.uid, status: 'lobby', level: settings.level, loot: settings.loot, created: net.stamp() } });
+    if (create) await net.set(path, { meta: { name: room, host: net.uid, status: 'lobby', level: settings.level, created: net.stamp() } });
     else {
       if (await net.get(`${path}/kicked/${net.uid}`)) { err.textContent = 'Der Host hat dich aus diesem Raum entfernt.'; forgetRoom(); return; }
       const players = (await net.get(path + '/players')) || {};
@@ -2159,7 +2542,7 @@ async function enterRoom(create) {
 }
 function joinRoom(net, path, roomName, rejoining, me) {
   leaveRoom(false);
-  ONLINE = { net, path, uid: net.uid, host: false, name: roomName, players: {}, meta: null, loot: {}, unsub: [], lastLive: 0, lastAim: -1, lootDeadline: 0, lootDlRound: -1, lootShown: -1, lootApplied: -1 };
+  ONLINE = { net, path, uid: net.uid, host: false, name: roomName, players: {}, meta: null, unsub: [], lastLive: 0, lastAim: -1 };
   S.v = 0; S.players = []; S.phase = 'setup';
   $('#lobbyName').textContent = roomName;
   $('#lobbyMaps').dataset.built = '';
@@ -2172,10 +2555,9 @@ function joinRoom(net, path, roomName, rejoining, me) {
     net.set(`${path}/players/${net.uid}`, { ...me, joined: Date.now() }).then(() => net.removeOnDisconnect(`${path}/players/${net.uid}`));
     if (o.host && o.listKey) { o.listSig = ''; o.listReg = false; renderLobby(); }
   }));
-  ONLINE.unsub.push(net.on(path + '/players', p => { if (ONLINE) { ONLINE.players = p || {}; renderLobby(); checkLoot(); } }));
+  ONLINE.unsub.push(net.on(path + '/players', p => { if (ONLINE) { ONLINE.players = p || {}; renderLobby(); } }));
   ONLINE.unsub.push(net.on(path + '/state', applyState));
   ONLINE.unsub.push(net.on(path + '/live', onLive));
-  ONLINE.unsub.push(net.on(path + '/loot', l => { if (ONLINE) { ONLINE.loot = l || {}; checkLoot(); } }));
   showPage('pgLobby', '#lobbyLeave');
   renderLobby();
   const o = ONLINE;
@@ -2225,7 +2607,7 @@ function renderLobby() {
 }
 function resetRun() {
   S.cur = 0; S.finale = false; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.toasts = [];
-  S.order = 0; S.lastMult = 1; S.timeScale = 1; S.adGap = 0; S.round = 1; S.turnInRound = 0; S.lootRound = 0; S.liveBalls = [];
+  S.order = 0; S.lastMult = 1; S.timeScale = 1; S.adGap = 0; S.round = 1; S.turnInRound = 0; S.liveBalls = [];
 }
 function hostStart() {
   if (!ONLINE || !ONLINE.host) return;
@@ -2233,14 +2615,12 @@ function hostStart() {
   const lvl = (ONLINE.meta && ONLINE.meta.level) || 'gasse';
   S.levelKey = lvl === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : lvl;
   buildLevel(S.levelKey);
-  S.players = list.map(p => ({ uid: p.uid, name: p.name || 'Gast', power: CHARS[p.power] ? p.power : 'fuchs', score: 0, balls: BALLS_BY_COUNT[list.length], charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, theme: 'nacht' }));
-  S.rogue = null;
+  S.players = list.map(p => ({ uid: p.uid, name: p.name || 'Gast', power: CHARS[p.power] ? p.power : 'fuchs', score: 0, balls: BALLS_BY_COUNT[list.length], charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false }));
+  S.rogue = null; S.awarded = false;
   resetRun(); pickBonus();
   S.phase = 'aim';
-  ONLINE.lootApplied = ONLINE.lootShown = ONLINE.lootDlRound = -1;
-  ONLINE.net.set(ONLINE.path + '/loot', null);
   pushState();
-  ONLINE.net.update(ONLINE.path + '/meta', { status: 'playing', loot: settings.loot });
+  ONLINE.net.update(ONLINE.path + '/meta', { status: 'playing' });
   hideOverlays(); audio();
   announceTurn(); updatePanel();
 }
@@ -2250,12 +2630,12 @@ function pushState() {
   ONLINE.net.set(ONLINE.path + '/state', {
     v: S.v, by: ONLINE.uid, level: S.levelKey, orangeTotal: S.orangeTotal,
     pegs: S.pegs.map(p => [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10, TYPE_KEYS.indexOf(p.type), (p.hit ? 1 : 0) | (p.gone ? 2 : 0)]),
-    players: S.players.map(p => ({ uid: p.uid, name: p.name, power: p.power, score: Math.round(p.score), balls: p.balls, charges: p.charges, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 1 : 0, gold: p.gold ? 1 : 0, theme: p.theme || 'nacht' })),
-    cur: S.cur, round: S.round, turnInRound: S.turnInRound || 0, finale: S.finale ? 1 : 0, phase: S.phase, lootRound: S.lootRound || 0, lastMult: S.lastMult || 1, aim: S.aim,
+    players: S.players.map(p => ({ uid: p.uid, name: p.name, power: p.power, score: Math.round(p.score), balls: p.balls, charges: p.charges, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 1 : 0, gold: p.gold ? 1 : 0 })),
+    cur: S.cur, round: S.round, turnInRound: S.turnInRound || 0, finale: S.finale ? 1 : 0, phase: S.phase, lastMult: S.lastMult || 1, aim: S.aim,
   });
   if (S.phase === 'over') ONLINE.net.update(ONLINE.path + '/meta', { status: 'lobby' });
 }
-const normPlayer = p => ({ uid: p.uid, name: p.name || '?', power: CHARS[p.power] ? p.power : 'fuchs', score: p.score || 0, balls: p.balls || 0, charges: p.charges || 0, armed: false, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 'rainbow' : null, gold: !!p.gold, theme: THEMES[p.theme] ? p.theme : 'nacht' });
+const normPlayer = p => ({ uid: p.uid, name: p.name || '?', power: CHARS[p.power] ? p.power : 'fuchs', score: p.score || 0, balls: p.balls || 0, charges: p.charges || 0, armed: false, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 'rainbow' : null, gold: !!p.gold });
 function applyState(st) {
   if (!ONLINE || !st || (st.by === ONLINE.uid && !ONLINE.fresh)) return;
   ONLINE.fresh = false;
@@ -2267,13 +2647,12 @@ function applyState(st) {
   else np.forEach((a, i) => { const p = S.pegs[i]; const gone = !!(a[3] & 2); p.type = TYPE_KEYS[a[2]] || 'plain'; if (gone && !p.gone) removePeg(p); p.gone = gone; p.hit = !!(a[3] & 1); });
   S.levelKey = st.level; S.orangeTotal = st.orangeTotal || 25;
   S.players = (st.players || []).map(normPlayer);
-  S.cur = st.cur || 0; S.round = st.round || 1; S.turnInRound = st.turnInRound || 0; S.finale = !!st.finale; S.lastMult = st.lastMult || 1; S.lootRound = st.lootRound || 0;
+  S.cur = st.cur || 0; S.round = st.round || 1; S.turnInRound = st.turnInRound || 0; S.finale = !!st.finale; S.lastMult = st.lastMult || 1;
   S.phase = st.phase;
   if (typeof st.aim === 'number') S.aim = st.aim;
-  if (fresh) { S.popups = []; S.parts = []; S.toasts = []; S.balls = []; ONLINE.lootApplied = ONLINE.lootShown = ONLINE.lootDlRound = -1; }
+  if (fresh) { S.popups = []; S.parts = []; S.toasts = []; S.balls = []; S.awarded = false; }
   if (st.phase === 'shot') { S.shot = { score: 0, hits: 0, time: 0, free: false, floor: 0, gold: false }; S.liveBalls = []; S.balls = []; }
   if (st.phase === 'aim' && (prevCur !== S.cur || prevPhase !== 'aim' || fresh)) announceTurn();
-  if (st.phase === 'loot') openOnlineLoot(S.lootRound); else if (!$('#loot').hidden) $('#loot').hidden = true;
   if (st.phase === 'over' && prevPhase !== 'over') endGame();
   updatePanel();
 }
@@ -2331,27 +2710,6 @@ function onlineTick() {
       o.lastLive = now; o.lastAim = S.aim; o.net.set(o.path + '/live', { a: S.aim });
     }
   }
-  if (o.host && S.phase === 'loot' && o.lootDeadline && Date.now() > o.lootDeadline) checkLoot(true);
-}
-function openOnlineLoot(r) {
-  if (!ONLINE) return;
-  if (ONLINE.host && ONLINE.lootDlRound !== r) { ONLINE.lootDlRound = r; ONLINE.lootDeadline = Date.now() + 45000; }
-  if (ONLINE.lootShown !== r) {
-    ONLINE.lootShown = r;
-    const me = S.players.findIndex(p => p.uid === ONLINE.uid);
-    if (me >= 0) { S.lootQ = []; $('#loot').hidden = false; nextLoot(me); $('#lootSub').textContent = 'Deine Box für diese Runde'; }
-  }
-  checkLoot();
-}
-function checkLoot(force) {
-  if (!ONLINE || !ONLINE.host || S.phase !== 'loot' || ONLINE.lootApplied === S.lootRound) return;
-  const got = (ONLINE.loot && ONLINE.loot[S.lootRound]) || {};
-  const present = new Set(Object.keys(ONLINE.players || {}));
-  if (!force && S.players.some(p => present.has(p.uid) && got[p.uid] == null)) return;
-  ONLINE.lootApplied = S.lootRound;
-  for (const p of S.players) { const i = got[p.uid]; if (i != null && LOOT[i]) applyLoot(p, LOOT[i]); }
-  S.phase = 'aim'; $('#loot').hidden = true;
-  pushState(); announceTurn(); updatePanel();
 }
 /* Wiedereinstieg und Kicken */
 const LAST_ROOM_KEY = 'plinko-lastroom', LAST_ROOM_MAX_AGE = 3 * 60 * 60 * 1000;
@@ -2407,17 +2765,16 @@ $('#skipBtn').addEventListener('click', skipTurn);
 $('#kickBtn').addEventListener('click', kickCurrent);
 $('#rejoinBtn').addEventListener('click', rejoinLast);
 $('#againBtn').addEventListener('click', startGame);
+$('#overBoxBtn').addEventListener('click', () => { toMenu(); openThemes(true); });
 $('#setupBtn').addEventListener('click', toMenu);
 $('#newBtn').addEventListener('click', toMenu);
 $('#adSkip').addEventListener('click', closeAd);
 $('#abilBtn').addEventListener('click', toggleAbility);
-$('#lootOpen').addEventListener('click', spinLoot);
-$('#lootNext').addEventListener('click', lootNext);
 $('#muteBtn').addEventListener('click', () => { muted = !muted; syncToggles(); });
 
 
 buildLevel(settings.level); pickBonus();
-openSetup(); resize();
+openSetup(); resize(); syncBoxBadge(); setTimeout(restoreAccount, 0);
 requestAnimationFrame(frame);
 })();
 </script>
