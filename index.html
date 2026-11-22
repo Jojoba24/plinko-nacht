@@ -206,7 +206,7 @@ body{--cam:0}
 .dvd-title .w2{font-size:clamp(46px,11vw,112px);margin-top:-.08em;transform:rotate(4deg) translateX(.4em)}
 .L{position:relative;display:inline-block;color:transparent;animation:letterin .8s cubic-bezier(.3,1.7,.5,1) both,wave 3.4s ease-in-out infinite;animation-delay:calc(var(--i) * 70ms),calc(1.2s + var(--i) * 120ms)}
 .L::before,.L::after{content:attr(data-l);position:absolute;left:0;top:0}
-.L::before{color:var(--ink2);-webkit-text-stroke:.2em var(--ink2);text-shadow:0 .07em 0 var(--ink2),0 .12em 0 #0c0420,0 .2em .2em rgba(0,0,0,.45)}
+.L::before{color:var(--ink2);-webkit-text-stroke:.2em var(--ink2);filter:drop-shadow(0 .07em 0 var(--ink2)) drop-shadow(0 .06em .08em rgba(0,0,0,.45))}
 .L::after{background:var(--title1);-webkit-background-clip:text;background-clip:text;color:transparent}
 .w2 .L::after{background:var(--title2);-webkit-background-clip:text;background-clip:text}
 .L.sp{width:.3em}
@@ -217,7 +217,7 @@ body{--cam:0}
   background:var(--rose);color:var(--gold);padding:6px 30px 7px;margin-top:6px;border:4px solid var(--ink2);border-radius:6px;box-shadow:0 5px 0 var(--ink2);text-shadow:0 2px 0 var(--ink2);animation:pagein .7s cubic-bezier(.2,1.5,.45,1) .9s both}
 .dvd-menu{display:flex;flex-direction:column;gap:2px;align-items:center;margin-top:12px}
 .dvd-item{--o:var(--ink2);background:none;border:0;color:var(--cream);font-family:var(--toon);font-weight:400;font-size:clamp(21px,4.6vw,31px);letter-spacing:.03em;padding:8px 26px 8px 52px;cursor:pointer;position:relative;
-  text-shadow:-3px -3px 0 var(--o),3px -3px 0 var(--o),-3px 3px 0 var(--o),3px 3px 0 var(--o),0 -3px 0 var(--o),0 3px 0 var(--o),-3px 0 0 var(--o),3px 0 0 var(--o),0 7px 0 var(--o);
+  -webkit-text-stroke:6px var(--o);paint-order:stroke fill;filter:drop-shadow(0 4px 0 var(--o));
   transition:transform .2s cubic-bezier(.3,1.8,.5,1),color .15s}
 .dvd-menu .dvd-item{animation:pagein .6s cubic-bezier(.2,1.5,.45,1) both}
 .dvd-menu .dvd-item:nth-child(1){animation-delay:1.05s}.dvd-menu .dvd-item:nth-child(2){animation-delay:1.15s}.dvd-menu .dvd-item:nth-child(3){animation-delay:1.25s}
@@ -233,7 +233,7 @@ body{--cam:0}
 .dvd-tile:disabled:hover{transform:none}
 .dvd-h{position:absolute;top:0;left:50%;transform:translate(-50%,-58%) rotate(-2deg);white-space:nowrap;max-width:calc(100% + 20px);overflow:hidden;text-overflow:ellipsis;
   font-family:var(--toon);font-weight:400;font-size:clamp(20px,5vw,36px);letter-spacing:.04em;margin:0;text-align:center;color:var(--gold);
-  background:var(--rose);padding:6px 30px 8px;border:4px solid var(--ink2);border-radius:10px;box-shadow:0 6px 0 var(--ink2);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+  background:var(--rose);padding:6px 30px 8px;border:4px solid var(--ink2);border-radius:10px;box-shadow:0 6px 0 var(--ink2);-webkit-text-stroke:4px var(--ink2);paint-order:stroke fill;text-shadow:none;filter:drop-shadow(0 3px 0 var(--ink2))}
 .dvd-chip{display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--cream);text-align:center}
 .dvd-chip i{width:16px;height:16px;border-radius:50%;background:var(--pc);border:3px solid var(--ink2)}
 .dvd-tile{position:relative;overflow:hidden;background:var(--panel);border:4px solid var(--ink2);border-radius:20px;box-shadow:0 6px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18);
@@ -241,10 +241,10 @@ body{--cam:0}
 .dvd-tile img{filter:drop-shadow(0 3px 0 rgba(20,8,50,.6))}
 .dvd-tile:hover,.dvd-tile:focus-visible{outline:none;transform:translateY(-5px) scale(1.06) rotate(-1.5deg);box-shadow:0 0 0 4px var(--gold),0 11px 0 var(--ink2),inset 0 3px 0 rgba(255,255,255,.18);z-index:1}
 .dvd-tile.sel{background:var(--panel-on)}
-.dvd-tile.sel::after{content:"★";position:absolute;top:5px;right:7px;font-size:20px;line-height:1;color:var(--gold);text-shadow:0 2px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+.dvd-tile.sel::after{content:"★";position:absolute;top:5px;right:7px;font-size:20px;line-height:1;color:var(--gold);-webkit-text-stroke:4px var(--ink2);paint-order:stroke fill;text-shadow:none;filter:drop-shadow(0 2px 0 var(--ink2))}
 .count-grid{display:grid;grid-template-columns:repeat(4,minmax(0,150px));gap:18px}
 .count-grid .dvd-tile{padding:22px 10px}
-.count-grid b{font-family:var(--toon);font-weight:400;font-size:66px;line-height:1;color:var(--gold);text-shadow:0 4px 0 var(--ink2),-3px 0 0 var(--ink2),3px 0 0 var(--ink2),0 -3px 0 var(--ink2)}
+.count-grid b{font-family:var(--toon);font-weight:400;font-size:66px;line-height:1;color:var(--gold);-webkit-text-stroke:6px var(--ink2);paint-order:stroke fill;text-shadow:none;filter:drop-shadow(0 4px 0 var(--ink2))}
 .count-grid span{font-size:15px;font-weight:600}
 .cast{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;width:100%;align-items:start}
 .cast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
@@ -253,7 +253,7 @@ body{--cam:0}
 .cast-info{--cc:#8cc8ff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:18px;border-radius:22px;background:radial-gradient(ellipse at 50% 20%,rgba(255,255,255,.14),rgba(0,0,0,.2));border:4px solid var(--ink2)}
 .cast-big{width:170px;height:170px;max-width:100%;animation:bob 2.6s ease-in-out infinite;filter:drop-shadow(0 6px 0 var(--ink2)) drop-shadow(0 0 22px var(--cc))}
 @keyframes bob{50%{transform:translateY(-8px) rotate(2deg)}}
-.cast-name{font-family:var(--toon);font-size:clamp(24px,4.4vw,32px);letter-spacing:.03em;color:var(--cc);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+.cast-name{font-family:var(--toon);font-size:clamp(24px,4.4vw,32px);letter-spacing:.03em;color:var(--cc);-webkit-text-stroke:4px var(--ink2);paint-order:stroke fill;text-shadow:none;filter:drop-shadow(0 3px 0 var(--ink2))}
 .cast-kind{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--lav)}
 .cast-bio{margin:0;font-size:15px;line-height:1.5;color:var(--cream);max-width:44ch}
 .cast-power{font-size:15px;line-height:1.5;background:rgba(10,4,30,.5);border-radius:14px;padding:10px 14px;max-width:44ch}
@@ -268,7 +268,7 @@ body{--cam:0}
 .map-grid .mn{font-family:var(--toon);font-size:17px;letter-spacing:.03em;text-align:center}
 .map-grid .md{font-size:13px;color:var(--lav);text-align:center;line-height:1.35}
 .room-list-wrap{width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center;gap:10px}
-.room-list-h{margin:0;font-family:var(--toon);font-weight:400;font-size:22px;letter-spacing:.03em;color:var(--gold);text-shadow:0 3px 0 var(--ink2),-2px 0 0 var(--ink2),2px 0 0 var(--ink2),0 -2px 0 var(--ink2)}
+.room-list-h{margin:0;font-family:var(--toon);font-weight:400;font-size:22px;letter-spacing:.03em;color:var(--gold);-webkit-text-stroke:4px var(--ink2);paint-order:stroke fill;text-shadow:none;filter:drop-shadow(0 3px 0 var(--ink2))}
 .room-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;width:100%;max-height:260px;overflow:auto;padding:6px 6px 12px}
 .room-card{padding:10px 12px;gap:3px}
 .room-card .rn{font-family:var(--toon);font-size:19px;letter-spacing:.02em;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -849,7 +849,7 @@ const UI_THEMES = {
     cv: { ink: '#0a4a8a', box: '#1a9ae0', sub: '#e6f6ff', g: ['#ffffff', '#c8f0ff', '#3ab0ff', '#0a6ad0'] } },
   xp: { name: 'Blauer Desktop', rar: 3, desc: 'Blaue Titelleisten, beige Fenster und eine grüne Wiese unter blauem Himmel.', swatch: ['#0a5ce8', '#ece9d8', '#3c9a31'],
     vars: { ink2: '#0a246a', cream: '#000000', gold: '#ffffff', rose: '#0a5ce8', lav: '#333333', item: '#ffffff', ptext: '#000000',
-      toon: '"Trebuchet MS",Tahoma,sans-serif', ui: 'Tahoma,Verdana,"Segoe UI",sans-serif',
+      toon: '"Trebuchet MS","Fredoka",sans-serif', ui: 'Tahoma,"Fredoka",Verdana,"Segoe UI",sans-serif',
       panel: 'linear-gradient(180deg,#ffffff,#ece9d8 80%,#d6d0b8)', 'panel-on': 'linear-gradient(180deg,#c8f0b8,#7ac860)',
       inner: 'linear-gradient(180deg,#f6f4ea,#ece9d8)',
       metal: 'linear-gradient(180deg,#3a93ff 0%,#0058e6 25%,#0a4ad0 70%,#0040b0 100%)',
