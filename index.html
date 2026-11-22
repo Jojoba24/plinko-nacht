@@ -464,6 +464,66 @@ body[data-ui=maerchen] .dvd-tile img,body[data-ui=maerchen] .map-grid img{border
 #box{z-index:40}
 .dvd-hint{color:var(--item);background:rgba(0,0,0,.45)}
 @media (max-width:760px){.theme-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* ---------- Bewegte Theme-Hintergründe und Materialien ---------- */
+@keyframes thspin{to{transform:rotate(360deg)}}
+@keyframes thrise{to{transform:translateY(-50%)}}
+@keyframes thpulse{50%{opacity:.55;transform:scale(1.1)}}
+@keyframes thsweep{from{background-position:150% 0}to{background-position:-150% 0}}
+@keyframes thdrift{to{background-position:-1200px 0}}
+@keyframes thjitter{50%{transform:translate(1px,-1px)}}
+@keyframes thgrid{to{background-position:0 46px,46px 0,0 0}}
+/* Frutiger Aero: Glas mit Weichzeichner, Lichtkante und Spiegelung; Luftblasen steigen auf */
+body[data-ui=aero]{--panel:linear-gradient(180deg,rgba(150,226,255,.8),rgba(26,150,224,.78));--panel-on:linear-gradient(180deg,rgba(200,246,140,.88),rgba(74,176,32,.85))}
+body[data-ui=aero] .dlg,body[data-ui=aero] .dvd-page:not(#pgMain){background:linear-gradient(180deg,rgba(255,255,255,.62) 0%,rgba(225,245,255,.36) 46%,rgba(170,222,252,.26) 50%,rgba(210,240,255,.42) 100%) padding-box,var(--metal) border-box;
+  -webkit-backdrop-filter:blur(18px) saturate(1.7);backdrop-filter:blur(18px) saturate(1.7);box-shadow:0 0 0 2px rgba(10,74,138,.6),0 20px 50px rgba(0,60,120,.35),inset 0 2px 0 rgba(255,255,255,.95)}
+body[data-ui=aero] :is(.dvd-tile,.btn,.pl,.abil,.hud-btn,.mini-meter,.results li,.board li,.room-card,.box-bar,.plate){
+  background-image:linear-gradient(180deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,.28) 46%,rgba(255,255,255,0) 50%,rgba(255,255,255,.18) 100%),var(--bgc,var(--panel));
+  -webkit-backdrop-filter:blur(10px) saturate(1.5);backdrop-filter:blur(10px) saturate(1.5);border-color:rgba(10,74,138,.75);
+  box-shadow:0 6px 16px rgba(0,60,120,.3),inset 0 1px 0 #fff,inset 0 -3px 8px rgba(255,255,255,.45)}
+body[data-ui=aero] .board-frame{box-shadow:0 0 0 2px rgba(10,74,138,.6),0 20px 50px rgba(0,60,120,.4),inset 0 2px 0 #fff}
+body[data-ui=aero] .theme-bg::before{background:radial-gradient(ellipse 60% 30% at 70% -5%,rgba(255,255,255,.75),transparent 70%),repeating-linear-gradient(115deg,transparent 0 80px,rgba(255,255,255,.07) 80px 140px),linear-gradient(172deg,transparent 62%,rgba(126,211,33,.45) 62.3%,rgba(50,140,20,.6) 100%)}
+body[data-ui=aero] .theme-bg::after{top:0;height:200%;background:
+  radial-gradient(circle at 12% 30%,rgba(255,255,255,.7) 0 3px,rgba(255,255,255,.15) 4px 14px,rgba(255,255,255,.6) 15px,transparent 16px),
+  radial-gradient(circle at 34% 70%,rgba(255,255,255,.7) 0 4px,rgba(255,255,255,.12) 5px 22px,rgba(255,255,255,.55) 23px,transparent 24px),
+  radial-gradient(circle at 63% 45%,rgba(255,255,255,.7) 0 2px,rgba(255,255,255,.12) 3px 9px,rgba(255,255,255,.6) 10px,transparent 11px),
+  radial-gradient(circle at 86% 85%,rgba(255,255,255,.7) 0 5px,rgba(255,255,255,.12) 6px 30px,rgba(255,255,255,.5) 31px,transparent 32px),
+  radial-gradient(circle at 48% 12%,rgba(255,255,255,.7) 0 3px,rgba(255,255,255,.12) 4px 16px,rgba(255,255,255,.55) 17px,transparent 18px);
+  background-size:100% 50%;animation:thrise 26s linear infinite}
+/* Neon-Konsole: fließendes Gitter, pulsierender Leuchtkern, kreisende Lichtbänder, leuchtende Knöpfe */
+body[data-ui=neon] .theme-bg{animation:thgrid 5s linear infinite}
+body[data-ui=neon] .theme-bg::before{background:radial-gradient(circle at 30% 42%,rgba(220,255,140,.75) 0 30px,rgba(150,240,60,.35) 80px,rgba(80,180,20,.12) 180px,transparent 300px);transform-origin:30% 42%;animation:thpulse 3.2s ease-in-out infinite}
+body[data-ui=neon] .theme-bg::after{inset:auto;left:calc(30% - 70vmax);top:calc(42% - 70vmax);width:140vmax;height:140vmax;border-radius:50%;
+  background:conic-gradient(from 0deg,transparent 0 15deg,rgba(160,255,70,.32) 40deg,transparent 75deg,transparent 150deg,rgba(160,255,70,.22) 185deg,transparent 225deg,transparent 290deg,rgba(160,255,70,.18) 320deg,transparent 350deg);
+  -webkit-mask:radial-gradient(circle,transparent 0 7%,#000 7.5% 11%,transparent 11.5% 16%,#000 16.5% 18%,transparent 18.5%);mask:radial-gradient(circle,transparent 0 7%,#000 7.5% 11%,transparent 11.5% 16%,#000 16.5% 18%,transparent 18.5%);
+  animation:thspin 14s linear infinite}
+body[data-ui=neon] :is(.dvd-tile,.btn,.pl,.abil,.hud-btn,.mini-meter,.results li,.board li,.room-card,.box-bar){border-color:#5ad01a;box-shadow:0 0 12px rgba(150,255,60,.45),inset 0 0 12px rgba(150,255,60,.18)}
+body[data-ui=neon] :is(.dvd-tile,.btn,.abil,.pl):is(:hover,:focus-visible,.sel,.on){box-shadow:0 0 0 2px #b8ff4a,0 0 26px rgba(170,255,70,.85),inset 0 0 16px rgba(170,255,70,.3)}
+body[data-ui=neon] .dlg,body[data-ui=neon] .dvd-page:not(#pgMain),body[data-ui=neon] .board-frame{box-shadow:0 0 0 2px #5ad01a,0 0 40px rgba(130,240,50,.45),inset 0 0 30px rgba(130,240,50,.15)}
+/* Chromkanal: wandernder Glanzstreif, pulsierende Ringe */
+body[data-ui=chrom] .theme-bg::before{animation:thpulse 6s ease-in-out infinite;transform-origin:50% 35%}
+body[data-ui=chrom] .theme-bg::after{background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%) 0 0/300% 100%;animation:thsweep 7s linear infinite}
+/* Glitzerherz: Satin-Schimmer */
+body[data-ui=glitzer] .theme-bg::after{background:linear-gradient(120deg,transparent 30%,rgba(255,230,245,.28) 45%,transparent 60%) 0 0/250% 100%;animation:thsweep 9s ease-in-out infinite}
+/* Schleimkanal: langsam kreisende Schlieren */
+body[data-ui=schleim] .theme-bg::after{inset:-60%;animation:thspin 60s linear infinite}
+/* Goldautomat: drehende Lichtstrahlen */
+body[data-ui=automat] .theme-bg::after{inset:auto;left:calc(50% - 90vmax);top:calc(45% - 90vmax);width:180vmax;height:180vmax;background:repeating-conic-gradient(from 0deg,rgba(255,210,80,.09) 0 6deg,transparent 6deg 14deg);animation:thspin 50s linear infinite}
+/* Blauer Desktop: ziehende Wolken */
+body[data-ui=xp] .theme-bg::after{background:radial-gradient(ellipse 120px 34px at 10% 20%,rgba(255,255,255,.85) 50%,transparent 70%),radial-gradient(ellipse 160px 40px at 45% 12%,rgba(255,255,255,.75) 50%,transparent 70%),radial-gradient(ellipse 100px 28px at 78% 28%,rgba(255,255,255,.8) 50%,transparent 70%) 0 0/1200px 100%;animation:thdrift 70s linear infinite}
+/* Märchenwiese: schwebende Pollen */
+body[data-ui=maerchen] .theme-bg::after{top:0;height:200%;background:radial-gradient(circle,rgba(255,250,190,.9) 0 2px,transparent 3px) 0 0/90px 110px,radial-gradient(circle,rgba(255,255,255,.7) 0 1.5px,transparent 2.5px) 40px 50px/130px 90px;animation:thrise 40s linear infinite}
+/* Grunge-Pink: leicht zuckendes Raster */
+body[data-ui=grunge] .theme-bg::before{animation:thjitter .35s steps(2) infinite}
+@media (prefers-reduced-motion:reduce){.theme-bg,.theme-bg::before,.theme-bg::after{animation:none!important}}
+/* Geheimer Testmodus */
+.test-bar{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:6px;padding:6px 8px 6px 14px;border-radius:999px;
+  background:rgba(10,10,20,.88);color:#fff;font:600 13px/1 Fredoka,Tahoma,sans-serif;box-shadow:0 0 0 2px #ff2d87,0 8px 24px rgba(0,0,0,.5);max-width:calc(100vw - 24px);flex-wrap:wrap;justify-content:center}
+.test-bar b{color:#ff8ac4;letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+.test-bar span{min-width:9em;text-align:center}
+.test-bar button{border:0;border-radius:999px;padding:7px 11px;background:#2a2a40;color:#fff;font:600 13px Fredoka,Tahoma,sans-serif;cursor:pointer}
+.test-bar button:hover,.test-bar button:focus-visible{background:#ff2d87;outline:none}
+body:has(#testBar:not([hidden])) .dvd{padding-bottom:84px}
+body:has(#testBar:not([hidden])) .desk{padding-bottom:64px}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -474,6 +534,7 @@ body[data-ui=maerchen] .dvd-tile img,body[data-ui=maerchen] .map-grid img{border
 
 <div class="dvd-bg" id="dvdScene" aria-hidden="true"></div>
 <div class="theme-bg" aria-hidden="true"></div>
+<div class="test-bar" id="testBar" role="region" aria-label="Testmodus" hidden><b>Testmodus</b><button id="testPrev" type="button" aria-label="Vorheriges Theme">◀</button><span id="testName"></span><button id="testNext" type="button" aria-label="Nächstes Theme">▶</button><button id="testSfx" type="button">♪ Klang</button><button id="testOff" type="button">Beenden</button></div>
 
 <div class="desk">
   <header class="hud" aria-label="Spielstand">
@@ -917,12 +978,46 @@ function audio() {
   if (actx && actx.state === 'suspended') actx.resume().catch(() => {});
   return actx;
 }
+/* Klangprofile pro Theme: Jedes Theme färbt alle Effekte und die Menümusik um.
+   wave: Wellenform, mul: Tonhöhe, echo: Hall in Sekunden, slide: Gleiten am Tonende, filter: Tiefpass,
+   bell/sparkle/chorus: zusätzliche Obertöne, pluck: kurz gezupft, tempo/key: Menümusik */
+const SFX = {
+  nacht:    { tempo: 1 },
+  schleim:  { wave: 'square', mul: 0.8, slide: -0.45, vol: 0.55, tempo: 0.85, key: -2 },
+  chrom:    { wave: 'sine', mul: 1.5, echo: 0.11, chorus: true, tempo: 1.1, key: 2 },
+  grunge:   { wave: 'sawtooth', mul: 0.75, filter: 2400, vol: 0.5, tempo: 1.25, key: -5, minor: true },
+  glitzer:  { wave: 'sine', mul: 2, sparkle: true, echo: 0.09, tempo: 0.95, key: 5 },
+  maerchen: { wave: 'triangle', mul: 1, pluck: true, echo: 0.2, tempo: 0.8, key: 0 },
+  aero:     { wave: 'sine', mul: 1.25, echo: 0.24, chorus: true, tempo: 0.75, key: 4 },
+  xp:       { wave: 'sine', mul: 1.12, echo: 0.06, bell: true, tempo: 1, key: 7 },
+  neon:     { wave: 'square', mul: 0.5, filter: 1100, echo: 0.16, vol: 0.6, tempo: 1.3, key: -3, minor: true },
+  automat:  { wave: 'square', mul: 1, bell: true, vol: 0.55, tempo: 1.15, key: 2 },
+};
+const SFXP = () => SFX[uiTheme] || SFX.nacht;
 function tone(freq, dur = 0.18, type = 'triangle', vol = 0.12, delay = 0) {
   if (muted) return; const a = audio(); if (!a) return;
-  const t = a.currentTime + delay, o = a.createOscillator(), g = a.createGain();
-  o.type = type; o.frequency.value = freq;
-  g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
-  o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + 0.03);
+  const P = SFXP(), t = a.currentTime + delay, f = freq * (P.mul || 1), d = P.pluck ? dur * 0.7 : dur, v = vol * (P.vol || 1);
+  let out = a.destination;
+  if (P.filter) { const lp = a.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = P.filter; lp.Q.value = 6; lp.connect(out); out = lp; }
+  if (P.echo) {
+    const dl = a.createDelay(1), fb = a.createGain(), wet = a.createGain();
+    dl.delayTime.value = P.echo; fb.gain.value = 0.32; wet.gain.value = 0.45;
+    dl.connect(fb).connect(dl); dl.connect(wet).connect(out);
+    const mix = a.createGain(); mix.connect(out); mix.connect(dl); out = mix;
+    setTimeout(() => { try { mix.disconnect(); dl.disconnect(); fb.disconnect(); wet.disconnect(); } catch (e) {} }, (delay + d + P.echo * 8 + 0.5) * 1000);
+  }
+  const voice = (freq2, w, vol2, len, detune = 0) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = w; o.frequency.setValueAtTime(freq2, t); o.detune.value = detune;
+    if (P.slide) o.frequency.exponentialRampToValueAtTime(Math.max(30, freq2 * (1 + P.slide)), t + len);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol2, t + (P.pluck ? 0.004 : 0.01)); g.gain.exponentialRampToValueAtTime(0.0008, t + len);
+    o.connect(g).connect(out); o.start(t); o.stop(t + len + 0.03);
+  };
+  const w = P.wave || type;
+  voice(f, w, v, d);
+  if (P.chorus) voice(f, w, v * 0.6, d, 9);
+  if (P.bell) voice(f * 2.76, 'sine', v * 0.35, d * 0.5);
+  if (P.sparkle) voice(f * 3, 'sine', v * 0.25, Math.min(d, 0.12));
 }
 const PENTA = [0, 2, 4, 7, 9];
 const noteFreq = i => 330 * Math.pow(2, (PENTA[i % 5] + 12 * Math.floor(i / 5)) / 12);
@@ -1512,9 +1607,87 @@ function toonBox(x, y, w, h, fill, accent) {
   if (accent) { ctx.save(); path(); ctx.clip(); ctx.fillStyle = accent; ctx.fillRect(x, y, 10, h); ctx.restore(); }
   path(); ctx.strokeStyle = ink; ctx.lineWidth = 4; ctx.stroke();
 }
+/* Bewegte Theme-Effekte auf dem Spielfeld, jedes Bild neu gezeichnet (über dem Hintergrund, unter den Laternen) */
+const FX_SEED = Array.from({ length: 40 }, (_, i) => { const x = Math.sin(i * 12.9898) * 43758.5453; return x - Math.floor(x); });
+const fxR = (i, k = 0) => FX_SEED[(i * 7 + k * 13) % FX_SEED.length];
+function drawThemeFx() {
+  if (reducedMotion) return;
+  const T = S.t, g = ctx;
+  switch (uiTheme) {
+    case 'neon': {
+      const pulse = 0.5 + 0.5 * Math.sin(T * 1.6);
+      const orb = g.createRadialGradient(W / 2, 360, 10, W / 2, 360, 260 + pulse * 40);
+      orb.addColorStop(0, `rgba(190,255,90,${0.22 + pulse * 0.14})`); orb.addColorStop(0.5, 'rgba(80,200,30,.08)'); orb.addColorStop(1, 'rgba(0,0,0,0)');
+      g.fillStyle = orb; g.fillRect(0, 0, W, H);
+      g.lineWidth = 6; g.lineCap = 'round';
+      for (let i = 0; i < 4; i++) { const a = T * (0.5 + i * 0.18) * (i % 2 ? -1 : 1) + i; g.strokeStyle = `rgba(170,255,70,${0.18 - i * 0.03})`; g.beginPath(); g.arc(W / 2, 360, 120 + i * 55, a, a + 1.4); g.stroke(); }
+      g.strokeStyle = 'rgba(120,240,40,.22)'; g.lineWidth = 1.2;
+      const off = (T * 0.35) % 1;
+      for (let k = 0; k < 18; k++) { const q = k + off, y = 560 + q * q * 1.5; if (y > H) break; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
+      const sy = (T * 120) % H; g.fillStyle = 'rgba(170,255,80,.06)'; g.fillRect(0, sy, W, 26);
+      break;
+    }
+    case 'aero': {
+      for (let i = 0; i < 18; i++) {
+        const sp = 30 + fxR(i) * 60, r = 6 + fxR(i, 1) * 22, x = fxR(i, 2) * W + Math.sin(T * 0.8 + i) * 18, y = H + 40 - ((T * sp + fxR(i, 3) * (H + 80)) % (H + 80));
+        const bg = g.createRadialGradient(x - r * 0.35, y - r * 0.35, 1, x, y, r);
+        bg.addColorStop(0, 'rgba(255,255,255,.85)'); bg.addColorStop(0.35, 'rgba(255,255,255,.12)'); bg.addColorStop(0.85, 'rgba(200,240,255,.08)'); bg.addColorStop(1, 'rgba(255,255,255,.55)');
+        g.fillStyle = bg; g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.fill();
+      }
+      const gl = g.createLinearGradient(0, 0, 0, 220); gl.addColorStop(0, 'rgba(255,255,255,.4)'); gl.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = gl; g.beginPath(); g.moveTo(0, 0); g.lineTo(W, 0); g.lineTo(W, 120); g.quadraticCurveTo(W / 2, 230, 0, 150); g.fill();
+      break;
+    }
+    case 'glitzer': {
+      for (let i = 0; i < 28; i++) {
+        const a = Math.max(0, Math.sin(T * (1.5 + fxR(i) * 2) + i * 2)), x = fxR(i, 1) * W, y = fxR(i, 2) * H, s = 3 + a * 9;
+        g.fillStyle = `rgba(255,255,255,${a * 0.9})`; g.beginPath(); g.moveTo(x, y - s); g.lineTo(x + s * 0.22, y - s * 0.22); g.lineTo(x + s, y); g.lineTo(x + s * 0.22, y + s * 0.22); g.lineTo(x, y + s); g.lineTo(x - s * 0.22, y + s * 0.22); g.lineTo(x - s, y); g.lineTo(x - s * 0.22, y - s * 0.22); g.fill();
+      }
+      break;
+    }
+    case 'schleim': {
+      g.fillStyle = 'rgba(170,250,50,.55)';
+      for (let i = 0; i < 9; i++) { const x = 60 + i * 85 + fxR(i) * 30, len = 40 + ((T * (14 + fxR(i, 1) * 20) + fxR(i, 2) * 300) % 300); g.fillRect(x - 5, 0, 10, len); g.beginPath(); g.arc(x, len, 9, 0, Math.PI * 2); g.fill(); }
+      break;
+    }
+    case 'chrom': {
+      const x = ((T * 260) % (W + 900)) - 450, sh = g.createLinearGradient(x, 0, x + 260, 0);
+      sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(0.5, 'rgba(220,240,255,.16)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
+      g.save(); g.transform(1, 0, -0.35, 1, 0, 0); g.fillStyle = sh; g.fillRect(x, 0, 260, H); g.restore();
+      break;
+    }
+    case 'automat': {
+      const n = 40, step = Math.floor(T * 8);
+      for (let i = 0; i < n; i++) {
+        const u = i / n, per = 2 * (W + H), d = u * per;
+        const [x, y] = d < W ? [d, 10] : d < W + H ? [W - 10, d - W] : d < 2 * W + H ? [W - (d - W - H), H - 10] : [10, H - (d - 2 * W - H)];
+        const on = (i + step) % 3 === 0;
+        g.fillStyle = on ? 'rgba(255,230,120,.95)' : 'rgba(255,200,80,.25)'; g.beginPath(); g.arc(x, y, on ? 5 : 3.5, 0, Math.PI * 2); g.fill();
+      }
+      break;
+    }
+    case 'xp': {
+      g.fillStyle = 'rgba(255,255,255,.55)';
+      for (let i = 0; i < 4; i++) { const s = 50 + fxR(i) * 60, x = ((T * (8 + i * 4) + fxR(i, 1) * (W + 300)) % (W + 300)) - 150, y = 120 + fxR(i, 2) * 260;
+        for (let k = 0; k < 4; k++) { g.beginPath(); g.ellipse(x + (k - 1.5) * s * 0.5, y + Math.sin(k) * 8, s * 0.5, s * 0.25, 0, 0, Math.PI * 2); g.fill(); } }
+      break;
+    }
+    case 'maerchen': {
+      for (let i = 0; i < 22; i++) { const x = fxR(i) * W + Math.sin(T + i) * 20, y = H - ((T * (12 + fxR(i, 1) * 18) + fxR(i, 2) * H) % H), a = 0.4 + 0.4 * Math.sin(T * 3 + i);
+        g.fillStyle = `rgba(255,245,170,${a})`; g.beginPath(); g.arc(x, y, 2.5, 0, Math.PI * 2); g.fill(); }
+      break;
+    }
+    case 'grunge': {
+      g.fillStyle = 'rgba(0,0,0,.08)'; for (let i = 0; i < 90; i++) g.fillRect(Math.random() * W, Math.random() * H, 2, 2);
+      if (Math.sin(T * 7) > 0.97) { g.fillStyle = 'rgba(255,45,135,.05)'; g.fillRect(0, 0, W, H); }
+      break;
+    }
+  }
+}
 function draw() {
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
   ctx.drawImage(bgFor(curTheme()), 0, 0, W, H);
+  drawThemeFx();
 
   if (S.finale && S.phase !== 'setup') {
     for (let i = 0; i < 5; i++) {
@@ -1909,13 +2082,13 @@ let tuneStep = 0, tuneTime = 0, tuneTimer = null;
 function menuMusicTick() {
   const a = actx;
   if (!a || a.state !== 'running' || muted || $('#setup').hidden || document.hidden) { tuneTime = 0; return; }
-  const beat = 0.24;
+  const P = SFXP(), beat = 0.24 / (P.tempo || 1), key = P.key || 0, mi = n => (P.minor && [4, 9, 11].includes(((n % 12) + 12) % 12) ? n - 1 : n);
   if (tuneTime < a.currentTime) tuneTime = a.currentTime + 0.05;
   while (tuneTime < a.currentTime + 0.6) {
     const [n, len] = MENU_TUNE[tuneStep % MENU_TUNE.length], d = tuneTime - a.currentTime;
-    if (n !== null) { const f = 523.25 * Math.pow(2, n / 12); tone(f, 0.9, 'sine', 0.03, d); tone(f * 2, 0.35, 'sine', 0.008, d); }
+    if (n !== null) { const f = 523.25 * Math.pow(2, (mi(n) + key) / 12); tone(f, 0.9, 'sine', 0.03, d); tone(f * 2, 0.35, 'sine', 0.008, d); }
     const totalBeats = MENU_TUNE.slice(0, tuneStep % MENU_TUNE.length).reduce((s, x) => s + x[1], 0);
-    if (totalBeats % 6 === 0) tone(130.81 * Math.pow(2, MENU_BASS[(totalBeats / 6) % MENU_BASS.length] / 12) * 2, 1.2, 'triangle', 0.025, d);
+    if (totalBeats % 6 === 0) tone(130.81 * Math.pow(2, (mi(MENU_BASS[(totalBeats / 6) % MENU_BASS.length]) + key) / 12) * 2, 1.2, 'triangle', 0.025, d);
     tuneTime += len * beat; tuneStep++;
   }
 }
@@ -2161,20 +2334,21 @@ const swatchBg = t => `linear-gradient(135deg,${t.swatch[0]} 0 45%,${t.swatch[1]
 const boxItemHTML = k => { const t = UI_THEMES[k]; return `<div class="item" style="--rc:${RARITY[t.rar].c};--ob:${swatchBg(t)}"><span class="orb"></span><span>${t.name}</span></div>`; };
 function openBoxDialog() {
   boxWin = null;
-  $('#boxHead').textContent = PROG.boxes > 0 ? 'Was steckt drin?' : 'Keine Boxen mehr';
-  $('#boxSub').textContent = PROG.boxes > 0 ? `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3` : 'Spiel eine Runde, dann gibt es neue Boxen.';
+  const can = PROG.boxes > 0 || TEST;
+  $('#boxHead').textContent = can ? 'Was steckt drin?' : 'Keine Boxen mehr';
+  $('#boxSub').textContent = TEST ? 'Testmodus: Boxen sind unbegrenzt und nichts wird gespeichert.' : PROG.boxes > 0 ? `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3` : 'Spiel eine Runde, dann gibt es neue Boxen.';
   const strip = $('#boxStrip'); strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
   strip.innerHTML = Array.from({ length: 9 }, rollTheme).map(boxItemHTML).join('');
   $('#boxPrize').className = 'prize'; $('#boxPrize').innerHTML = '<p class="note">Jedes Theme verändert das ganze Spiel. Doppelte werden zu Splittern, drei Splitter ergeben eine Box.</p>';
-  $('#boxOpen').hidden = PROG.boxes <= 0; $('#boxOpen').disabled = false; $('#boxOpen').textContent = 'Box öffnen';
+  $('#boxOpen').hidden = PROG.boxes <= 0 && !TEST; $('#boxOpen').disabled = false; $('#boxOpen').textContent = 'Box öffnen';
   $('#boxWear').hidden = true; $('#boxDone').textContent = 'Fertig';
   $('#box').hidden = false;
-  (PROG.boxes > 0 ? $('#boxOpen') : $('#boxDone')).focus();
+  (can ? $('#boxOpen') : $('#boxDone')).focus();
 }
 function spinBox() {
-  if (boxBusy || PROG.boxes <= 0) return;
+  if (boxBusy || (PROG.boxes <= 0 && !TEST)) return;
   boxBusy = true; $('#boxOpen').disabled = true; $('#boxWear').hidden = true;
-  PROG.boxes--;
+  if (!TEST) PROG.boxes--;
   const win = rollTheme(), WIN_AT = 38, items = Array.from({ length: 44 }, rollTheme); items[WIN_AT] = win;
   const strip = $('#boxStrip');
   strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
@@ -2192,15 +2366,16 @@ function spinBox() {
 function revealBox(k) {
   const t = UI_THEMES[k], r = RARITY[t.rar], dup = !!PROG.themes[k];
   let extra = '';
-  if (dup) { PROG.shards++; if (PROG.shards >= 3) { PROG.shards = 0; PROG.boxes++; extra = ' Drei Splitter zusammen: +1 Box!'; } }
+  if (TEST) extra = ' (Testmodus: nichts gespeichert)';
+  else if (dup) { PROG.shards++; if (PROG.shards >= 3) { PROG.shards = 0; PROG.boxes++; extra = ' Drei Splitter zusammen: +1 Box!'; } }
   else PROG.themes[k] = 1;
-  saveProg();
-  boxWin = dup ? null : k;
+  if (!TEST) saveProg();
+  boxWin = dup && !TEST ? null : k;
   const pr = $('#boxPrize'); pr.className = 'prize win'; pr.style.setProperty('--rc', r.c);
-  pr.innerHTML = `<span class="rar">${r.n}${dup ? ' · schon da' : ' · neu!'}</span><span class="pn">${t.name}</span><span class="pd">${dup ? `Doppelt: +1 Splitter (${PROG.shards}/3).${extra}` : t.desc}</span>`;
+  pr.innerHTML = `<span class="rar">${r.n}${dup ? ' · schon da' : ' · neu!'}</span><span class="pn">${t.name}</span><span class="pd">${TEST ? t.desc + extra : dup ? `Doppelt: +1 Splitter (${PROG.shards}/3).${extra}` : t.desc}</span>`;
   [0, 4, 7, 12, 16].slice(0, t.rar + 1).forEach((n, i) => tone(noteFreq(5 + n), 0.4, 'triangle', 0.08, i * 0.09));
   $('#boxSub').textContent = `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3`;
-  $('#boxOpen').disabled = false; $('#boxOpen').hidden = PROG.boxes <= 0; $('#boxOpen').textContent = 'Noch eine öffnen';
+  $('#boxOpen').disabled = false; $('#boxOpen').hidden = PROG.boxes <= 0 && !TEST; $('#boxOpen').textContent = 'Noch eine öffnen';
   $('#boxWear').hidden = !boxWin;
   boxBusy = false;
   (boxWin ? $('#boxWear') : PROG.boxes > 0 ? $('#boxOpen') : $('#boxDone')).focus();
@@ -2208,25 +2383,26 @@ function revealBox(k) {
 }
 function closeBox() { if (boxBusy) return; $('#box').hidden = true; if (curPage() === 'pgThemes') { renderThemes(); const f = $('#pgThemes .sel') || $('#boxMenuOpen'); if (f) f.focus(); } }
 $('#boxOpen').addEventListener('click', spinBox);
-$('#boxWear').addEventListener('click', () => { if (boxWin) { setActiveTheme(boxWin); $('#boxWear').hidden = true; closeBox(); } });
+$('#boxWear').addEventListener('click', () => { if (boxWin) { if (PROG.themes[boxWin]) setActiveTheme(boxWin); else applyUiTheme(boxWin); if (TEST) syncTestBar(); $('#boxWear').hidden = true; closeBox(); } });
 $('#boxDone').addEventListener('click', closeBox);
 
 /* ---------- Menüseite Themes ---------- */
 function renderThemes() {
   $('#boxCount').textContent = `${PROG.boxes} ${PROG.boxes === 1 ? 'Lootbox' : 'Lootboxen'}`;
   $('#shardCount').textContent = `${PROG.shards}/3`;
-  $('#boxMenuOpen').disabled = PROG.boxes <= 0;
+  $('#boxMenuOpen').disabled = PROG.boxes <= 0 && !TEST;
   const owned = Object.keys(PROG.themes).length, all = Object.keys(UI_THEMES).length;
-  $('#themeChip').textContent = `${owned} von ${all} Themes gesammelt`;
+  $('#themeChip').textContent = TEST ? `Testmodus: alle ${all} Themes frei (dein echter Stand: ${owned} von ${all})` : `${owned} von ${all} Themes gesammelt`;
   $('#themeGrid').innerHTML = Object.entries(UI_THEMES).map(([k, t]) => {
-    const have = !!PROG.themes[k], on = PROG.active === k, r = RARITY[t.rar];
+    const have = owns(k), on = uiTheme === k, r = RARITY[t.rar];
     return `<button class="dvd-tile theme-card ${on ? 'sel' : ''} ${have ? '' : 'locked'}" type="button" data-k="${k}" ${have ? '' : 'aria-disabled="true"'} title="${have ? t.desc : 'Noch nicht gefunden – steckt in Lootboxen'}">
       <span class="th-prev" style="--a:${t.swatch[0]};--b:${t.swatch[1]};--c:${t.swatch[2]}"><i></i><i></i><i></i>${have ? '' : '<b>?</b>'}</span>
       <span class="mn">${have ? t.name : '???'}</span><span class="th-rar" style="color:${r.c}">${r.n}</span><span class="md">${on ? 'Aktiv' : have ? 'Auswählen' : 'Noch nicht gefunden'}</span></button>`;
   }).join('');
   $('#themeGrid').querySelectorAll('.theme-card').forEach(b => b.addEventListener('click', () => {
     if (b.classList.contains('locked')) { $('#themeChip').textContent = 'Dieses Theme steckt noch in einer Lootbox.'; return; }
-    setActiveTheme(b.dataset.k); confirmTone(); renderThemes();
+    if (PROG.themes[b.dataset.k]) setActiveTheme(b.dataset.k); else applyUiTheme(b.dataset.k);
+    if (TEST) syncTestBar(); confirmTone(); renderThemes();
     const f = $(`#themeGrid [data-k="${b.dataset.k}"]`); if (f) f.focus({ preventScroll: true });
   }));
   renderAccountHint();
@@ -2305,6 +2481,51 @@ async function restoreAccount() {
   const remote = await net.loadProgress().catch(() => null);
   PROG = mergeProg(PROG, remote); applyUiTheme(PROG.active); saveProg();
 }
+
+/* ---------- Geheimer Testmodus ----------
+   Im Menü den Konami-Code tippen (↑ ↑ ↓ ↓ ← → ← → B A) oder 7× schnell auf das Logo tippen.
+   Schaltet alle Themes zum Ausprobieren frei, ohne den echten Fortschritt oder das Konto zu verändern. */
+let TEST = (() => { try { return sessionStorage.getItem('plinko-test') === '1'; } catch (e) { return false; } })();
+const owns = k => TEST || !!PROG.themes[k];
+function setTest(on) {
+  TEST = on;
+  try { if (on) sessionStorage.setItem('plinko-test', '1'); else sessionStorage.removeItem('plinko-test'); } catch (e) {}
+  $('#testBar').hidden = !on;
+  if (!on) applyUiTheme(PROG.active);
+  syncTestBar();
+  if (curPage() === 'pgThemes') renderThemes();
+  [0, 4, 7, 12].forEach((k, i) => tone(noteFreq(on ? 5 + k : 17 - k), 0.2, 'triangle', 0.07, i * 0.07));
+}
+function syncTestBar() { $('#testName').textContent = TH().name; }
+function cycleTheme(d) {
+  const ks = Object.keys(UI_THEMES), i = ks.indexOf(uiTheme);
+  applyUiTheme(ks[(i + d + ks.length) % ks.length]); syncTestBar();
+  if (curPage() === 'pgThemes' && !$('#setup').hidden) renderThemes();
+  playThemeDemo();
+}
+function playThemeDemo() {
+  [0, 2, 4, 7, 9, 12, 7, 12].forEach((k, i) => tone(noteFreq(5 + k), 0.22, 'triangle', 0.08, i * 0.09));
+  tone(170, 0.14, 'square', 0.04, 0.85); tone(340, 0.2, 'triangle', 0.06, 0.87);
+}
+const KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+let konamiPos = 0;
+window.addEventListener('keydown', e => {
+  const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+  konamiPos = k === KONAMI[konamiPos] ? konamiPos + 1 : (k === KONAMI[0] ? 1 : 0);
+  if (konamiPos === KONAMI.length) { konamiPos = 0; setTest(!TEST); }
+  const typing = document.activeElement && document.activeElement.tagName === 'INPUT';
+  if (TEST && !typing && (e.key === '[' || e.key === ']')) { e.preventDefault(); cycleTheme(e.key === ']' ? 1 : -1); }
+}, true);
+let logoTaps = [];
+$('.dvd-title').addEventListener('click', () => {
+  const now = Date.now(); logoTaps = logoTaps.filter(t => now - t < 2500); logoTaps.push(now);
+  if (logoTaps.length >= 7) { logoTaps = []; setTest(!TEST); }
+});
+$('#testPrev').addEventListener('click', () => cycleTheme(-1));
+$('#testNext').addEventListener('click', () => cycleTheme(1));
+$('#testSfx').addEventListener('click', playThemeDemo);
+$('#testOff').addEventListener('click', () => setTest(false));
+$('#testBar').hidden = !TEST; syncTestBar();
 
 /* ---------- Netz: Firebase oder Testmodus (?net=local) ---------- */
 let netPromise = null, netError = '';
