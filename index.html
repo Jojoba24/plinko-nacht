@@ -2281,27 +2281,52 @@ function onLive(lv) {
   if (!ONLINE || !lv || isMine()) return;
   if (typeof lv.a === 'number') S.aim = lv.a;
   if (S.phase !== 'shot') return;
-  S.liveBalls = Array.isArray(lv.b) ? lv.b : [];
+  S.liveBalls = Array.isArray(lv.b) ? lv.b : []; S.liveFresh = true;
   if (S.shot && typeof lv.s === 'number') S.shot.score = lv.s;
   (Array.isArray(lv.h) ? lv.h : []).forEach(i => { const p = S.pegs[i]; if (p && !p.hit && !p.gone) { p.hit = true; p.flash = 1; S.shot.hits++; tone(noteFreq(Math.min(S.shot.hits - 1, 19)), 0.2, 'triangle', 0.08); } });
 }
+/* Zuschauen: Die Kugel fliegt lokal mit derselben Physik weiter (Schwerkraft, Wände, Laternen, Boot).
+   Jeder Netz-Schnappschuss setzt den echten Stand; der Sprung dorthin wird über rund 0,1 s weich ausgeblendet. */
 function spectate(dt) {
   const tgt = S.phase === 'shot' ? (S.liveBalls || []) : [];
-  while (S.balls.length < tgt.length) { const t = tgt[S.balls.length]; S.balls.push({ x: t[0], y: t[1], vx: 0, vy: 0, fire: 0, magnet: 0, trail: [], tt: 0, col: PCOL[S.cur], skin: null, gold: false }); }
-  S.balls.length = tgt.length;
-  const k = Math.min(1, dt * 16);
-  S.balls.forEach((b, i) => {
-    const t = tgt[i]; b.x += (t[0] - b.x) * k; b.y += (t[1] - b.y) * k;
-    b.fire = t[2] ? 1 : 0; b.gold = !!t[3]; b.magnet = t[4] ? 1 : 0; b.skin = t[5] ? 'rainbow' : null; b.col = PCOL[S.cur];
+  if (S.liveFresh || tgt.length !== S.balls.length) {
+    S.liveFresh = false;
+    while (S.balls.length < tgt.length) { const t = tgt[S.balls.length]; S.balls.push({ x: t[0], y: t[1], sx: t[0], sy: t[1], ex: 0, ey: 0, vx: 0, vy: 0, fire: 0, magnet: 0, trail: [], tt: 0, col: PCOL[S.cur], skin: null, gold: false, fresh: true }); }
+    S.balls.length = tgt.length;
+    S.balls.forEach((b, i) => {
+      const t = tgt[i], nf = t.length >= 8, f = nf ? 4 : 2;
+      let ex = b.x - t[0], ey = b.y - t[1];
+      if (b.fresh || Math.hypot(ex, ey) > 90) { ex = 0; ey = 0; }
+      b.fresh = false; b.sx = t[0]; b.sy = t[1]; b.ex = ex; b.ey = ey;
+      if (nf) { b.vx = t[2]; b.vy = t[3]; } else { b.vx = 0; b.vy = 0; }
+      b.fire = t[f] ? 1 : 0; b.gold = !!t[f + 1]; b.magnet = t[f + 2] ? 1 : 0; b.skin = t[f + 3] ? 'rainbow' : null; b.col = PCOL[S.cur]; b.live = nf;
+    });
+  }
+  const sdt = dt * S.timeScale, n = Math.max(1, Math.ceil(sdt * 240)), h = sdt / n, decay = Math.exp(-dt / 0.09);
+  for (const b of S.balls) {
+    if (b.live) for (let i = 0; i < n; i++) {
+      // dieselbe Physik wie beim Schützen, aber ohne Punkte und ohne Laternen zu treffen
+      const q = { x: b.sx, y: b.sy, vx: b.vx, vy: b.vy };
+      q.vy += GRAV * h; q.x += q.vx * h; q.y += q.vy * h;
+      if (q.x < BR) { q.x = BR; q.vx = Math.abs(q.vx) * 0.9; }
+      if (q.x > W - BR) { q.x = W - BR; q.vx = -Math.abs(q.vx) * 0.9; }
+      if (q.y < BR) { q.y = BR; q.vy = Math.abs(q.vy) * 0.9; }
+      if (!b.fire) for (const p of S.pegs) if (!p.gone) collideCircle(q, p.x, p.y, PR);
+      if (!S.finale) { const bw = boatW(); collideCircle(q, S.bucketX - bw / 2, BY + 2, 6); collideCircle(q, S.bucketX + bw / 2, BY + 2, 6); }
+      if (q.y > H + BR * 2) { q.vx = 0; q.vy = 0; }
+      b.sx = q.x; b.sy = q.y; b.vx = q.vx; b.vy = q.vy;
+    }
+    b.ex *= decay; b.ey *= decay;
+    b.x = b.sx + b.ex; b.y = b.sy + b.ey;
     b.tt += dt; if (b.tt > 1 / 60) { b.tt = 0; b.trail.push(b.x, b.y); if (b.trail.length > 36) b.trail.splice(0, 2); }
-  });
+  }
 }
 function onlineTick() {
   const o = ONLINE, now = performance.now();
   if (isMine()) {
     if (S.phase === 'shot' && now - o.lastLive > 60) {
       o.lastLive = now;
-      o.net.set(o.path + '/live', { b: S.balls.map(b => [Math.round(b.x), Math.round(b.y), b.fire > 0 ? 1 : 0, b.gold ? 1 : 0, b.magnet > 0 ? 1 : 0, b.skin ? 1 : 0]), h: S.pegs.reduce((a, p, i) => { if (p.hit && !p.gone) a.push(i); return a; }, []), s: Math.round(S.shot ? S.shot.score : 0), a: S.aim });
+      o.net.set(o.path + '/live', { b: S.balls.map(b => [Math.round(b.x), Math.round(b.y), Math.round(b.vx), Math.round(b.vy), b.fire > 0 ? 1 : 0, b.gold ? 1 : 0, b.magnet > 0 ? 1 : 0, b.skin ? 1 : 0]), h: S.pegs.reduce((a, p, i) => { if (p.hit && !p.gone) a.push(i); return a; }, []), s: Math.round(S.shot ? S.shot.score : 0), a: S.aim });
     } else if (S.phase === 'aim' && Math.abs(S.aim - o.lastAim) > 0.004 && now - o.lastLive > 90) {
       o.lastLive = now; o.lastAim = S.aim; o.net.set(o.path + '/live', { a: S.aim });
     }
