@@ -138,6 +138,7 @@ canvas{display:block;touch-action:none;cursor:crosshair;border-radius:18px;box-s
   position:fixed;inset:0;z-index:30;overflow:auto;color:var(--cream);font-family:var(--ui);background:transparent;display:flex;flex-direction:column;align-items:center;
   padding-block:44px 24px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 body[data-page=pgCount]{--cam:-.55}
+body[data-page=pgPlay]{--cam:-.25}
 body[data-page=pgCast]{--cam:.6}
 body[data-page=pgMap]{--cam:1}
 body[data-page=pgOnline],body[data-page=pgLobby]{--cam:-1}
@@ -495,13 +496,16 @@ body:has(#testBar:not([hidden])) .desk{padding-bottom:64px}
 .theme-bg svg{position:absolute;inset:0;width:100%;height:100%}
 
 /* Reaktor */
-body[data-ui=reaktor] .rk-core{position:absolute;left:12%;top:50%;width:min(44vh,34vw);aspect-ratio:1;translate:0 -50%;border-radius:50%;background:radial-gradient(circle at 40% 32%,#f6ffd2 0 8%,#c8ff56 22%,#76d816 48%,#2f7a06 74%,rgba(20,60,2,.2) 100%);box-shadow:0 0 80px 20px rgba(160,255,60,.45),inset -16px -20px 40px rgba(0,40,0,.5);animation:rkPulse 3s ease-in-out infinite}
-@keyframes rkPulse{50%{box-shadow:0 0 120px 40px rgba(170,255,70,.6),inset -16px -20px 40px rgba(0,40,0,.5)}}
+body[data-ui=reaktor] .rk-core{position:absolute;left:12%;top:50%;width:min(44vh,34vw);aspect-ratio:1;translate:0 -50%;border-radius:50%;background:radial-gradient(circle at 40% 32%,#f6ffd2 0 8%,#c8ff56 22%,#76d816 48%,#2f7a06 74%,rgba(20,60,2,.2) 100%);box-shadow:0 0 80px 20px rgba(160,255,60,.45),inset -16px -20px 40px rgba(0,40,0,.5)}
+body[data-ui=reaktor] .rk-core::after{content:"";position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,rgba(190,255,90,.45),rgba(160,255,60,0) 65%);will-change:opacity,transform;animation:rkPulse 3s ease-in-out infinite}
+@keyframes rkPulse{50%{opacity:.35;transform:scale(1.12)}}
 body[data-ui=reaktor] .rk-tube{position:absolute;top:-5%;bottom:-5%;width:3.4vw;max-width:46px;border-radius:30px;background:linear-gradient(90deg,#0a2a02,#4ab010 35%,#c8ff70 48%,#2f7a06 62%,#061a01);opacity:.5;overflow:hidden}
-body[data-ui=reaktor] .rk-tube::after{content:"";position:absolute;left:0;right:0;height:14%;border-radius:10px;background:radial-gradient(ellipse,rgba(230,255,160,.9),transparent 70%);animation:rkFlow 2.6s linear infinite}
-@keyframes rkFlow{from{top:-15%}to{top:110%}}
-body[data-ui=reaktor] .rk-rings g{transform-origin:24% 50%;transform-box:view-box;animation:thspin 30s linear infinite}
-body[data-ui=reaktor] .rk-steam{mix-blend-mode:screen;opacity:.5;animation:rkSteam 18s ease-in-out infinite alternate}
+body[data-ui=reaktor] .rk-tube::after{content:"";position:absolute;left:0;right:0;top:0;height:14%;border-radius:10px;background:radial-gradient(ellipse,rgba(230,255,160,.9),transparent 70%);will-change:transform;animation:rkFlow 2.6s linear infinite}
+@keyframes rkFlow{from{transform:translateY(-110%)}to{transform:translateY(790%)}}
+body[data-ui=reaktor] .rk-rings{will-change:transform;animation:rkRing 60s linear infinite alternate}
+@keyframes rkRing{to{transform:rotate(8deg) scale(1.06)}}
+body[data-ui=reaktor] .rk-steam{position:absolute;inset:-6%;background-size:100% 100%;opacity:.55;will-change:transform;animation:rkSteam 18s ease-in-out infinite alternate}
+body[data-ui=reaktor] .rk-steam.s2{opacity:.4;animation-duration:26s;animation-direction:alternate-reverse}
 @keyframes rkSteam{to{transform:translate(4%,-6%) scale(1.12)}}
 body[data-ui=reaktor] .dvd-menu{perspective:700px;align-items:stretch;min-width:min(420px,86vw)}
 body[data-ui=reaktor] .dvd-item{text-align:left;font-weight:900;letter-spacing:.1em;text-transform:uppercase;font-size:clamp(15px,2.6vw,22px);-webkit-text-stroke:0;filter:none;color:#e4ffc4;text-shadow:0 2px 0 #0a2a02;padding:.5em 1.2em .5em 3em;margin-block:3px;clip-path:polygon(0 0,94% 0,100% 45%,100% 100%,5% 100%,0 70%);
@@ -630,15 +634,15 @@ body[data-ui=chrom] .dvd-toggles .dvd-item{padding:.4em 1em}
 
 /* Kommandobrücke */
 body[data-ui=bruecke] .br-warp{position:absolute;left:50%;top:42%;width:10px;height:10px}
-body[data-ui=bruecke] .br-warp i{position:absolute;left:0;top:0;width:2px;height:2px;border-radius:2px;background:#cfe8ff;box-shadow:0 0 4px #9fd0ff;transform-origin:0 0;animation:brWarp 1.8s linear infinite}
+body[data-ui=bruecke] .br-warp i{position:absolute;left:0;top:0;width:2px;height:2px;border-radius:2px;background:#cfe8ff;transform-origin:0 0;will-change:transform,opacity;animation:brWarp 1.8s linear infinite}
 @keyframes brWarp{0%{transform:rotate(var(--a)) translateX(4px) scaleX(1);opacity:0}20%{opacity:1}100%{transform:rotate(var(--a)) translateX(70vmax) scaleX(30);opacity:0}}
 body[data-ui=bruecke] .br-hex{position:absolute;inset:0;opacity:.14;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='48'%3E%3Cpath d='M14 0l14 8v16l-14 8L0 24V8z M14 32v16' fill='none' stroke='%235ad8ff' stroke-width='1'/%3E%3C/svg%3E") 0 0/28px 48px}
 body[data-ui=bruecke] .br-scan{position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(120,220,255,.05) 0 1px,transparent 1px 3px)}
-body[data-ui=bruecke] .br-scan::after{content:"";position:absolute;left:0;right:0;height:18%;background:linear-gradient(180deg,transparent,rgba(120,220,255,.12),transparent);animation:brSweep 4s linear infinite}
-@keyframes brSweep{from{top:-20%}to{top:110%}}
+body[data-ui=bruecke] .br-scan::after{content:"";position:absolute;left:0;right:0;top:0;height:18%;background:linear-gradient(180deg,transparent,rgba(120,220,255,.12),transparent);will-change:transform;animation:brSweep 4s linear infinite}
+@keyframes brSweep{from{transform:translateY(-110%)}to{transform:translateY(620%)}}
 body[data-ui=bruecke] .br-radar{position:absolute;right:max(20px,3vw);bottom:max(20px,3vh);width:120px;aspect-ratio:1;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 22%,rgba(90,216,255,.5) 22.5% 23.5%),radial-gradient(circle,rgba(10,40,80,.8),rgba(4,12,30,.9));box-shadow:0 0 0 1px #5ad8ff,0 0 12px rgba(90,216,255,.5);overflow:hidden}
 body[data-ui=bruecke] .br-radar::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(90,216,255,.55),transparent 70deg);animation:thspin 2.6s linear infinite}
-body[data-ui=bruecke] .dvd-page:not(#pgMain),body[data-ui=bruecke] .dlg,body[data-ui=bruecke] #pgMain{border-radius:0;border:0;clip-path:polygon(0 18px,18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);background:linear-gradient(180deg,rgba(20,60,110,.6),rgba(6,20,44,.82));box-shadow:inset 0 0 0 1px rgba(90,216,255,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+body[data-ui=bruecke] .dvd-page:not(#pgMain),body[data-ui=bruecke] .dlg,body[data-ui=bruecke] #pgMain{border-radius:0;border:0;clip-path:polygon(0 18px,18px 0,100% 0,100% calc(100% - 18px),calc(100% - 18px) 100%,0 100%);background:linear-gradient(180deg,rgba(20,60,110,.78),rgba(6,20,44,.9));box-shadow:inset 0 0 0 1px rgba(90,216,255,.6)}
 body[data-ui=bruecke] #pgMain{padding:28px 34px}
 body[data-ui=bruecke] .dvd-h,body[data-ui=bruecke] .dlg .tb{position:static;transform:none;background:none;border:0;box-shadow:none;font-family:"Chakra Petch",sans-serif;font-weight:700;letter-spacing:.14em;color:#e8f8ff;text-shadow:0 0 8px #5ad8ff;-webkit-text-stroke:0;filter:none;text-transform:uppercase}
 body[data-ui=bruecke] .dvd-title{transform:none}
@@ -679,6 +683,14 @@ body[data-ui=nacht] .dvd-menu .dvd-item:hover,body[data-ui=nacht] .dvd-menu .dvd
 }
 @media (max-width:760px){.hud{flex-wrap:nowrap}.hud .plate{flex:1 1 0;min-width:0;font-size:13px;padding:8px 10px}.hud .players{order:5;flex-basis:100%}.hud{flex-wrap:wrap}.hud .hud-btn{order:0}}
 body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
+.play-desc{margin:0;max-width:52ch;text-align:center;font-size:16px;line-height:1.5;color:var(--cream)}
+.mode-chip{display:inline-block;padding:3px 12px;border-radius:999px;background:var(--rose);color:var(--gold);font-weight:700;border:2px solid var(--ink2)}
+.mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:100%;max-width:560px}
+.mode-tile{padding:14px 10px;gap:4px}
+.mode-tile .mn{font-family:var(--toon);font-size:20px}
+.mode-tile .md{font-size:13px;opacity:.85;text-align:center}
+#pgMain .mode-item{font-size:clamp(24px,5.2vw,36px)}
+body[data-page=game] .theme-bg *,body[data-page=game] .theme-bg *::before,body[data-page=game] .theme-bg *::after{animation-play-state:paused!important}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -731,9 +743,8 @@ body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
     <div class="dvd-sub">Die Kugel-Edition</div>
     <nav class="dvd-menu" aria-label="Hauptmenü">
       <button class="dvd-item" type="button" id="rejoinBtn" hidden>Zurück in den Raum</button>
-      <button class="dvd-item" type="button" data-go="pgCount">Lokales Spiel</button>
-      <button class="dvd-item" type="button" id="rogueMenuBtn">Roguelike-Modus</button>
-      <button class="dvd-item" type="button" id="onlineMenuBtn">Online spielen</button>
+      <button class="dvd-item mode-item" type="button" data-mode="normal">Klassisch</button>
+      <button class="dvd-item mode-item" type="button" data-mode="rogue">Roguelike</button>
       <button class="dvd-item" type="button" id="themesMenuBtn">Themes &amp; Boxen</button>
       <button class="dvd-item" type="button" id="accountMenuBtn">Konto</button>
       <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
@@ -741,6 +752,16 @@ body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
       <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
       <div class="dvd-toggles"><button class="dvd-item" type="button" id="adsToggle">Werbepausen: An</button><button class="dvd-item" type="button" id="sndToggle">Ton: An</button></div>
     </nav>
+  </div>
+
+  <div class="dvd-page" id="pgPlay" hidden>
+    <h2 class="dvd-h" id="playHead">Klassisch</h2>
+    <p class="play-desc" id="playDesc"></p>
+    <nav class="dvd-menu" aria-label="Wo spielen">
+      <button class="dvd-item" type="button" id="playLocal">Lokal spielen</button>
+      <button class="dvd-item" type="button" id="playOnline">Online spielen</button>
+    </nav>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgCount" hidden>
@@ -752,7 +773,7 @@ body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
       <button class="dvd-tile" type="button" data-n="4"><b>4</b><span>Spieler</span></button>
     </div>
     <p class="dvd-sub" id="countNote" style="letter-spacing:.2em"></p>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◀ Zurück</button></div>
   </div>
 
   <div class="dvd-page" id="pgCast" hidden>
@@ -780,7 +801,7 @@ body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
 
   <div class="dvd-page" id="pgOnline" hidden>
     <h2 class="dvd-h">Online spielen</h2>
-    <p class="dvd-chip" id="netStatus">Verbinde …</p>
+    <p class="dvd-chip"><span id="onMode" class="mode-chip">Klassisch</span> <span id="netStatus">Verbinde …</span></p>
     <section class="room-list-wrap" aria-labelledby="roomListH">
       <h3 class="room-list-h" id="roomListH">Offene Räume</h3>
       <div class="room-list" id="roomList"><p class="room-none">Lädt …</p></div>
@@ -793,13 +814,15 @@ body[data-ui=bruecke] .dvd-toggles .dvd-item{border-left:0}
       <div class="dvd-nav"><button class="dvd-item" type="button" id="roomCreate">Raum erstellen</button><button class="dvd-item" type="button" id="roomJoin">Raum beitreten</button></div>
       <p class="dvd-err" id="onErr" role="status"></p>
     </div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◀ Zurück</button></div>
   </div>
 
   <div class="dvd-page" id="pgLobby" hidden>
     <h2 class="dvd-h">Raum <span id="lobbyName"></span></h2>
     <p class="dvd-chip">Teile Raumname und Passwort mit deinen Leuten. 2 bis 4 Personen.</p>
     <div class="lobby-list" id="lobbyList"></div>
+    <div class="dvd-chip" id="lobbyModeLabel">Spielmodus</div>
+    <div class="mode-grid" id="lobbyModes"></div>
     <div class="dvd-chip" id="lobbyMapLabel">Szene</div>
     <div class="map-grid" id="lobbyMaps"></div>
     <p class="dvd-sub" id="lobbyWait" style="letter-spacing:.2em"></p>
@@ -1044,7 +1067,8 @@ const UI_THEMES = {
 };
 /* Hintergrund-Szenen der Themes für Menü und Spiel (Laternennacht hat ihre eigene gezeichnete Szene) */
 const THEME_BG = (() => {
-  const steam = (id, f, a, s) => `<svg class="rk-steam" viewBox="0 0 400 260" preserveAspectRatio="none" aria-hidden="true"><filter id="${id}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${f}" numOctaves="4" seed="${s}"><animate attributeName="baseFrequency" values="${f};.01 .014;${f}" dur="18s" repeatCount="indefinite"/></feTurbulence><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .95  0 0 0 0 .3  0 0 0 ${a}"/><feGaussianBlur stdDeviation="3"/></filter><rect width="400" height="260" filter="url(#${id})"/></svg>`;
+  // Dampf: einmal als Bild gerastert, danach nur verschoben – kein Neuberechnen pro Bild
+  const steam = (id, f, a, s, cls) => `<div class="rk-steam ${cls || ''}" style="background-image:url(&quot;data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' width='400' height='260' preserveAspectRatio='none'><filter id='${id}' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='${f}' numOctaves='4' seed='${s}'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .95  0 0 0 0 .3  0 0 0 ${a}'/><feGaussianBlur stdDeviation='3'/></filter><rect width='400' height='260' filter='url(%23${id})'/></svg>`).replace(/%2523/g, '%23')}&quot;)"></div>`;
   const warp = Array.from({ length: 24 }, (_, i) => `<i style="--a:${i * 15}deg;animation-delay:-${((i * 37) % 180) / 100}s"></i>`).join('');
   const pc = c => `url("data:image/svg+xml,${encodeURIComponent(c)}")`;
   const icPC = pc('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="1" y="1" width="14" height="10" fill="#c8d0d8"/><rect x="2" y="2" width="12" height="8" fill="#2a6ad8"/><rect x="3" y="3" width="5" height="2" fill="#9ac8ff"/><rect x="5" y="11" width="6" height="2" fill="#8a929a"/><rect x="2" y="13" width="12" height="2" fill="#c8d0d8"/></svg>');
@@ -1054,7 +1078,7 @@ const THEME_BG = (() => {
     nacht: '',
     reaktor: `<div class="tb-layer"><div class="rk-tube" style="left:2%"></div><div class="rk-tube" style="right:2%"></div>
       <svg class="rk-rings" viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="rgba(150,240,60,.22)" stroke-width=".3"><circle cx="38" cy="50" r="24"/><circle cx="38" cy="50" r="40"/><circle cx="38" cy="50" r="62"/><ellipse cx="38" cy="50" rx="62" ry="20"/><ellipse cx="38" cy="50" rx="20" ry="62"/><ellipse cx="38" cy="50" rx="50" ry="32" stroke-dasharray="2 3"/></g></svg>
-      ${steam('rkS1', '.008 .018', '3.2 -1.75', 5)}<div class="rk-core"></div>${steam('rkS2', '.012 .006', '2.8 -1.6', 11)}</div>`,
+      ${steam('rkS1', '.008 .018', '3.2 -1.75', 5)}<div class="rk-core"></div></div>`,
     aero: `<div class="tb-layer"><div class="ae-aur"></div><div class="ae-bub"></div><div class="ae-orb"></div></div>`,
     schleim: `<div class="tb-layer"><div class="sl-pipe" style="left:1.5%"></div><div class="sl-pipe" style="right:1.5%"></div>
       <svg class="sl-drip" viewBox="0 0 200 30" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="slg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8e070"/><stop offset=".6" stop-color="#94bc3e"/><stop offset="1" stop-color="#6a922a"/></linearGradient></defs><path d="M0 0h200v8c-6 0-6 14-12 14s-6-14-12-14-8 20-14 20-6-20-12-20-4 9-10 9-6-9-12-9-8 16-14 16-6-16-12-16-6 10-12 10-6-10-12-10-8 18-14 18-6-18-12-18-6 8-12 8-6-8-12-8z" fill="url(#slg)" stroke="#4a6a1c" stroke-width=".6"/></svg></div>`,
@@ -1729,12 +1753,12 @@ function burst(x, y, col, n = 10, sp = 160) {
 /* ---------- Spielablauf ---------- */
 function startGame() {
   if (ONLINE) { hostStart(); return; }
-  const rogue = settings.mode === 'rogue', n = rogue ? 1 : settings.count;
+  const rogue = settings.mode === 'rogue', n = settings.count;
   S.rogue = rogue ? { stage: 1, picks: 0 } : null; S.awarded = false;
   S.levelKey = rogue || settings.level === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : settings.level;
   if (rogue) buildLevel(S.levelKey, rogueOrange(1)); else buildLevel(S.levelKey);
   S.players = settings.players.slice(0, n).map((p, i) => ({
-    name: p.name.trim() || `Spieler ${i + 1}`, power: p.power, score: 0, balls: rogue ? 10 : BALLS_BY_COUNT[n],
+    name: p.name.trim() || `Spieler ${i + 1}`, power: p.power, score: 0, balls: rogue ? ROGUE_BALLS : BALLS_BY_COUNT[n],
     charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, perks: {},
   }));
   S.cur = 0; S.finale = false; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.toasts = [];
@@ -1743,7 +1767,7 @@ function startGame() {
   S.phase = 'aim';
   hideOverlays();
   audio();
-  if (rogue) toast('Roguelike: Feld 1', PCOL[0], `${LEVELS[S.levelKey].name} · ${S.orangeTotal} Ziellaternen`);
+  if (rogue) toast('Roguelike: Feld 1', PCOL[0], `${n > 1 ? S.players[0].name + ' beginnt · ' : ''}${S.orangeTotal} Ziellaternen`);
   else toast(n > 1 ? `${S.players[0].name} beginnt` : LEVELS[S.levelKey].name, PCOL[0], `Runde 1 · ${LEVELS[S.levelKey].name}`);
   updatePanel();
 }
@@ -1836,7 +1860,7 @@ function endShot() {
   updatePanel();
 }
 function finishTurn() {
-  if (S.rogue && !ONLINE) { rogueFinishTurn(); return; }
+  if (S.rogue) { rogueFinishTurn(); return; }
   if (S.finale || S.players.every(p => p.balls <= 0)) { S.phase = 'over'; pushState(); endGame(); return; }
   const n = S.players.length, prev = S.cur;
   for (let k = 1; k <= n; k++) { const j = (prev + k) % n; if (S.players[j].balls > 0) { S.cur = j; break; } }
@@ -1871,7 +1895,11 @@ function endGame() {
   updatePanel();
   const ranked = S.players.map((p, i) => ({ ...p, i })).sort((a, b) => b.score - a.score);
   let title, sub;
-  if (S.rogue) {
+  if (S.rogue && S.players.length > 1) {
+    const tie = ranked[1] && ranked[1].score === ranked[0].score;
+    title = tie ? 'Unentschieden!' : `${ranked[0].name} gewinnt den Run!`;
+    sub = `Ihr seid zusammen bis Feld ${S.rogue.stage} gekommen.`;
+  } else if (S.rogue) {
     const n = Object.values(S.players[0].perks || {}).reduce((a, b) => a + b, 0);
     title = 'Run vorbei';
     sub = `Du bist bis Feld ${S.rogue.stage} gekommen und hattest ${n} ${n === 1 ? 'Upgrade' : 'Upgrades'}. Es ${orangeLeft() === 1 ? 'brannte noch eine Ziellaterne' : `brannten noch ${orangeLeft()} Ziellaternen`}.`;
@@ -1907,49 +1935,96 @@ function announceTurn() {
   } else toast(`${curP().name} ist dran`, PCOL[S.cur], `Runde ${S.round}`);
 }
 
-/* ---------- Roguelike-Modus ---------- */
+/* ---------- Roguelike-Modus ----------
+   Runde = jede Person mit Kugeln war einmal dran (allein: 3 Schüsse). Danach wählt jede Person eins von drei Upgrades.
+   Geschafftes Feld: alle +3 Kugeln, Upgrade, dann ein neues, schwereres Feld. Online wählt jede Person auf ihrem Gerät, der Host wendet an. */
+const ROGUE_BALLS = 10;
 const rogueOrange = stage => 8 + stage * 3;
 function rogueFinishTurn() {
-  const p = S.players[0];
   if (S.finale) {
-    p.balls += 3;
-    toast(`Feld ${S.rogue.stage} geschafft!`, '#1d6e2a', '+3 Kugeln');
-    S.phase = 'upgrade';
-    showUpgrade(`Feld ${S.rogue.stage} geschafft!`, () => nextStage());
-    updatePanel(); return;
+    S.players.forEach(p => { p.balls += 3; });
+    toast(`Feld ${S.rogue.stage} geschafft!`, '#1d6e2a', 'Alle bekommen +3 Kugeln');
+    beginUpgrade(`Feld ${S.rogue.stage} geschafft!`, 'stage'); return;
   }
-  if (p.balls <= 0) { S.phase = 'over'; endGame(); return; }
+  if (S.players.every(p => p.balls <= 0)) { S.phase = 'over'; pushState(); endGame(); return; }
+  const n = S.players.length, prev = S.cur;
+  for (let k = 1; k <= n; k++) { const j = (prev + k) % n; if (S.players[j].balls > 0) { S.cur = j; break; } }
+  const active = S.players.filter(p => p.balls > 0).length;
   S.turnInRound++;
+  const roundOver = active > 1 ? S.cur <= prev : S.turnInRound >= 3;
   pickBonus();
-  if (S.turnInRound >= 3) {
-    S.turnInRound = 0; S.round++;
-    S.phase = 'upgrade';
-    showUpgrade(`Runde ${S.round - 1} ist vorbei`, () => maybeAd(rogueResume));
-  } else rogueResume();
+  if (roundOver) { S.turnInRound = 0; S.round++; beginUpgrade(`Runde ${S.round - 1} ist vorbei`, 'round'); }
+  else rogueResume();
   updatePanel();
 }
-function rogueResume() { S.phase = 'aim'; S.balls = []; updatePanel(); }
+function rogueResume() {
+  S.phase = 'aim'; S.balls = [];
+  if (ONLINE) { pushState(); announceTurn(); }
+  else if (S.players.length > 1) toast(`${curP().name} ist dran`, PCOL[S.cur], `Runde ${S.round}`);
+  updatePanel();
+}
+function afterUpgrades() {
+  if (S.upgKind === 'stage') nextStage();
+  else if (ONLINE) rogueResume();
+  else maybeAd(rogueResume);
+}
+function beginUpgrade(head, kind) {
+  S.phase = 'upgrade'; S.upgKind = kind; S.upgHead = head; S.upgRound = (S.upgRound || 0) + 1;
+  if (ONLINE) { pushState(); openOnlineUpgrade(); updatePanel(); return; }
+  // Lokal: alle nacheinander
+  const queue = S.players.map((_, i) => i);
+  const next = () => {
+    if (!queue.length) { afterUpgrades(); return; }
+    const i = queue.shift(), p = S.players[i];
+    showUpgrade(i, S.players.length > 1 ? `${head} · ${p.name} wählt` : head, id => { applyUpgrade(p, id); next(); });
+  };
+  next(); updatePanel();
+}
+function openOnlineUpgrade() {
+  if (!ONLINE || S.phase !== 'upgrade') return;
+  const r = S.upgRound, me = S.players.findIndex(p => p.uid === ONLINE.uid);
+  if (ONLINE.host && ONLINE.upgDlRound !== r) { ONLINE.upgDlRound = r; ONLINE.upgDeadline = Date.now() + 45000; }
+  if (me >= 0 && ONLINE.upgShown !== r) {
+    ONLINE.upgShown = r;
+    showUpgrade(me, S.upgHead, id => {
+      ONLINE.net.set(`${ONLINE.path}/upg/${r}/${ONLINE.uid}`, id);
+      toast('Warte auf die anderen …', PCOL[me], 'Upgrade gewählt');
+    });
+  }
+  checkUpgrades();
+}
+function checkUpgrades(force) {
+  const o = ONLINE;
+  if (!o || !o.host || S.phase !== 'upgrade' || o.upgApplied === S.upgRound) return;
+  const got = (o.upg && o.upg[S.upgRound]) || {}, present = new Set(Object.keys(o.players || {}));
+  if (!force && S.players.some(p => present.has(p.uid) && got[p.uid] == null)) return;
+  o.upgApplied = S.upgRound;
+  for (const p of S.players) if (got[p.uid]) applyUpgrade(p, got[p.uid]);
+  afterUpgrades();
+}
 function nextStage() {
-  const p = S.players[0];
   S.rogue.stage++;
   const keys = Object.keys(LEVELS).filter(k => k !== S.levelKey);
   S.levelKey = keys[Math.floor(Math.random() * keys.length)];
-  buildLevel(S.levelKey, rogueOrange(S.rogue.stage), 3 + 2 * perk('gruen', p));
+  const greens = Math.max(...S.players.map(p => perk('gruen', p)));
+  buildLevel(S.levelKey, rogueOrange(S.rogue.stage), 3 + 2 * greens);
   S.finale = false; S.lastMult = 1; S.balls = []; S.newBalls = []; S.popups = []; S.parts = []; S.order = 0; S.turnInRound = 0; S.round++;
+  const n = S.players.length; for (let k = 0; k < n; k++) { const j = (S.cur + k) % n; if (S.players[j].balls > 0) { S.cur = j; break; } }
   pickBonus();
   S.phase = 'aim';
   toast(`Feld ${S.rogue.stage}`, PCOL[0], `${LEVELS[S.levelKey].name} · ${S.orangeTotal} Ziellaternen`);
   [0, 4, 7, 12].forEach((k, i) => tone(noteFreq(8 + k), 0.4, 'triangle', 0.07, i * 0.08));
+  if (ONLINE) { pushState(); announceTurn(); }
   updatePanel();
 }
 function rollUpgrades(p) {
   const open = UPGRADES.filter(u => perk(u.id, p) < u.max);
   return shuffle(open).slice(0, 3);
 }
-function showUpgrade(head, after) {
-  const p = S.players[0], opts = rollUpgrades(p);
+function showUpgrade(idx, head, onPick) {
+  const p = S.players[idx], opts = rollUpgrades(p);
   $('#upgHead').textContent = head;
-  $('#upgSub').textContent = `Wähle ein Upgrade. Du hast ${p.balls} ${p.balls === 1 ? 'Kugel' : 'Kugeln'}.`;
+  $('#upgSub').innerHTML = `<b style="color:${PCOL[idx]}">${esc(p.name)}</b> · ${CHARS[p.power].name}: Wähle ein Upgrade. Noch ${p.balls} ${p.balls === 1 ? 'Kugel' : 'Kugeln'}.`;
   $('#upgGrid').innerHTML = opts.map(u => {
     const lv = perk(u.id, p);
     return `<button class="btn upg" type="button" data-id="${u.id}"><span class="us">${u.sym}</span><span class="un">${u.name}</span><span class="ud">${u.desc}</span><span class="ul">${u.max > 1 && u.max < 99 ? `Stufe ${lv + 1} von ${u.max}` : u.max === 1 ? 'Einmalig' : lv ? `Schon ${lv}× genommen` : '&nbsp;'}</span></button>`;
@@ -1957,9 +2032,8 @@ function showUpgrade(head, after) {
   const btns = [...$('#upgGrid').querySelectorAll('.upg')];
   btns.forEach(b => b.addEventListener('click', () => {
     if ($('#upg').hidden) return;
-    applyUpgrade(p, b.dataset.id);
     $('#upg').hidden = true;
-    after();
+    onPick(b.dataset.id);
   }));
   $('#upg').hidden = false;
   [0, 4, 7].forEach((k, i) => tone(noteFreq(10 + k), 0.25, 'sine', 0.06, i * 0.07));
@@ -1967,7 +2041,8 @@ function showUpgrade(head, after) {
 }
 function applyUpgrade(p, id) {
   const u = UPGRADES.find(x => x.id === id); if (!u) return;
-  p.perks[id] = (p.perks[id] || 0) + 1; S.rogue.picks++;
+  if (!p.perks) p.perks = {};
+  p.perks[id] = (p.perks[id] || 0) + 1; if (S.rogue) S.rogue.picks++;
   if (id === 'speicher') p.charges = Math.min(maxCh(p), p.charges + 1);
   if (id === 'kugeln') p.balls += 3;
   if (id === 'gruen') { const c = shuffle(S.pegs.filter(q => q.type === 'plain' && !q.hit && !q.gone)); c.slice(0, 2).forEach(q => { q.type = 'power'; q.flash = 1; }); }
@@ -2743,7 +2818,7 @@ function menuMusicTick() {
 applyUiTheme((() => { try { return new URLSearchParams(location.search).get('ui') || JSON.parse(localStorage.getItem('plinko-progress') || '{}').active; } catch (e) { return 'nacht'; } })());
 buildScene(); splitTitle(); setTimeout(syncRejoin, 0);
 tuneTimer = setInterval(menuMusicTick, 250);
-const PAGES = ['pgMain', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'];
+const PAGES = ['pgMain', 'pgPlay', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'];
 let castIdx = 0, castOnly = false;
 const curPage = () => PAGES.find(p => !$('#' + p).hidden);
 function showPage(id, focusSel) {
@@ -2761,7 +2836,7 @@ function syncToggles() {
   $('#sndToggle').textContent = `Ton: ${muted ? 'Aus' : 'An'}`;
   $('#muteBtn').textContent = muted ? '✕' : '♪'; $('#muteBtn').setAttribute('aria-label', muted ? 'Ton ist aus' : 'Ton ist an');
 }
-function countNote(n) { $('#countNote').textContent = `${BALLS_BY_COUNT[n]} Kugeln pro Person`; }
+function countNote(n) { $('#countNote').textContent = settings.mode === 'rogue' ? `Roguelike · ${ROGUE_BALLS} Kugeln pro Person zum Start` : `${BALLS_BY_COUNT[n]} Kugeln pro Person`; }
 function renderCount() { document.querySelectorAll('#countGrid .dvd-tile').forEach(b => b.classList.toggle('sel', +b.dataset.n === settings.count)); countNote(settings.count); }
 function previewChar(k) {
   const c = CHARS[k], p = settings.players[castIdx], chosen = !castOnly && p.power === k;
@@ -2775,7 +2850,7 @@ function previewChar(k) {
 function renderCast() {
   const p = settings.players[castIdx];
   const rogue = !castOnly && settings.mode === 'rogue';
-  $('#castChip').innerHTML = castOnly ? 'Alle Charaktere und ihre Fähigkeiten' : rogue ? 'Roguelike: Wähle deinen Charakter für den Run' : `<i style="--pc:${PCOL[castIdx]}"></i>Spieler ${castIdx + 1} von ${settings.count} wählt`;
+  $('#castChip').innerHTML = castOnly ? 'Alle Charaktere und ihre Fähigkeiten' : `<i style="--pc:${PCOL[castIdx]}"></i>${rogue ? 'Roguelike · ' : ''}Spieler ${castIdx + 1} von ${settings.count} wählt`;
   $('#castGrid').innerHTML = Object.entries(CHARS).map(([k, v]) => `<button class="dvd-tile ${!castOnly && k === p.power ? 'sel' : ''}" type="button" data-k="${k}"><img src="${ICON_URL[k]}" alt=""><span>${v.name}</span></button>`).join('');
   $('#castGrid').querySelectorAll('.dvd-tile').forEach(b => {
     b.addEventListener('focus', () => previewChar(b.dataset.k));
@@ -2785,8 +2860,8 @@ function renderCast() {
   $('#castName').value = p.name;
   $('#castNameWrap').hidden = castOnly;
   $('#castNext').hidden = castOnly;
-  $('#castBack').textContent = castOnly || rogue ? '◀ Hauptmenü' : '◀ Zurück';
-  $('#castNext').textContent = rogue ? 'Run starten ▶' : castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : 'Szenenauswahl ▶';
+  $('#castBack').textContent = castOnly ? '◀ Hauptmenü' : '◀ Zurück';
+  $('#castNext').textContent = castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : rogue ? 'Run starten ▶' : 'Szenenauswahl ▶';
   previewChar(castOnly ? 'fuchs' : p.power);
 }
 function pickChar(k) {
@@ -2796,12 +2871,12 @@ function pickChar(k) {
   previewChar(k); confirmTone();
 }
 function castNext() {
-  if (settings.mode === 'rogue') { startGame(); return; }
   if (castIdx < settings.count - 1) { castIdx++; renderCast(); showPage('pgCast', '.sel'); }
+  else if (settings.mode === 'rogue') startGame();
   else { renderMaps(); showPage('pgMap', '.sel'); }
 }
 function castBack() {
-  if (castOnly || settings.mode === 'rogue') { showPage('pgMain'); return; }
+  if (castOnly) { showPage('pgMain'); return; }
   if (castIdx > 0) { castIdx--; renderCast(); showPage('pgCast', '.sel'); }
   else { renderCount(); showPage('pgCount', '.sel'); }
 }
@@ -2817,10 +2892,11 @@ function renderMaps() {
 function mapBack() { castOnly = false; castIdx = settings.count - 1; renderCast(); showPage('pgCast', '.sel'); }
 function goBack() {
   const pg = curPage();
-  if (pg === 'pgCount') showPage('pgMain');
+  if (pg === 'pgCount' || pg === 'pgOnline') showPage('pgPlay');
+  else if (pg === 'pgPlay') showPage('pgMain');
   else if (pg === 'pgCast') castBack();
   else if (pg === 'pgMap') mapBack();
-  else if (['pgOnline', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'].includes(pg)) showPage('pgMain');
+  else if (['pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'].includes(pg)) showPage('pgMain');
 }
 function spatialMove(dir) {
   const pg = $('#' + curPage());
@@ -2846,14 +2922,26 @@ function openSetup() {
 }
 document.querySelectorAll('#setup [data-go]').forEach(b => b.addEventListener('click', () => {
   castOnly = false;
-  if (b.dataset.go === 'pgCount') settings.mode = 'normal';
   if (b.dataset.go === 'pgCount') { renderCount(); showPage('pgCount', '.sel'); } else showPage(b.dataset.go);
 }));
 document.querySelectorAll('#countGrid .dvd-tile').forEach(b => {
   b.addEventListener('focus', () => countNote(+b.dataset.n));
   b.addEventListener('click', () => { settings.count = +b.dataset.n; castOnly = false; castIdx = 0; confirmTone(); renderCast(); showPage('pgCast', '.sel'); });
 });
-$('#rogueMenuBtn').addEventListener('click', () => { settings.mode = 'rogue'; castOnly = false; castIdx = 0; renderCast(); showPage('pgCast', '.sel'); });
+/* Spielmodi: im Hauptmenü wählen, danach lokal oder online */
+const MODES = {
+  normal: { name: 'Klassisch', desc: 'Ein Feld, feste Anzahl Kugeln. Lösch alle orangen Ziellaternen und sammle die meisten Punkte. 1 bis 4 Personen.' },
+  rogue: { name: 'Roguelike', desc: 'Ein Run über immer schwerere Felder. Nach jeder Runde und jedem geschafften Feld wählt jede Person eins von drei Upgrades. 1 bis 4 Personen, der Run endet, wenn alle Kugeln weg sind.' },
+};
+function openPlay(mode) {
+  settings.mode = MODES[mode] ? mode : 'normal';
+  $('#playHead').textContent = MODES[settings.mode].name;
+  $('#playDesc').textContent = MODES[settings.mode].desc;
+  showPage('pgPlay', '#playLocal');
+}
+document.querySelectorAll('#pgMain .mode-item').forEach(b => b.addEventListener('click', () => { confirmTone(); openPlay(b.dataset.mode); }));
+$('#playLocal').addEventListener('click', () => { castOnly = false; renderCount(); showPage('pgCount', '.sel'); });
+$('#playOnline').addEventListener('click', () => openOnline());
 $('#castMenuBtn').addEventListener('click', () => { castOnly = true; castIdx = 0; renderCast(); showPage('pgCast', '.dvd-tile'); });
 $('#castName').addEventListener('input', e => { settings.players[castIdx].name = e.target.value; });
 $('#castNext').addEventListener('click', castNext);
@@ -2910,7 +2998,7 @@ function extraHTML(id) {
   </ul><p class="xn">Bleibt eine Kugel hängen, räumt das Spiel die getroffenen Laternen um sie herum nach kurzer Zeit ab.</p>`;
   if (id === 'figuren') return `<h3>Charaktere und ihre Fähigkeiten</h3><ul class="xl xc">${Object.entries(CHARS).map(([k, c]) => `<li><img src="${ICON_URL[k]}" alt=""><div><b style="color:${c.col}">${c.name}</b> <small>${c.kind}</small><span class="xp">Fähigkeit: <b>${c.power}</b> – ${c.desc}</span><span>${BIO[k]}</span><span class="xt">Tipp: ${TIPS[k]}</span></div></li>`).join('')}</ul>`;
   if (id === 'loot') return `<h3>Themes &amp; Lootboxen</h3><p>Nach jedem Spiel bekommst du eine Lootbox, für einen Sieg, ein geschafftes Feld oder Feld 3 im Roguelike eine zweite. Geöffnet wird im Hauptmenü unter <b>Themes &amp; Boxen</b>. In jeder Box steckt ein Theme. Ein Theme verändert das ganze Spiel: Farben, Schrift, Knöpfe, Rahmen, Hintergrund und Spielfeld. Doppelte Themes werden zu Splittern, drei Splitter ergeben eine neue Box.</p><p>Mit einem <b>Konto</b> (Hauptmenü → Konto) sind deine Themes gesichert und auf jedem Gerät da.</p><ul class="xl">${Object.values(UI_THEMES).map(t => li(`<i class="xs" style="background:${swatchBg(t)}"></i>`, `${t.name} <small style="color:${RARITY[t.rar].c}">${RARITY[t.rar].n}</small>`, t.desc)).join('')}</ul>`;
-  if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Ein Run für eine Person. Du startest mit 10 Kugeln auf einem zufälligen Feld. Nach jeder Runde (3 Schüsse) und nach jedem geschafften Feld wählst du <b>eins von drei Upgrades</b>. Geschaffte Felder geben +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn die Kugeln ausgehen.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
+  if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Im Hauptmenü wählst du zuerst den Spielmodus, danach lokal oder online. Im Roguelike-Modus spielen 1 bis 4 Personen einen Run über immer schwerere Felder. Alle starten mit 10 Kugeln. Nach jeder Runde (allein: 3 Schüsse) und nach jedem geschafften Feld wählt jede Person <b>eins von drei Upgrades</b>, online auf dem eigenen Gerät. Geschaffte Felder geben allen +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn alle Kugeln weg sind. Im Online-Raum stellt der Host den Modus um.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
   return `<h3>Online spielen</h3><ul class="xl">
     ${li(sym('⌂'), 'Räume', 'Erstell einen Raum mit Name und Passwort. 2 bis 4 Personen spielen abwechselnd, alle sehen Zielen und Flugbahn live.')}
     ${li(sym('≡'), 'Raumliste', 'Offene Räume stehen in der Liste. Antippen, Passwort eingeben, beitreten. Das Passwort steht nie in der Liste.')}
@@ -3312,6 +3400,7 @@ function renderOnChars() {
   }));
 }
 async function openOnline() {
+  $('#onMode').textContent = (MODES[settings.mode] || MODES.normal).name;
   $('#onName').value = settings.players[0].name; renderOnChars(); $('#onErr').textContent = '';
   showPage('pgOnline', '#onName');
   $('#netStatus').textContent = 'Verbinde …';
@@ -3393,7 +3482,7 @@ async function enterRoom(create) {
     const meta = await net.get(path + '/meta');
     if (create && meta) { err.textContent = 'Diesen Raum gibt es schon. Tritt bei oder nimm einen anderen Namen.'; return; }
     if (!create && !meta) { err.textContent = 'Kein Raum gefunden. Prüf Raumname und Passwort.'; return; }
-    if (create) await net.set(path, { meta: { name: room, host: net.uid, status: 'lobby', level: settings.level, created: net.stamp() } });
+    if (create) await net.set(path, { meta: { name: room, host: net.uid, status: 'lobby', level: settings.level, mode: settings.mode, created: net.stamp() } });
     else {
       if (await net.get(`${path}/kicked/${net.uid}`)) { err.textContent = 'Der Host hat dich aus diesem Raum entfernt.'; forgetRoom(); return; }
       const players = (await net.get(path + '/players')) || {};
@@ -3420,6 +3509,7 @@ function joinRoom(net, path, roomName, rejoining, me) {
   $('#lobbyMaps').dataset.built = '';
   ONLINE.fresh = !!rejoining;
   ONLINE.unsub.push(net.on(path + '/meta', onMeta));
+  ONLINE.unsub.push(net.on(path + '/upg', u => { if (ONLINE) { ONLINE.upg = u || {}; checkUpgrades(); } }));
   ONLINE.unsub.push(net.on(`${path}/kicked/${net.uid}`, k => { if (k && ONLINE && ONLINE.path === path) wasKicked(); }));
   ONLINE.unsub.push(net.onReconnect(() => {
     // Verbindung kurz weg gewesen: Firebase hat uns aus der Spielerliste genommen, also wieder eintragen.
@@ -3439,6 +3529,7 @@ function onMeta(m) {
   if (!ONLINE) return;
   if (!m) { forgetRoom(); leaveRoom(true); openSetup(); openOnline(); setTimeout(() => { $('#onErr').textContent = 'Der Raum wurde geschlossen.'; }, 50); return; }
   ONLINE.meta = m; ONLINE.host = m.host === ONLINE.uid;
+  if (MODES[m.mode] && S.phase === 'setup') settings.mode = m.mode;
   renderLobby(); updatePanel();
 }
 function leaveRoom(silent) {
@@ -3463,6 +3554,11 @@ function renderLobby() {
   for (let i = list.length; i < 4; i++) tiles.push('<div class="dvd-tile empty-slot"><span class="md">Freier Platz</span></div>');
   $('#lobbyList').innerHTML = tiles.join('');
   $('#lobbyList').querySelectorAll('.kick').forEach(b => b.addEventListener('click', () => kickPlayer(b.dataset.uid)));
+  const mode = (ONLINE.meta && MODES[ONLINE.meta.mode]) ? ONLINE.meta.mode : 'normal';
+  $('#lobbyModes').innerHTML = Object.entries(MODES).map(([k, m]) => `<button class="dvd-tile mode-tile ${k === mode ? 'sel' : ''}" type="button" data-m="${k}" ${ONLINE.host ? '' : 'disabled'}><span class="mn">${m.name}</span><span class="md">${k === 'rogue' ? 'Upgrades, immer schwerere Felder' : 'Ein Feld, meiste Punkte gewinnt'}</span></button>`).join('');
+  $('#lobbyModes').querySelectorAll('.mode-tile').forEach(b => b.addEventListener('click', () => { if (ONLINE && ONLINE.host) { ONLINE.net.update(ONLINE.path + '/meta', { mode: b.dataset.m }); confirmTone(); } }));
+  $('#lobbyModeLabel').textContent = ONLINE.host ? 'Spielmodus wählen' : 'Spielmodus (wählt der Host)';
+  $('#lobbyMapLabel').hidden = $('#lobbyMaps').hidden = mode === 'rogue';
   const lvl = (ONLINE.meta && ONLINE.meta.level) || 'gasse', grid = $('#lobbyMaps');
   if (grid.dataset.built !== '1') {
     grid.innerHTML = [...Object.keys(LEVELS), 'zufall'].map(k => `<button class="dvd-tile" type="button" data-k="${k}"><img src="${THUMBS[k]}" alt=""><span class="mn">${k === 'zufall' ? 'Zufall' : LEVELS[k].name}</span></button>`).join('');
@@ -3484,11 +3580,13 @@ function resetRun() {
 function hostStart() {
   if (!ONLINE || !ONLINE.host) return;
   const list = lobbyPlayers(); if (list.length < 2) return;
-  const lvl = (ONLINE.meta && ONLINE.meta.level) || 'gasse';
-  S.levelKey = lvl === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : lvl;
-  buildLevel(S.levelKey);
-  S.players = list.map(p => ({ uid: p.uid, name: p.name || 'Gast', power: CHARS[p.power] ? p.power : 'fuchs', score: 0, balls: BALLS_BY_COUNT[list.length], charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false }));
-  S.rogue = null; S.awarded = false;
+  const lvl = (ONLINE.meta && ONLINE.meta.level) || 'gasse', rogue = ONLINE.meta && ONLINE.meta.mode === 'rogue';
+  S.levelKey = rogue || lvl === 'zufall' ? shuffle(Object.keys(LEVELS))[0] : lvl;
+  if (rogue) buildLevel(S.levelKey, rogueOrange(1)); else buildLevel(S.levelKey);
+  S.players = list.map(p => ({ uid: p.uid, name: p.name || 'Gast', power: CHARS[p.power] ? p.power : 'fuchs', score: 0, balls: rogue ? ROGUE_BALLS : BALLS_BY_COUNT[list.length], charges: 1, armed: false, sight: 0, bigBoat: 0, skin: null, gold: false, perks: {} }));
+  S.rogue = rogue ? { stage: 1, picks: 0 } : null; S.awarded = false; S.upgRound = 0;
+  ONLINE.upgApplied = ONLINE.upgShown = ONLINE.upgDlRound = 0;
+  ONLINE.net.set(ONLINE.path + '/upg', null);
   resetRun(); pickBonus();
   S.phase = 'aim';
   pushState();
@@ -3502,12 +3600,12 @@ function pushState() {
   ONLINE.net.set(ONLINE.path + '/state', {
     v: S.v, by: ONLINE.uid, level: S.levelKey, orangeTotal: S.orangeTotal,
     pegs: S.pegs.map(p => [Math.round(p.x * 10) / 10, Math.round(p.y * 10) / 10, TYPE_KEYS.indexOf(p.type), (p.hit ? 1 : 0) | (p.gone ? 2 : 0)]),
-    players: S.players.map(p => ({ uid: p.uid, name: p.name, power: p.power, score: Math.round(p.score), balls: p.balls, charges: p.charges, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 1 : 0, gold: p.gold ? 1 : 0 })),
-    cur: S.cur, round: S.round, turnInRound: S.turnInRound || 0, finale: S.finale ? 1 : 0, phase: S.phase, lastMult: S.lastMult || 1, aim: S.aim,
+    players: S.players.map(p => ({ uid: p.uid, name: p.name, power: p.power, score: Math.round(p.score), balls: p.balls, charges: p.charges, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 1 : 0, gold: p.gold ? 1 : 0, perks: p.perks || {} })),
+    cur: S.cur, round: S.round, turnInRound: S.turnInRound || 0, finale: S.finale ? 1 : 0, phase: S.phase, lastMult: S.lastMult || 1, aim: S.aim, rogue: S.rogue ? S.rogue.stage : 0, upg: [S.upgRound || 0, S.upgKind || '', S.upgHead || ''],
   });
   if (S.phase === 'over') ONLINE.net.update(ONLINE.path + '/meta', { status: 'lobby' });
 }
-const normPlayer = p => ({ uid: p.uid, name: p.name || '?', power: CHARS[p.power] ? p.power : 'fuchs', score: p.score || 0, balls: p.balls || 0, charges: p.charges || 0, armed: false, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 'rainbow' : null, gold: !!p.gold });
+const normPlayer = p => ({ uid: p.uid, name: p.name || '?', power: CHARS[p.power] ? p.power : 'fuchs', score: p.score || 0, balls: p.balls || 0, charges: p.charges || 0, armed: false, sight: p.sight || 0, bigBoat: p.bigBoat || 0, skin: p.skin ? 'rainbow' : null, gold: !!p.gold, perks: p.perks && typeof p.perks === 'object' ? p.perks : {} });
 function applyState(st) {
   if (!ONLINE || !st || (st.by === ONLINE.uid && !ONLINE.fresh)) return;
   ONLINE.fresh = false;
@@ -3521,11 +3619,15 @@ function applyState(st) {
   S.players = (st.players || []).map(normPlayer);
   S.cur = st.cur || 0; S.round = st.round || 1; S.turnInRound = st.turnInRound || 0; S.finale = !!st.finale; S.lastMult = st.lastMult || 1;
   S.phase = st.phase;
+  S.rogue = st.rogue ? { stage: st.rogue, picks: 0 } : null;
+  if (Array.isArray(st.upg)) { S.upgRound = st.upg[0] || 0; S.upgKind = st.upg[1] || ''; S.upgHead = st.upg[2] || ''; }
+  if (st.phase !== 'upgrade' && !$('#upg').hidden) $('#upg').hidden = true;
   if (typeof st.aim === 'number') S.aim = st.aim;
   if (fresh) { S.popups = []; S.parts = []; S.toasts = []; S.balls = []; S.awarded = false; }
   if (st.phase === 'shot') { S.shot = { score: 0, hits: 0, time: 0, free: false, floor: 0, gold: false }; S.liveBalls = []; S.balls = []; }
   if (st.phase === 'aim' && (prevCur !== S.cur || prevPhase !== 'aim' || fresh)) announceTurn();
   if (st.phase === 'over' && prevPhase !== 'over') endGame();
+  if (st.phase === 'upgrade') openOnlineUpgrade();
   updatePanel();
 }
 function onLive(lv) {
@@ -3574,6 +3676,7 @@ function spectate(dt) {
 }
 function onlineTick() {
   const o = ONLINE, now = performance.now();
+  if (o.host && S.phase === 'upgrade' && o.upgDeadline && Date.now() > o.upgDeadline) checkUpgrades(true);
   if (isMine()) {
     if (S.phase === 'shot' && now - o.lastLive > 60) {
       o.lastLive = now;
@@ -3625,7 +3728,6 @@ function skipTurn() {
 }
 function toMenu() { if (ONLINE) forgetRoom(); leaveRoom(false); openSetup(); }
 
-$('#onlineMenuBtn').addEventListener('click', openOnline);
 $('#boardMenuBtn').addEventListener('click', openBoard);
 $('#roomCreate').addEventListener('click', () => enterRoom(true));
 $('#roomJoin').addEventListener('click', () => enterRoom(false));

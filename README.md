@@ -10,7 +10,7 @@ Das Spiel wurde mit [Claude](https://claude.ai) entwickelt.
 
 - **Lokal spielen:** 1 bis 4 Personen abwechselnd am selben Gerät
 - **Online spielen:** 2 bis 4 Personen in Räumen mit Passwort, mit Raumliste, Wiedereinstieg und Kick-Funktion für den Host
-- **Roguelike-Modus:** immer schwerere Felder, nach jeder Runde ein Upgrade aus drei zur Wahl
+- **Spielmodi Klassisch und Roguelike**, lokal oder online; im Online-Raum kann der Host den Modus wechseln. Im Roguelike geht es über immer schwerere Felder, nach jeder Runde wählt jede Person ein Upgrade aus drei
 - **Sechs gezeichnete Charaktere** mit eigenen Fähigkeiten und Gesichtern für Jubel und Frust
 - **Zehn Themes** mit eigener Welt: Menü-Aufbau, animierter Hintergrund, Kanone, Laternen, Kugel, Boot und Klang ändern sich. Von Laternennacht über Reaktor, Aero und Märchenbuch bis Kommandobrücke
 - **Lootboxen** nach jedem Spiel, aus denen neue Themes kommen
