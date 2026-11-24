@@ -1,21 +1,25 @@
-# Plinko Nacht
+# Jojoba's Spielekiste
 
-Ein Kugel-und-Laternen-Spiel für den Browser: Schieß Leuchtkugeln ins Feld und lösch alle orangen Ziellaternen.
+Eine kleine Spielesammlung für den Browser. Auf der Startseite wählst du das Spiel.
 
 **Spielen:** https://jojoba24.github.io/plinko-nacht/
 
 Das Spiel wurde mit [Claude](https://claude.ai) entwickelt.
 
+## Spiele
+
+- **Plinko Nacht:** Schieß Leuchtkugeln ins Feld und lösch alle orangen Ziellaternen. Modi Klassisch und Roguelike (nach jeder Runde ein Upgrade aus drei), 1 bis 4 Personen lokal oder online
+- **Klötzchenregen:** Fallende Steine zu vollen Reihen stapeln. Allein oder online im Duell mit 2 bis 4 Personen, wobei abgeräumte Reihen als Müll bei den anderen landen
+- **Schiffe versenken:** Gegen den Computer, zu zweit an einem Gerät (mit Übergabe-Bildschirm) oder online
+- Weitere Spiele folgen
+
 ## Funktionen
 
-- **Lokal spielen:** 1 bis 4 Personen abwechselnd am selben Gerät
-- **Online spielen:** 2 bis 4 Personen in Räumen mit Passwort, mit Raumliste, Wiedereinstieg und Kick-Funktion für den Host
-- **Spielmodi Klassisch und Roguelike**, lokal oder online; im Online-Raum kann der Host den Modus wechseln. Im Roguelike geht es über immer schwerere Felder, nach jeder Runde wählt jede Person ein Upgrade aus drei
-- **Sechs gezeichnete Charaktere** mit eigenen Fähigkeiten und Gesichtern für Jubel und Frust
-- **Zehn Themes** mit eigener Welt: Menü-Aufbau, animierter Hintergrund, Kanone, Laternen, Kugel, Boot und Klang ändern sich. Von Laternennacht über Reaktor, Aero und Märchenbuch bis Kommandobrücke
+- **Online-Räume** mit Passwort für 2 bis 4 Personen, mit Raumliste, Wiedereinstieg und Kick-Funktion. Der Host wählt in der Lobby das Spiel und kann es nach jeder Partie wechseln
+- **Sechs gezeichnete Charaktere** als Spielfiguren, in Plinko mit eigenen Fähigkeiten
+- **Zehn Themes**, die das ganze Aussehen und den Klang aller Spiele ändern
 - **Lootboxen** nach jedem Spiel, aus denen neue Themes kommen
 - **Konten** mit E-Mail und Passwort, damit Themes und Boxen auf jedem Gerät da sind
-- **Bestenliste** mit den besten 20 Ergebnissen
+- **Bestenliste** für jedes Spiel
 - **DVD-Menü** im Stil alter Zeichentrickfilm-DVDs, mit Bonusmaterial, das alles erklärt
-- **Werbepausen** für erfundene 90er-Produkte (abschaltbar)
 - Steuerung mit Maus, Touch oder Tastatur
