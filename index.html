@@ -440,7 +440,7 @@ body:not([data-ui=nacht]) #dvdScene{display:none}
 .item .ithumb{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;border:2px solid var(--ink2)}
 .th-prev i:nth-child(1){background:var(--a)}.th-prev i:nth-child(2){background:var(--b)}.th-prev i:nth-child(3){background:var(--c)}
 .th-prev b{position:absolute;inset:0;display:grid;place-items:center;font:400 34px var(--toon);color:#fff;background:rgba(0,0,0,.6);text-shadow:0 2px 0 #000}
-.theme-card.locked{filter:grayscale(.9);opacity:.72}
+.theme-card.locked .th-prev{filter:grayscale(.9)}
 .theme-card .mn{font-family:var(--toon);font-size:16px;text-align:center;line-height:1.1}
 .theme-card .th-rar{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;text-shadow:0 1px 0 rgba(0,0,0,.5)}
 .theme-card .md{font-size:12px;font-weight:600;opacity:.85}
@@ -772,6 +772,47 @@ button.sv-cell{cursor:pointer}
 .sv-log{display:flex;flex-direction:column;gap:3px;width:100%;max-width:300px;font-size:14px;min-height:5em}
 .sv-log div{padding:3px 8px;border-radius:8px;background:rgba(0,0,0,.25)}.sv-log div:first-child{background:var(--inner);box-shadow:0 0 0 2px var(--ink2)}
 @media (max-width:700px){.ar-bar{gap:8px;padding:4px 8px}.ar-info{font-size:12px}.sv-fight{gap:10px}.sv-grid{--cs:min(calc((100vw - 96px) / 11),40px);padding:5px;border-width:5px}.sv-grid.small{--cs:min(calc((100vw - 80px) / 18),24px)}.sv-dock{min-width:0;width:100%}.sv-own{flex-direction:row;flex-wrap:wrap;justify-content:center}.sv-log{max-width:none;min-height:0}}
+
+/* ---------- Kontrast: Farben kommen aus autoContrast() und passen zur Helligkeit der jeweiligen Fläche ---------- */
+.dvd-tile,.pl,.btn:not(.def),.abil,.results li,.board li,.room-card,.hud-btn,.mini-meter,.lobby-list .who{color:var(--tp)}
+.pl.on,.results li:first-child,.dvd-tile.sel,.board li:nth-child(1),.abil.pressed{color:var(--tpo)}
+.pl .sc,.results .sc,.board .bs,.board .rk,.results li > span:first-child,.room-card .rc,.lobby-list .tag,.upg .ul{color:var(--tpa);text-shadow:var(--tpash)}
+.pl.on .sc,.results li:first-child .sc,.board li:nth-child(1) .bs,.board li:nth-child(1) .rk,.results li:first-child > span:first-child,.dvd-tile.sel .tag{color:var(--tpoa);text-shadow:var(--tpoash)}
+.pl-sub,.abil small,.dvd-tile .md,.board .bm,.map-grid .md,.upg .ud,.room-card .rs{color:var(--tps)}
+.pl.on .pl-sub,.dvd-tile.sel .md,.board li:nth-child(1) .bm,.abil.pressed small{color:var(--tpos)}
+.th-rar{padding:1px 8px;border-radius:999px;text-shadow:none!important;-webkit-text-stroke:0!important;box-shadow:0 0 0 2px var(--ink2)}
+.pips{color:var(--tpa)}.pl.on .pips,.abil.pressed .pips{color:var(--tpoa)}
+.tube-cap{background:var(--inner);color:var(--ti);padding:2px 7px;border-radius:8px;box-shadow:0 0 0 2px var(--ink2)}
+.tube-lbl,#multRow{-webkit-text-stroke:5px var(--ink2);paint-order:stroke fill}
+.plate{color:var(--tm);text-shadow:none}
+.xl .xt{color:var(--tws)}
+.extra-chapters .cs,.xl .xs:not([style]){background:var(--gold);color:var(--tg)}
+.dvd-field,.cast-name-input{color:var(--ti)}
+body[data-ui=aero] .dvd-page:not(#pgMain) .dvd-item:not(.dvd-menu .dvd-item):not(:hover):not(:focus-visible){color:#fff;text-shadow:0 1px 3px rgba(0,30,70,.9)}
+.cast-power{background:var(--well);color:var(--tw)}
+body[data-tone=light] .xl.xc b[style],body[data-tone=light] .cast-power b{color:var(--twa)!important}
+.sv-h{padding:4px 12px 4px 6px;border-radius:14px;background:var(--inner);box-shadow:0 0 0 3px var(--ink2)}
+.sv-h small{color:var(--tis);opacity:1}
+.sv-log div{background:var(--inner);color:var(--ti)}.sv-log div:first-child{color:var(--tia)}
+.lede,.note,.lootfor,.prize .pd,.cast-kind,.dvd-field,.cast-name-input,.board .none,.room-none,.acc-hint,.acc-why,.play-desc,.cast-bio,.dvd-sub:not(#pgMain .dvd-sub){color:var(--ti)}
+.lede,.note,.lootfor,.cast-kind,.dvd-field,.cast-name-input{color:var(--tis)}
+.dlg h1,.dlg h2{color:var(--ti)}
+.over-box,.dvd-err{color:var(--tia)}
+.extra-body{background:var(--well);color:var(--tw)}
+.extra-body h3{color:var(--twa);text-shadow:var(--twash)}
+.extra-body .xn,.xl small{color:var(--tws)}
+.xl .xp{color:var(--tw)}
+.dvd-chip{color:var(--ti)}
+.mode-chip{background:var(--rose);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.5)}
+.kr-card,.ar-bar,.sv-ph,.sv-pass,.sv-h{color:var(--ti)}
+.kr-stats b,.kr-os,.sv-ph b,.sv-pass b{color:var(--tia)}
+.ar-info,.kr-lab{color:var(--tis)}
+
+.room-none,.online-form{background:var(--well);color:var(--tw)}
+.online-form .dvd-field,.online-form .dvd-field span,.online-form > span{color:var(--tw)}
+.dvd-hint,body[data-ui] .dvd-hint{background:rgba(10,4,30,.78);color:#fff}
+.ar-bar,.kr-card,.sv-ph,.sv-pass,.sv-h,.sv-log div,.tube-cap{background:var(--inner-solid)}
+.sv-pass{background:var(--inner-solid) padding-box,var(--metal) border-box}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -1176,7 +1217,7 @@ const THEME_BG = (() => {
   // Dampf: einmal als Bild gerastert, danach nur verschoben – kein Neuberechnen pro Bild
   const steam = (id, f, a, s, cls) => `<div class="rk-steam ${cls || ''}" style="background-image:url(&quot;data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 260' width='400' height='260' preserveAspectRatio='none'><filter id='${id}' x='0' y='0' width='100%' height='100%'><feTurbulence type='fractalNoise' baseFrequency='${f}' numOctaves='4' seed='${s}'/><feColorMatrix values='0 0 0 0 .55  0 0 0 0 .95  0 0 0 0 .3  0 0 0 ${a}'/><feGaussianBlur stdDeviation='3'/></filter><rect width='400' height='260' filter='url(%23${id})'/></svg>`).replace(/%2523/g, '%23')}&quot;)"></div>`;
   const warp = Array.from({ length: 24 }, (_, i) => `<i style="--a:${i * 15}deg;animation-delay:-${((i * 37) % 180) / 100}s"></i>`).join('');
-  const pc = c => `url("data:image/svg+xml,${encodeURIComponent(c)}")`;
+  const pc = c => `url('data:image/svg+xml,${encodeURIComponent(c)}')`;
   const icPC = pc('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="1" y="1" width="14" height="10" fill="#c8d0d8"/><rect x="2" y="2" width="12" height="8" fill="#2a6ad8"/><rect x="3" y="3" width="5" height="2" fill="#9ac8ff"/><rect x="5" y="11" width="6" height="2" fill="#8a929a"/><rect x="2" y="13" width="12" height="2" fill="#c8d0d8"/></svg>');
   const icBin = pc('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="3" y="3" width="10" height="2" fill="#9aa2aa"/><rect x="4" y="5" width="8" height="10" fill="#c8d8e0"/><rect x="5" y="6" width="1" height="8" fill="#7a8a92"/><rect x="8" y="6" width="1" height="8" fill="#7a8a92"/><rect x="11" y="6" width="1" height="8" fill="#7a8a92"/></svg>');
   const icPl = pc('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges"><rect x="3" y="1" width="10" height="14" fill="#ffcf5a"/><rect x="1" y="3" width="14" height="10" fill="#ffcf5a"/><rect x="4" y="3" width="8" height="10" fill="#2a1a5a"/><rect x="7" y="4" width="2" height="8" fill="#ff4f7b"/><rect x="4" y="7" width="8" height="2" fill="#ff4f7b"/></svg>');
@@ -1199,8 +1240,8 @@ const THEME_BG = (() => {
 const lunaClock = () => { const c = document.querySelector('.lu-clock'); if (c) c.textContent = new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }); };
 setInterval(lunaClock, 10000);
 const RARITY = [
-  { n: 'Standard', c: '#8a7ad8', w: 0 }, { n: 'Gewöhnlich', c: '#3a8ef0', w: 10 }, { n: 'Selten', c: '#17b8a6', w: 6 },
-  { n: 'Episch', c: '#b04ae0', w: 3 }, { n: 'Legendär', c: '#ffb21f', w: 1.5 },
+  { n: 'Standard', c: '#8a7ad8', t: '#160a2a', w: 0 }, { n: 'Gewöhnlich', c: '#3a8ef0', t: '#160a2a', w: 10 }, { n: 'Selten', c: '#17b8a6', t: '#160a2a', w: 6 },
+  { n: 'Episch', c: '#b04ae0', t: '#ffffff', w: 3 }, { n: 'Legendär', c: '#ffb21f', t: '#160a2a', w: 1.5 },
 ];
 let uiTheme = 'nacht';
 const TH = () => UI_THEMES[uiTheme] || UI_THEMES.nacht;
@@ -1211,8 +1252,64 @@ function applyUiTheme(id) {
   for (const [k, v] of Object.entries(t.vars)) root.setProperty('--' + k, v);
   document.body.dataset.ui = uiTheme;
   const bg = document.querySelector('.theme-bg'); if (bg) bg.innerHTML = THEME_BG[uiTheme] || '';
-  lunaClock();
+  lunaClock(); autoContrast();
   const meta = document.querySelector('meta[name=theme-color]'); if (meta) meta.content = t.swatch[0];
+}
+/* Automatischer Kontrast: Für jede Fläche (Panel, aktives Panel, Fensterinneres) wird aus den Theme-Farben die Helligkeit
+   geschätzt. Danach bekommt jede Fläche Text-, Akzent- und Nebentextfarben, die mindestens WCAG-Kontrast 4,5 (Akzent 3) erreichen.
+   Bevorzugt werden die Theme-Farben, nur wenn die nicht reichen, wird auf Hell oder Dunkel ausgewichen. */
+function parseColors(str) {
+  const out = [];
+  (str || '').replace(/#([0-9a-f]{3,8})\b|rgba?\(([^)]+)\)|\b(white|black|transparent)\b/gi, (m, hex, rgb, name) => {
+    if (hex) {
+      let h = hex; if (h.length <= 4) h = [...h].map(c => c + c).join('');
+      out.push([parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16), h.length >= 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1]);
+    } else if (rgb) { const v = rgb.split(/[\s,/]+/).filter(Boolean).map(parseFloat); out.push([v[0], v[1], v[2], v[3] == null ? 1 : v[3]]); }
+    else out.push(name === 'white' ? [255, 255, 255, 1] : name === 'black' ? [0, 0, 0, 1] : [0, 0, 0, 0]);
+    return m;
+  });
+  return out;
+}
+function surfaceRGB(str, base) {
+  const cs = parseColors(str); if (!cs.length) return base;
+  const a = cs.reduce((s, c) => [s[0] + c[0], s[1] + c[1], s[2] + c[2], s[3] + c[3]], [0, 0, 0, 0]).map(v => v / cs.length);
+  const al = Math.min(1, a[3]);
+  if (al <= 0) return base;
+  return [0, 1, 2].map(i => (a[i] / a[3]) * al + base[i] * (1 - al));
+}
+const relLum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
+const contrastOf = (a, b) => { const x = relLum(a), y = relLum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+/* Gemessene Flächenfarben pro Theme (Glas und Verläufe lassen sich nicht sicher aus den CSS-Werten schätzen) */
+const SURF = {"nacht":{"inner":[45,26,88],"panel":[42,23,82],"on":[44,25,87],"metal":[233,191,112]},"reaktor":{"inner":[17,45,9],"panel":[77,141,23],"on":[175,232,66],"metal":[111,180,48]},"aero":{"inner":[77,120,183],"panel":[203,229,248],"on":[193,229,254],"metal":[161,193,220]},"schleim":{"inner":[95,130,49],"panel":[165,136,198],"on":[233,148,65],"metal":[120,94,147]},"tagebuch":{"inner":[243,239,224],"panel":[250,248,242],"on":[255,92,160],"metal":[30,30,30]},"maerchen":{"inner":[231,214,175],"panel":[241,227,187],"on":[221,168,75],"metal":[159,101,46]},"jackpot":{"inner":[34,18,77],"panel":[50,27,145],"on":[210,36,35],"metal":[216,168,78]},"luna":{"inner":[236,233,216],"panel":[243,242,231],"on":[34,111,232],"metal":[4,81,220]},"chrom":{"inner":[26,28,39],"panel":[205,207,213],"on":[143,215,254],"metal":[192,196,204]},"bruecke":{"inner":[12,37,72],"panel":[11,33,66],"on":[175,122,75],"metal":[42,131,185]}};
+function autoContrast() {
+  const cs = getComputedStyle(document.documentElement), v = k => cs.getPropertyValue('--' + k).trim();
+  const col = k => { const c = parseColors(v(k))[0]; return c ? c.slice(0, 3) : null; };
+  const page = surfaceRGB(v('page-color'), [18, 11, 58]);
+  const ink = col('ink2') || [26, 11, 54];
+  const dark = relLum(ink) < 0.05 ? ink : [20, 14, 36], light = [255, 255, 255];
+  const hex = c => '#' + c.map(x => Math.round(Math.max(0, Math.min(255, x))).toString(16).padStart(2, '0')).join('');
+  const pick = (prefs, bg, min) => {
+    for (const k of prefs) { const c = typeof k === 'string' ? col(k) : k; if (c && contrastOf(c, bg) >= min) return c; }
+    return contrastOf(dark, bg) >= contrastOf(light, bg) ? dark : light;
+  };
+  const root = document.documentElement.style;
+  const set = (pre, bg, text, accent, sub) => {
+    const t = pick([text], bg, 4.5), a = pick(['gold', 'rose', t], bg, 3), su = pick(['lav', t], bg, 4.5);
+    root.setProperty(`--${pre}`, hex(t)); root.setProperty(`--${pre}a`, hex(a)); root.setProperty(`--${pre}s`, hex(su));
+    // Schatten unter Zahlen nur, wenn die Schrift heller als die Fläche ist
+    root.setProperty(`--${pre}sh`, relLum(a) > relLum(bg) ? `0 2px 0 ${hex(dark)}` : 'none');
+  };
+  const M = SURF[uiTheme] || {};
+  const inner = M.inner || surfaceRGB(v('inner'), page);
+  const panel = M.panel || surfaceRGB(v('panel'), inner), panelOn = M.on || surfaceRGB(v('panel-on'), inner);
+  set('tm', M.metal || surfaceRGB(v('metal'), inner), 'ink2');
+  set('tg', col('gold') || [255, 210, 63], 'ink2');
+  set('tp', panel, 'ptext'); set('tpo', panelOn, 'ptext'); set('ti', inner, 'cream');
+  const wellBg = relLum(inner) > 0.35 ? 'rgba(255,255,255,.62)' : 'rgba(10,4,30,.45)';
+  root.setProperty('--well', wellBg);
+  set('tw', surfaceRGB(wellBg, inner), 'cream');
+  document.body.dataset.tone = relLum(inner) > 0.35 ? 'light' : 'dark';
+  root.setProperty('--inner-solid', `rgb(${inner.map(Math.round).join(',')})`);
 }
 const THEME_VAR_KEYS = [...new Set(Object.values(UI_THEMES).flatMap(t => Object.keys(t.vars)))];
 const BALLS_BY_COUNT = [0, 10, 8, 6, 5];
@@ -3282,7 +3379,7 @@ function renderThemes() {
     const have = owns(k), on = uiTheme === k, r = RARITY[t.rar];
     return `<button class="dvd-tile theme-card ${on ? 'sel' : ''} ${have ? '' : 'locked'}" type="button" data-k="${k}" ${have ? '' : 'aria-disabled="true"'} title="${have ? t.desc : 'Noch nicht gefunden – steckt in Lootboxen'}">
       <span class="th-prev"><img src="${themeThumb(k)}" alt="">${have ? '' : '<b>?</b>'}</span>
-      <span class="mn">${have ? t.name : '???'}</span><span class="th-rar" style="color:${r.c}">${r.n}</span><span class="md">${on ? 'Aktiv' : have ? 'Auswählen' : 'Noch nicht gefunden'}</span></button>`;
+      <span class="mn">${have ? t.name : '???'}</span><span class="th-rar" style="background:${r.c};color:${r.t}">${r.n}</span><span class="md">${on ? 'Aktiv' : have ? 'Auswählen' : 'Noch nicht gefunden'}</span></button>`;
   }).join('');
   $('#themeGrid').querySelectorAll('.theme-card').forEach(b => b.addEventListener('click', () => {
     if (b.classList.contains('locked')) { $('#themeChip').textContent = 'Dieses Theme steckt noch in einer Lootbox.'; return; }
