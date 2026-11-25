@@ -7,7 +7,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Chakra+Petch:wght@500;600;700&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;900&family=Fredoka:wght@500;600;700&family=IM+Fell+English:ital@0;1&family=Lilita+One&family=Luckiest+Guy&family=Noto+Sans:wght@400;600;700&family=Orbitron:wght@700;900&family=Permanent+Marker&family=Pixelify+Sans:wght@400;600;700&family=Rubik+Mono+One&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Chakra+Petch:wght@500;600;700&family=Cinzel+Decorative:wght@700;900&family=Cinzel:wght@700;900&family=Fredoka:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&family=Lilita+One&family=Luckiest+Guy&family=Noto+Sans:wght@400;600;700&family=Orbitron:wght@700;900&family=Permanent+Marker&family=Pixelify+Sans:wght@400;600;700&family=Rubik+Mono+One&display=swap">
 <style>
 /* Spielbildschirm im selben Zeichentrick-Stil wie das DVD-Menü: Nachtszene im Hintergrund, schmale Leiste oben, Spielfeld mit Goldrahmen, Fähigkeit unten. */
 :root{
@@ -844,6 +844,32 @@ body[data-ui=katze] .dvd-page:not(#pgMain),body[data-ui=katze] .dlg{border-radiu
 body[data-ui=katze] .dvd-h{background:var(--rose);color:#fff}
 
 .dlg .tb,.mode-chip{color:var(--tr);text-shadow:var(--trsh)}
+
+/* Kein künstliches Fettmachen: Fehlt eine Schriftstärke, bleibt der Text normal statt mehrfach versetzt gemalt */
+html{font-synthesis-weight:none}
+/* Splitter */
+.shard{display:inline-block;width:.9em;height:1.05em;vertical-align:-.15em;margin:0 .08em;clip-path:polygon(50% 0,100% 38%,78% 100%,22% 100%,0 38%);background:rgba(128,128,128,.35)}
+.shard.on{background:linear-gradient(160deg,#e8fbff,#5ad8ff 45%,#7a5cff)}
+.shards small{font-size:.85em;opacity:.9}
+.shard-help{margin:0;max-width:62ch;text-align:center;font-size:14px;line-height:1.5;color:var(--ti)}
+.prize .shard{width:1.4em;height:1.6em}
+/* Luna und Märchenbuch: dünne Schriften vertragen keine Konturen */
+body[data-ui=luna] *,body[data-ui=maerchen] *{-webkit-text-stroke:0!important}
+body[data-ui=luna] .dvd-title .L::before{-webkit-text-stroke:.06em #0a246a!important}
+body[data-ui=maerchen] .dvd-title .L::before{-webkit-text-stroke:.08em #2a1808!important}
+/* Zahlen an den Röhren auf eigenem Schildchen statt mit Kontur */
+.tube-lbl,#multRow{-webkit-text-stroke:0;text-shadow:none;background:var(--inner-solid);color:var(--tia);padding:3px 9px 4px;border-radius:10px;box-shadow:0 0 0 2px var(--ink2)}
+
+.dvd-h{color:var(--tr)}
+.extra-chapters .cn{overflow-wrap:anywhere;hyphens:auto}
+body[data-ui=maerchen] .extra-chapters .cn{font-size:.92em;letter-spacing:0}
+@media (max-width:560px){body[data-ui=maerchen] .extra-chapters .cn{font-size:13px}}
+
+/* Luna und Märchenbuch ohne Konturen: Farben aus dem Auto-Kontrast */
+body[data-ui=luna] .count-grid b,body[data-ui=maerchen] .count-grid b{color:var(--tpa);filter:none;text-shadow:none}
+body[data-ui=luna] .dvd-tile.sel .count-grid b,body[data-ui=luna] .count-grid .sel b,body[data-ui=maerchen] .count-grid .sel b{color:var(--tpoa)}
+body[data-ui=luna] :is(.room-list-h,.ar-title,.cast-name),body[data-ui=maerchen] :is(.room-list-h,.ar-title,.cast-name){color:var(--tia)!important;filter:none;text-shadow:none}
+body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna] .kr-toast,body[data-ui=maerchen] .kr-toast{color:#fff;text-shadow:0 2px 0 #000,0 0 6px #000}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -1028,9 +1054,10 @@ body[data-ui=katze] .dvd-h{background:var(--rose);color:#fff}
     <h2 class="dvd-h">Themes &amp; Boxen</h2>
     <div class="box-bar">
       <div class="chest" aria-hidden="true"><i></i></div>
-      <div class="box-info"><b id="boxCount">0 Lootboxen</b><span>Splitter <span id="shardCount">0/3</span> · drei ergeben eine Box</span></div>
+      <div class="box-info"><b id="boxCount">0 Lootboxen</b><span class="shard-row">Splitter <span class="shards" id="shardCount" aria-label="0 von 3 Splittern"></span></span></div>
       <button class="btn def" id="boxMenuOpen" type="button">Box öffnen</button>
     </div>
+    <p class="shard-help"><b>So funktionieren Splitter:</b> Ziehst du aus einer Box ein Theme, das du schon hast, bekommst du stattdessen einen Splitter <span class="shard on"></span>. Hast du drei Splitter gesammelt, werden sie automatisch zu einer neuen Lootbox. Doppelte Themes sind also nie verloren.</p>
     <p class="dvd-chip" id="themeChip"></p>
     <div class="theme-grid" id="themeGrid"></div>
     <div class="acc-hint"><span id="themeAccHint"></span><button class="btn" id="themeAccBtn" type="button">Konto anlegen</button></div>
@@ -1132,7 +1159,7 @@ body[data-ui=katze] .dvd-h{background:var(--rose);color:#fff}
 <script>
 (() => {
 'use strict';
-const W = 800, H = 1000, LX = 400, LY = 74, PR = 11, BR = 8, GRAV = 950, SPEED = 740, E = 0.74;
+const W = 800, H = 1000, LX = 400, LY = 74, PR = 11, BR = 8, GRAV = 950, SPEED = 740, E = 0.74, PHYS_H = 1 / 240;
 const BY = 958, BW = 120, MAX_CHARGES = 3;
 const UI_FONT = 'Fredoka, Tahoma, Verdana, sans-serif', toonFont = () => TH().vars.toon || '"Lilita One", Fredoka, Tahoma, sans-serif';
 const TYPES = {
@@ -1202,7 +1229,7 @@ const UI_THEMES = {
     board: { top: '#fffdf3', mid: '#faf5e4', bot: '#f2ead0', deco: 'diary' },
     cv: { ink: '#111111', box: '#ffffff', sub: '#3a3a6a', g: ['#ff8ab8', '#ff2d87', '#e0106a', '#b0004f'] } },
   maerchen: { name: 'Märchenbuch', rar: 2, desc: 'Altes Buch auf Moos: Papier mit Fasern, Tusche und Aquarell, Zauberkessel, Fliegenpilze und Glühwürmchen.', swatch: ['#efe0b8', '#4f7a1c', '#9a1a10'],
-    vars: { ink2: '#2a1808', cream: '#3a2210', gold: '#9a1a10', rose: '#6a3a08', lav: '#5a4020', item: '#fff4dc', ptext: '#3a2210', toon: '"Cinzel Decorative","Cinzel",serif', ui: '"IM Fell English","Cinzel",serif',
+    vars: { ink2: '#2a1808', cream: '#3a2210', gold: '#9a1a10', rose: '#6a3a08', lav: '#5a4020', item: '#fff4dc', ptext: '#3a2210', toon: '"Cinzel Decorative","Cinzel",serif', ui: '"EB Garamond","IM Fell English",serif',
       panel: 'linear-gradient(180deg,#f8ecc8,#e8d3a0)', 'panel-on': 'linear-gradient(180deg,#f2c46a,#c88a2a)',
       inner: 'linear-gradient(90deg,#e2cc96,#fbf1d6 12%,#f4e4bc 88%,#e2cc96)',
       metal: 'linear-gradient(135deg,#c88440,#7a4418 50%,#a86a2a)',
@@ -2192,7 +2219,7 @@ function shoot() {
   S.shot = { score: 0, hits: 0, time: 0, free: false, floor: 0, gold: false };
   const dx = Math.cos(S.aim), dy = Math.sin(S.aim);
   const b0 = { x: LX + dx * 40, y: LY + dy * 40, vx: dx * SPEED, vy: dy * SPEED, fire: 0, magnet: 0, split: false, trail: [], tt: 0, anchor: null, col: PCOL[S.cur], skin: p.skin, gold: false };
-  S.balls = [b0];
+  S.balls = [b0]; S.physAcc = 0;
   if (perk('feuer', p)) b0.fire = 0.5 * perk('feuer', p);
   if (perk('magnet', p)) b0.magnet = 0.8 * perk('magnet', p);
   if (Math.random() < 0.3 * perk('zwilling', p)) b0.split = true;
@@ -2545,12 +2572,14 @@ function stepBalls(h) {
 function aimPath() {
   const p = curP(), long = !!p && (p.sight > 0 || (p.armed && p.power === 'uhu') || perk('fernrohr', p) > 0);
   const dx = Math.cos(S.aim), dy = Math.sin(S.aim);
-  const pts = [], hh = 1 / 120, steps = long ? 300 : 110, b = { x: LX + dx * 40, y: LY + dy * 40, vx: dx * SPEED, vy: dy * SPEED };
+  // exakt dieselben Rechenschritte wie die echte Kugel (stepBalls): gleicher Takt, gleiche Wände, gleiche Abpraller
+  const pts = [], hh = PHYS_H, steps = long ? 600 : 220, b = { x: LX + dx * 40, y: LY + dy * 40, vx: dx * SPEED, vy: dy * SPEED };
   let bounces = 0;
   for (let i = 0; i < steps; i++) {
     b.vy += GRAV * hh; b.x += b.vx * hh; b.y += b.vy * hh;
     if (b.x < BR) { b.x = BR; b.vx = Math.abs(b.vx) * 0.9; }
     if (b.x > W - BR) { b.x = W - BR; b.vx = -Math.abs(b.vx) * 0.9; }
+    if (b.y < BR) { b.y = BR; b.vy = Math.abs(b.vy) * 0.9; }
     let hit = false;
     for (const q of S.pegs) {
       if (q.gone) continue;
@@ -2559,7 +2588,7 @@ function aimPath() {
     }
     if (hit && ++bounces > 4) break;
     if (b.y > H) break;
-    if (i % 3 === 0) pts.push(b.x, b.y);
+    if (i % 6 === 0) pts.push(b.x, b.y);
   }
   return { pts, long };
 }
@@ -2588,9 +2617,10 @@ function update(dt) {
   if (ONLINE) onlineTick(dt);
   if (ONLINE && !isMine()) spectate(dt);
   else if (S.phase === 'shot') {
-    const sdt = dt * S.timeScale, n = Math.max(1, Math.ceil(sdt * 240)), h = sdt / n;
-    for (let i = 0; i < n && S.phase === 'shot'; i++) stepBalls(h);
-    S.shot.time += sdt;
+    // fester Physiktakt (1/240 s): gleiche Bahn auf jedem Bildschirm und genau so, wie die Zielhilfe sie vorausrechnet
+    S.physAcc = Math.min((S.physAcc || 0) + dt * S.timeScale, 0.25);
+    while (S.physAcc >= PHYS_H && S.phase === 'shot') { stepBalls(PHYS_H); S.physAcc -= PHYS_H; }
+    S.shot.time += dt * S.timeScale;
     if (S.shot.time > 40) for (const p of S.pegs) if (p.hit && !p.gone) removePeg(p);
     if (!S.balls.length) endShot();
   } else if (S.phase === 'clearing') {
@@ -3429,7 +3459,7 @@ function extraHTML(id) {
     ${li(dot(TYPES.bonus.c), 'Lila: Bonuslaterne', `${TYPES.bonus.base} Punkte. Wechselt nach jedem Zug den Platz.`)}
   </ul><p class="xn">Bleibt eine Kugel hängen, räumt das Spiel die getroffenen Laternen um sie herum nach kurzer Zeit ab.</p>`;
   if (id === 'figuren') return `<h3>Charaktere und ihre Fähigkeiten</h3><ul class="xl xc">${Object.entries(CHARS).map(([k, c]) => `<li><img src="${ICON_URL[k]}" alt=""><div><b style="color:${c.col}">${c.name}</b> <small>${c.kind}</small><span class="xp">Fähigkeit: <b>${c.power}</b> – ${c.desc}</span><span>${BIO[k]}</span><span class="xt">Tipp: ${TIPS[k]}</span></div></li>`).join('')}</ul>`;
-  if (id === 'loot') return `<h3>Themes &amp; Lootboxen</h3><p>Nach jedem Spiel bekommst du eine Lootbox, für einen Sieg, ein geschafftes Feld oder Feld 3 im Roguelike eine zweite. Geöffnet wird im Hauptmenü unter <b>Themes &amp; Boxen</b>. In jeder Box steckt ein Theme. Ein Theme verändert das ganze Spiel: Farben, Schrift, Knöpfe, Rahmen, Hintergrund und Spielfeld. Doppelte Themes werden zu Splittern, drei Splitter ergeben eine neue Box.</p><p>Mit einem <b>Konto</b> (Hauptmenü → Konto) sind deine Themes gesichert und auf jedem Gerät da.</p><ul class="xl">${Object.values(UI_THEMES).map(t => li(`<i class="xs" style="background:${swatchBg(t)}"></i>`, `${t.name} <small style="color:${RARITY[t.rar].c}">${RARITY[t.rar].n}</small>`, t.desc)).join('')}</ul>`;
+  if (id === 'loot') return `<h3>Themes &amp; Lootboxen</h3><p>Nach jedem Spiel bekommst du eine Lootbox, für einen Sieg, ein geschafftes Feld oder Feld 3 im Roguelike eine zweite. Geöffnet wird im Hauptmenü unter <b>Themes &amp; Boxen</b>. In jeder Box steckt ein Theme. Ein Theme verändert das ganze Spiel: Farben, Schrift, Knöpfe, Rahmen, Hintergrund und Spielfeld. </p><ul class="xl">${li('<i class="xs"><span class="shard on"></span></i>', 'Splitter', 'Ziehst du ein Theme, das du schon hast, bekommst du stattdessen einen Splitter. Bei drei Splittern gibt es automatisch eine neue Lootbox, und der Zähler beginnt wieder bei null. Deinen Stand siehst du unter Themes &amp; Boxen.')}</ul><p>Mit einem <b>Konto</b> (Hauptmenü → Konto) sind deine Themes gesichert und auf jedem Gerät da.</p><ul class="xl">${Object.values(UI_THEMES).map(t => li(`<i class="xs" style="background:${swatchBg(t)}"></i>`, `${t.name} <small style="color:${RARITY[t.rar].c}">${RARITY[t.rar].n}</small>`, t.desc)).join('')}</ul>`;
   if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Im Hauptmenü wählst du zuerst den Spielmodus, danach lokal oder online. Im Roguelike-Modus spielen 1 bis 4 Personen einen Run über immer schwerere Felder. Alle starten mit 10 Kugeln. Nach jeder Runde (allein: 3 Schüsse) und nach jedem geschafften Feld wählt jede Person <b>eins von drei Upgrades</b>, online auf dem eigenen Gerät. Geschaffte Felder geben allen +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn alle Kugeln weg sind. Im Online-Raum stellt der Host den Modus um.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
   if (id === 'bloecke') return `<h3>Klötzchenregen</h3><p>Steine aus vier Kästchen fallen ins Feld. Schieb und dreh sie so, dass waagerechte Reihen voll werden, dann verschwinden sie. Alle 10 Reihen steigt die Stufe und es wird schneller. Ist der Stapel oben angekommen, ist das Spiel vorbei.</p><ul class="xl">
     ${li(sym('⌨'), 'Tastatur', 'Pfeile links/rechts schieben, Pfeil runter beschleunigt, Pfeil hoch oder X dreht, Z dreht andersrum, Leertaste lässt fallen, C hält einen Stein fest, P pausiert.')}
@@ -3523,7 +3553,7 @@ function openBoxDialog() {
   $('#boxSub').textContent = TEST ? 'Testmodus: Boxen sind unbegrenzt und nichts wird gespeichert.' : PROG.boxes > 0 ? `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3` : 'Spiel eine Runde, dann gibt es neue Boxen.';
   const strip = $('#boxStrip'); strip.style.transition = 'none'; strip.style.transform = 'translateX(0)';
   strip.innerHTML = Array.from({ length: 9 }, rollTheme).map(boxItemHTML).join('');
-  $('#boxPrize').className = 'prize'; $('#boxPrize').innerHTML = '<p class="note">Jedes Theme verändert das ganze Spiel. Doppelte werden zu Splittern, drei Splitter ergeben eine Box.</p>';
+  $('#boxPrize').className = 'prize'; $('#boxPrize').innerHTML = '<p class="note">Jedes Theme verändert das ganze Spiel. Hast du ein Theme schon, gibt es stattdessen einen Splitter. Drei Splitter werden automatisch zu einer neuen Box.</p>';
   $('#boxOpen').hidden = PROG.boxes <= 0 && !TEST; $('#boxOpen').disabled = false; $('#boxOpen').textContent = 'Box öffnen';
   $('#boxWear').hidden = true; $('#boxDone').textContent = 'Fertig';
   $('#box').hidden = false;
@@ -3551,12 +3581,12 @@ function revealBox(k) {
   const t = UI_THEMES[k], r = RARITY[t.rar], dup = !!PROG.themes[k];
   let extra = '';
   if (TEST) extra = ' (Testmodus: nichts gespeichert)';
-  else if (dup) { PROG.shards++; if (PROG.shards >= 3) { PROG.shards = 0; PROG.boxes++; extra = ' Drei Splitter zusammen: +1 Box!'; } }
+  else if (dup) { PROG.shards++; if (PROG.shards >= 3) { PROG.shards = 0; PROG.boxes++; extra = ' Das war der dritte: Die drei Splitter werden zu einer neuen Box!'; } }
   else PROG.themes[k] = 1;
   if (!TEST) saveProg();
   boxWin = dup && !TEST ? null : k;
   const pr = $('#boxPrize'); pr.className = 'prize win'; pr.style.setProperty('--rc', r.c);
-  pr.innerHTML = `<span class="rar">${r.n}${dup ? ' · schon da' : ' · neu!'}</span><span class="pn">${t.name}</span><span class="pd">${TEST ? t.desc + extra : dup ? `Doppelt: +1 Splitter (${PROG.shards}/3).${extra}` : t.desc}</span>`;
+  pr.innerHTML = `<span class="rar">${r.n}${dup ? ' · schon da' : ' · neu!'}</span><span class="pn">${t.name}</span><span class="pd">${TEST ? t.desc + extra : dup ? (extra ? `Hast du schon, darum gibt es einen Splitter.${extra}` : `Hast du schon, darum gibt es stattdessen einen Splitter. Du hast jetzt ${PROG.shards} von 3, noch ${3 - PROG.shards} bis zu einer neuen Box.`) : t.desc}</span>${dup && !TEST ? `<span class="pd">${shardIcons(extra ? 3 : PROG.shards)}</span>` : ''}`;
   [0, 4, 7, 12, 16].slice(0, t.rar + 1).forEach((n, i) => tone(noteFreq(5 + n), 0.4, 'triangle', 0.08, i * 0.09));
   $('#boxSub').textContent = `Noch ${PROG.boxes} ${PROG.boxes === 1 ? 'Box' : 'Boxen'} · Splitter ${PROG.shards}/3`;
   $('#boxOpen').disabled = false; $('#boxOpen').hidden = PROG.boxes <= 0 && !TEST; $('#boxOpen').textContent = 'Noch eine öffnen';
@@ -3571,9 +3601,11 @@ $('#boxWear').addEventListener('click', () => { if (boxWin) { if (PROG.themes[bo
 $('#boxDone').addEventListener('click', closeBox);
 
 /* ---------- Menüseite Themes ---------- */
+const shardIcons = n => [0, 1, 2].map(i => `<span class="shard ${i < n ? 'on' : ''}"></span>`).join('');
 function renderThemes() {
   $('#boxCount').textContent = `${PROG.boxes} ${PROG.boxes === 1 ? 'Lootbox' : 'Lootboxen'}`;
-  $('#shardCount').textContent = `${PROG.shards}/3`;
+  $('#shardCount').innerHTML = shardIcons(PROG.shards) + ` <small>${PROG.shards}/3 · noch ${3 - PROG.shards} bis zur nächsten Box</small>`;
+  $('#shardCount').setAttribute('aria-label', `${PROG.shards} von 3 Splittern`);
   $('#boxMenuOpen').disabled = PROG.boxes <= 0 && !TEST;
   const owned = Object.keys(PROG.themes).length, all = Object.keys(UI_THEMES).length;
   $('#themeChip').textContent = TEST ? `Testmodus: alle ${all} Themes frei (dein echter Stand: ${owned} von ${all})` : `${owned} von ${all} Themes gesammelt`;
@@ -4125,7 +4157,8 @@ function spectate(dt) {
       b.fire = t[f] ? 1 : 0; b.gold = !!t[f + 1]; b.magnet = t[f + 2] ? 1 : 0; b.skin = t[f + 3] ? 'rainbow' : null; b.col = PCOL[S.cur]; b.live = nf;
     });
   }
-  const sdt = dt * S.timeScale, n = Math.max(1, Math.ceil(sdt * 240)), h = sdt / n, decay = Math.exp(-dt / 0.09);
+  S.specAcc = Math.min((S.specAcc || 0) + dt * S.timeScale, 0.25);
+  const n = Math.floor(S.specAcc / PHYS_H), h = PHYS_H, decay = Math.exp(-dt / 0.09); S.specAcc -= n * PHYS_H;
   for (const b of S.balls) {
     if (b.live) for (let i = 0; i < n; i++) {
       // dieselbe Physik wie beim Schützen, aber ohne Punkte und ohne Laternen zu treffen
