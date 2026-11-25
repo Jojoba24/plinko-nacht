@@ -813,6 +813,17 @@ body[data-tone=light] .xl.xc b[style],body[data-tone=light] .cast-power b{color:
 .dvd-hint,body[data-ui] .dvd-hint{background:rgba(10,4,30,.78);color:#fff}
 .ar-bar,.kr-card,.sv-ph,.sv-pass,.sv-h,.sv-log div,.tube-cap{background:var(--inner-solid)}
 .sv-pass{background:var(--inner-solid) padding-box,var(--metal) border-box}
+
+/* Aufgeräumtes Hauptmenü: Spiele groß, Online abgesetzt, der Rest als kleine Leiste */
+#pgMain .online-item{margin-top:10px}
+#pgMain .main-more{margin-top:14px;max-width:min(980px,96vw)}
+#pgMain .main-more .dvd-item{font-size:clamp(14px,2.8vw,18px)}
+
+/* Hauptmenü in Raster- und Leisten-Themes: lange Spielnamen müssen passen */
+body[data-ui=schleim] #pgMain .dvd-menu,body[data-ui=jackpot] #pgMain .dvd-menu{grid-template-columns:repeat(2,minmax(0,1fr));max-width:min(520px,92vw)}
+body[data-ui=schleim] #pgMain .mode-item,body[data-ui=jackpot] #pgMain .mode-item{font-size:clamp(14px,2.4vw,21px);word-break:normal;overflow-wrap:anywhere}
+body[data-ui=reaktor] #pgMain .mode-item{font-size:clamp(15px,2.4vw,22px)}
+body[data-ui=reaktor] #pgMain .main-more{flex-wrap:wrap;justify-content:center}
 </style>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -869,14 +880,25 @@ body[data-tone=light] .xl.xc b[style],body[data-tone=light] .cast-power b{color:
       <button class="dvd-item mode-item game-item" type="button" data-game="plinko">Plinko Nacht</button>
       <button class="dvd-item mode-item game-item" type="button" data-game="bloecke">Klötzchenregen</button>
       <button class="dvd-item mode-item game-item" type="button" data-game="schiffe">Schiffe versenken</button>
-      <button class="dvd-item soon-item" type="button" disabled>Bald mehr …</button>
-      <button class="dvd-item" type="button" id="themesMenuBtn">Themes &amp; Boxen</button>
-      <button class="dvd-item" type="button" id="accountMenuBtn">Konto</button>
-      <button class="dvd-item" type="button" id="castMenuBtn">Besetzung</button>
-      <button class="dvd-item" type="button" id="extrasMenuBtn">Bonusmaterial</button>
-      <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
-      <div class="dvd-toggles"><button class="dvd-item" type="button" id="adsToggle">Werbepausen: An</button><button class="dvd-item" type="button" id="sndToggle">Ton: An</button></div>
+      <button class="dvd-item mode-item online-item" type="button" id="onlineMenuBtn">Online-Räume</button>
+      <div class="dvd-toggles main-more">
+        <button class="dvd-item" type="button" id="themesMenuBtn">Themes &amp; Boxen</button>
+        <button class="dvd-item" type="button" id="boardMenuBtn">Bestenliste</button>
+        <button class="dvd-item" type="button" id="extrasMenuBtn">Bonusmaterial</button>
+        <button class="dvd-item" type="button" id="accountMenuBtn">Konto</button>
+        <button class="dvd-item" type="button" id="settingsMenuBtn">Einstellungen</button>
+      </div>
     </nav>
+  </div>
+
+  <div class="dvd-page" id="pgSettings" hidden>
+    <h2 class="dvd-h">Einstellungen</h2>
+    <nav class="dvd-menu" aria-label="Einstellungen">
+      <button class="dvd-item" type="button" id="sndToggle">Ton: An</button>
+      <button class="dvd-item" type="button" id="adsToggle">Werbepausen: Aus</button>
+    </nav>
+    <p class="play-desc">Werbepausen sind erfundene 90er-Werbespots zwischen den Zügen in Plinko Nacht.</p>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgPlinko" hidden>
@@ -979,7 +1001,7 @@ body[data-tone=light] .xl.xc b[style],body[data-tone=light] .cast-power b{color:
       <nav class="extra-chapters" id="extraChapters" aria-label="Kapitel"></nav>
       <article class="extra-body" id="extraBody" aria-live="polite"></article>
     </div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button><button class="dvd-item" type="button" id="castMenuBtn">Besetzung ▶</button></div>
   </div>
 
   <div class="dvd-page" id="pgThemes" hidden>
@@ -1388,7 +1410,7 @@ const S = {
   popups: [], parts: [], toasts: [], orangeTotal: 25, order: 0, lastMult: 1, levelKey: 'gasse',
   adGap: 0, lastAd: -1, round: 1, turnInRound: 0,
 };
-const settings = { game: 'plinko', mode: 'normal', count: 2, level: 'gasse', ads: true, players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
+const settings = { game: 'plinko', mode: 'normal', count: 2, level: 'gasse', ads: false, players: [0, 1, 2, 3].map(i => ({ name: `Spieler ${i + 1}`, power: ['fuchs', 'drache', 'lumi', 'mira'][i] })) };
 let ONLINE = null;
 
 /* ---------- Audio ---------- */
@@ -2382,7 +2404,17 @@ function aimPath() {
 /* ---------- Schleife ---------- */
 function update(dt) {
   S.t += dt;
-  S.boatPh = (S.boatPh || 0) + dt * 0.85 * (1 - 0.3 * perk('ruhig'));
+  const boatRate = 0.85 * (1 - 0.3 * perk('ruhig'));
+  // Boot läuft auf echter Uhrzeit, nicht auf der gekappten Bildzeit, damit es auf allen Geräten gleich fährt
+  const bnow = performance.now(), bdt = Math.min(1, Math.max(0, (bnow - (S.boatT || bnow)) / 1000)); S.boatT = bnow;
+  S.boatPh = (S.boatPh || 0) + bdt * boatRate;
+  // Online: Wer zuschaut, rechnet das Boot aus dem letzten Stand der Person am Zug plus der echten verstrichenen Zeit
+  // und zieht es weich dorthin. So hängt es nicht an der eigenen Bildrate.
+  const ref = S.boatRef;
+  if (ONLINE && ref && !isMine()) {
+    const age = (performance.now() - ref.t) / 1000;
+    if (age < 4) { const want = ref.p + boatRate * age, err = want - S.boatPh; S.boatPh = Math.abs(err) > 1.2 ? want : S.boatPh + err * Math.min(1, dt * 6); }
+  }
   S.bucketX = 400 + 290 * Math.sin(S.boatPh);
   let target = 1;
   if (S.phase === 'shot' && !S.finale && orangeLeft() === 1) {
@@ -3022,7 +3054,7 @@ function menuMusicTick() {
 applyUiTheme((() => { try { return new URLSearchParams(location.search).get('ui') || JSON.parse(localStorage.getItem('plinko-progress') || '{}').active; } catch (e) { return 'nacht'; } })());
 buildScene(); splitTitle(); setTimeout(syncRejoin, 0);
 tuneTimer = setInterval(menuMusicTick, 250);
-const PAGES = ['pgMain', 'pgPlinko', 'pgGame', 'pgPlay', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'];
+const PAGES = ['pgMain', 'pgSettings', 'pgPlinko', 'pgGame', 'pgPlay', 'pgCount', 'pgCast', 'pgMap', 'pgOnline', 'pgLobby', 'pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'];
 let castIdx = 0, castOnly = false;
 const curPage = () => PAGES.find(p => !$('#' + p).hidden);
 function showPage(id, focusSel) {
@@ -3064,7 +3096,7 @@ function renderCast() {
   $('#castName').value = p.name;
   $('#castNameWrap').hidden = castOnly;
   $('#castNext').hidden = castOnly;
-  $('#castBack').textContent = castOnly ? '◀ Hauptmenü' : '◀ Zurück';
+  $('#castBack').textContent = castOnly ? '◀ Bonusmaterial' : '◀ Zurück';
   $('#castNext').textContent = castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : rogue ? 'Run starten ▶' : 'Szenenauswahl ▶';
   previewChar(castOnly ? 'fuchs' : p.power);
 }
@@ -3080,7 +3112,7 @@ function castNext() {
   else { renderMaps(); showPage('pgMap', '.sel'); }
 }
 function castBack() {
-  if (castOnly) { showPage('pgMain'); return; }
+  if (castOnly) { showPage('pgExtras', '#castMenuBtn'); return; }
   if (castIdx > 0) { castIdx--; renderCast(); showPage('pgCast', '.sel'); }
   else { renderCount(); showPage('pgCount', '.sel'); }
 }
@@ -3096,10 +3128,10 @@ function renderMaps() {
 function mapBack() { castOnly = false; castIdx = settings.count - 1; renderCast(); showPage('pgCast', '.sel'); }
 function goBack() {
   const pg = curPage();
-  if (pg === 'pgOnline') showPage(settings.game === 'plinko' ? 'pgPlay' : 'pgGame');
+  if (pg === 'pgOnline') showPage(onlineFromHub ? 'pgMain' : settings.game === 'plinko' ? 'pgPlay' : 'pgGame');
   else if (pg === 'pgCount') showPage('pgPlay');
   else if (pg === 'pgPlay') showPage('pgPlinko');
-  else if (pg === 'pgPlinko' || pg === 'pgGame') showPage('pgMain');
+  else if (pg === 'pgPlinko' || pg === 'pgGame' || pg === 'pgSettings') showPage('pgMain');
   else if (pg === 'pgCast') castBack();
   else if (pg === 'pgMap') mapBack();
   else if (['pgBoard', 'pgExtras', 'pgThemes', 'pgAccount'].includes(pg)) showPage('pgMain');
@@ -3650,8 +3682,10 @@ function renderOnChars() {
     $('#onChars').querySelectorAll('.dvd-tile').forEach(x => x.classList.toggle('sel', x === b)); confirmTone();
   }));
 }
-async function openOnline() {
-  $('#onMode').textContent = settings.game === 'plinko' ? 'Plinko Nacht · ' + (MODES[settings.mode] || MODES.normal).name : GAME_META[settings.game].name;
+let onlineFromHub = false;
+async function openOnline(fromHub) {
+  onlineFromHub = fromHub === true;
+  $('#onMode').textContent = onlineFromHub ? 'Alle Spiele · das Spiel wählt der Host in der Lobby' : settings.game === 'plinko' ? 'Plinko Nacht · ' + (MODES[settings.mode] || MODES.normal).name : GAME_META[settings.game].name;
   $('#onName').value = settings.players[0].name; renderOnChars(); $('#onErr').textContent = '';
   showPage('pgOnline', '#onName');
   $('#netStatus').textContent = 'Verbinde …';
@@ -3895,6 +3929,10 @@ function applyState(st) {
 function onLive(lv) {
   if (!ONLINE || !lv || isMine()) return;
   if (typeof lv.a === 'number') S.aim = lv.a;
+  if (typeof lv.p === 'number') {
+    // kleiner Vorlauf gleicht die Laufzeit der Nachricht aus
+    S.boatRef = { p: lv.p + (ONLINE.net.kind === 'local' ? 0 : 0.06) * 0.85, t: performance.now() };  // Vorlauf gleicht die Netz-Laufzeit aus
+  }
   if (S.phase !== 'shot') return;
   S.liveBalls = Array.isArray(lv.b) ? lv.b : []; S.liveFresh = true;
   if (S.shot && typeof lv.s === 'number') S.shot.score = lv.s;
@@ -3942,9 +3980,9 @@ function onlineTick() {
   if (isMine()) {
     if (S.phase === 'shot' && now - o.lastLive > 60) {
       o.lastLive = now;
-      o.net.set(o.path + '/live', { b: S.balls.map(b => [Math.round(b.x), Math.round(b.y), Math.round(b.vx), Math.round(b.vy), b.fire > 0 ? 1 : 0, b.gold ? 1 : 0, b.magnet > 0 ? 1 : 0, b.skin ? 1 : 0]), h: S.pegs.reduce((a, p, i) => { if (p.hit && !p.gone) a.push(i); return a; }, []), s: Math.round(S.shot ? S.shot.score : 0), a: S.aim });
-    } else if (S.phase === 'aim' && Math.abs(S.aim - o.lastAim) > 0.004 && now - o.lastLive > 90) {
-      o.lastLive = now; o.lastAim = S.aim; o.net.set(o.path + '/live', { a: S.aim });
+      o.net.set(o.path + '/live', { b: S.balls.map(b => [Math.round(b.x), Math.round(b.y), Math.round(b.vx), Math.round(b.vy), b.fire > 0 ? 1 : 0, b.gold ? 1 : 0, b.magnet > 0 ? 1 : 0, b.skin ? 1 : 0]), h: S.pegs.reduce((a, p, i) => { if (p.hit && !p.gone) a.push(i); return a; }, []), s: Math.round(S.shot ? S.shot.score : 0), a: S.aim, p: Math.round(S.boatPh * 1000) / 1000 });
+    } else if (S.phase === 'aim' && ((Math.abs(S.aim - o.lastAim) > 0.004 && now - o.lastLive > 90) || now - o.lastLive > 700)) {
+      o.lastLive = now; o.lastAim = S.aim; o.net.set(o.path + '/live', { a: S.aim, p: Math.round(S.boatPh * 1000) / 1000 });
     }
   }
 }
@@ -4040,6 +4078,8 @@ window.SK = {
 };
 
 $('#boardMenuBtn').addEventListener('click', () => openBoard());
+$('#onlineMenuBtn').addEventListener('click', () => { confirmTone(); openOnline(true); });
+$('#settingsMenuBtn').addEventListener('click', () => { confirmTone(); syncToggles(); showPage('pgSettings', '#sndToggle'); });
 $('#roomCreate').addEventListener('click', () => enterRoom(true));
 $('#roomJoin').addEventListener('click', () => enterRoom(false));
 $('#roomPass').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); enterRoom(false); } });
