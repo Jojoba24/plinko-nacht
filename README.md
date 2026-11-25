@@ -17,7 +17,7 @@ Das Spiel wurde mit [Claude](https://claude.ai) entwickelt.
 
 - **Online-Räume** mit Passwort für 2 bis 4 Personen, mit Raumliste, Wiedereinstieg und Kick-Funktion. Der Host wählt in der Lobby das Spiel und kann es nach jeder Partie wechseln
 - **Sechs gezeichnete Charaktere** als Spielfiguren, in Plinko mit eigenen Fähigkeiten
-- **Zehn Themes**, die das ganze Aussehen und den Klang aller Spiele ändern
+- **Elf Themes**, die das ganze Aussehen und den Klang aller Spiele ändern, darunter ein Katzencafé, in dem jeder Treffer miaut
 - **Lootboxen** nach jedem Spiel, aus denen neue Themes kommen
 - **Konten** mit E-Mail und Passwort, damit Themes und Boxen auf jedem Gerät da sind
 - **Bestenliste** für jedes Spiel
