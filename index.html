@@ -719,15 +719,16 @@ body[data-arcade] .desk{visibility:hidden}
 .kr-opp{font-size:12px;gap:3px}.kr-opp canvas{border-radius:3px;width:60px;height:120px}
 .kr-on{display:flex;align-items:center;gap:4px;max-width:120px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.kr-on img{width:20px;height:20px}
 .kr-opp.dead{opacity:.55}.kr-os{font-weight:700;color:var(--gold)}
-.kr-pad{display:none;gap:6px;width:100%;max-width:520px;justify-content:center}
-.kr-pad .btn{flex:1;min-width:0;padding:12px 0;font-size:20px;touch-action:none;user-select:none;-webkit-user-select:none}
-.kr-pad [data-a=hold]{font-size:13px}
-@media (pointer:coarse),(max-width:700px){.kr-pad{display:flex}}
+.kr-main{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 @media (max-width:700px){
-  .kr-main{gap:6px}.kr-side{width:74px;gap:6px}.kr-card{padding:5px;border-radius:10px}
+  .kr-main{display:grid;grid-template-columns:auto auto;grid-template-areas:"l r" "w w";gap:6px 8px;justify-content:center;align-content:start}
+  .kr-l{grid-area:l;flex-direction:row;width:auto;align-items:stretch}.kr-r{grid-area:r;flex-direction:row;width:auto;align-items:stretch}.kr-well{grid-area:w;justify-self:center}
+  .kr-l .kr-me{display:none}.kr-stats{display:grid;grid-template-columns:auto auto;column-gap:6px;align-items:baseline}
+  .kr-r .kr-opps{flex-direction:row}
+  .kr-main .kr-side{gap:6px;width:auto}.kr-card{padding:5px;border-radius:10px}
   .kr-me{flex-direction:column;gap:2px;font-size:11px}.kr-me img{width:26px;height:26px}.kr-me b{max-width:64px}
   .kr-stats b{font-size:17px}.kr-lab{font-size:9px;letter-spacing:.05em}
-  .kr-hold{width:64px;height:43px}.kr-next{width:64px;height:144px}.kr-opp canvas{width:40px;height:80px}.kr-on{font-size:10px;max-width:68px}
+  .kr-hold{width:54px;height:36px}.kr-next{width:110px;height:32px}.kr-opp canvas{width:26px;height:52px}.kr-r{flex-wrap:wrap;max-width:calc(100vw - 190px)}.kr-opp{padding:4px}.kr-opp .kr-on img{display:none}.kr-on{font-size:10px;max-width:68px}
   .kr-well{padding:4px;border-width:5px}.kr-msg{inset:4px}
 }
 /* Schiffe versenken */
@@ -880,7 +881,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
 
 <div class="dvd-bg" id="dvdScene" aria-hidden="true"></div>
 <div class="theme-bg" aria-hidden="true"></div>
-<div class="test-bar" id="testBar" role="region" aria-label="Testmodus" hidden><b>Testmodus</b><button id="testPrev" type="button" aria-label="Vorheriges Theme">◀</button><span id="testName"></span><button id="testNext" type="button" aria-label="Nächstes Theme">▶</button><button id="testSfx" type="button">♪ Klang</button><button id="testOff" type="button">Beenden</button></div>
+<div class="test-bar" id="testBar" role="region" aria-label="Testmodus" hidden><b>Testmodus</b><button id="testPrev" type="button" aria-label="Vorheriges Theme">◄</button><span id="testName"></span><button id="testNext" type="button" aria-label="Nächstes Theme">►</button><button id="testSfx" type="button">♪ Klang</button><button id="testOff" type="button">Beenden</button></div>
 
 <div class="desk">
   <header class="hud" aria-label="Spielstand">
@@ -944,7 +945,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="dvd-item" type="button" id="adsToggle">Werbepausen: Aus</button>
     </nav>
     <p class="play-desc">Werbepausen sind erfundene 90er-Werbespots zwischen den Zügen in Plinko Nacht.</p>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgPlinko" hidden>
@@ -954,14 +955,14 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="dvd-item mode-item" type="button" data-mode="normal">Klassisch</button>
       <button class="dvd-item mode-item" type="button" data-mode="rogue">Roguelike</button>
     </nav>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Spielauswahl</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Spielauswahl</button></div>
   </div>
 
   <div class="dvd-page" id="pgGame" hidden>
     <h2 class="dvd-h" id="gameHead">Spiel</h2>
     <p class="play-desc" id="gameDesc"></p>
     <nav class="dvd-menu" aria-label="Wie spielen" id="gameWays"></nav>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Spielauswahl</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Spielauswahl</button></div>
   </div>
 
   <div class="dvd-page" id="pgPlay" hidden>
@@ -971,7 +972,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="dvd-item" type="button" id="playLocal">Lokal spielen</button>
       <button class="dvd-item" type="button" id="playOnline">Online spielen</button>
     </nav>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlinko">◀ Zurück</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlinko">◄ Zurück</button></div>
   </div>
 
   <div class="dvd-page" id="pgCount" hidden>
@@ -983,7 +984,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="dvd-tile" type="button" data-n="4"><b>4</b><span>Spieler</span></button>
     </div>
     <p class="dvd-sub" id="countNote" style="letter-spacing:.2em"></p>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◀ Zurück</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◄ Zurück</button></div>
   </div>
 
   <div class="dvd-page" id="pgCast" hidden>
@@ -1000,13 +1001,13 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
         <label class="cast-name-input" id="castNameWrap" for="castName">Dein Name<input type="text" id="castName" maxlength="16"></label>
       </div>
     </div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" id="castBack">◀ Zurück</button><button class="dvd-item" type="button" id="castNext">Weiter ▶</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" id="castBack">◄ Zurück</button><button class="dvd-item" type="button" id="castNext">Weiter ►</button></div>
   </div>
 
   <div class="dvd-page" id="pgMap" hidden>
     <h2 class="dvd-h">Szenenauswahl</h2>
     <div class="map-grid" id="mapGrid"></div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" id="mapBack">◀ Zurück</button><button class="dvd-item" type="button" id="mapStart">Spiel starten ▶</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" id="mapBack">◄ Zurück</button><button class="dvd-item" type="button" id="mapStart">Spiel starten ►</button></div>
   </div>
 
   <div class="dvd-page" id="pgOnline" hidden>
@@ -1024,7 +1025,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <div class="dvd-nav"><button class="dvd-item" type="button" id="roomCreate">Raum erstellen</button><button class="dvd-item" type="button" id="roomJoin">Raum beitreten</button></div>
       <p class="dvd-err" id="onErr" role="status"></p>
     </div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◀ Zurück</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgPlay">◄ Zurück</button></div>
   </div>
 
   <div class="dvd-page" id="pgLobby" hidden>
@@ -1038,7 +1039,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
     <div class="dvd-chip" id="lobbyMapLabel">Szene</div>
     <div class="map-grid" id="lobbyMaps"></div>
     <p class="dvd-sub" id="lobbyWait" style="letter-spacing:.2em"></p>
-    <div class="dvd-nav"><button class="dvd-item" type="button" id="lobbyLeave">◀ Raum verlassen</button><button class="dvd-item" type="button" id="lobbyStart">Spiel starten ▶</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" id="lobbyLeave">◄ Raum verlassen</button><button class="dvd-item" type="button" id="lobbyStart">Spiel starten ►</button></div>
   </div>
 
   <div class="dvd-page" id="pgExtras" hidden>
@@ -1047,7 +1048,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <nav class="extra-chapters" id="extraChapters" aria-label="Kapitel"></nav>
       <article class="extra-body" id="extraBody" aria-live="polite"></article>
     </div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button><button class="dvd-item" type="button" id="castMenuBtn">Besetzung ▶</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Hauptmenü</button><button class="dvd-item" type="button" id="castMenuBtn">Besetzung ►</button></div>
   </div>
 
   <div class="dvd-page" id="pgThemes" hidden>
@@ -1061,7 +1062,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
     <p class="dvd-chip" id="themeChip"></p>
     <div class="theme-grid" id="themeGrid"></div>
     <div class="acc-hint"><span id="themeAccHint"></span><button class="btn" id="themeAccBtn" type="button">Konto anlegen</button></div>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgAccount" hidden>
@@ -1080,7 +1081,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="btn" id="accLogout" type="button">Abmelden</button>
     </div>
     <p class="dvd-err" id="accErr" role="status"></p>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-page" id="pgBoard" hidden>
@@ -1088,7 +1089,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
     <div class="mode-grid game-grid board-tabs" id="boardGames"></div>
     <p class="dvd-chip" id="boardInfo"></p>
     <ol class="board" id="boardList"></ol>
-    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◀ Hauptmenü</button></div>
+    <div class="dvd-nav"><button class="dvd-item" type="button" data-go="pgMain">◄ Hauptmenü</button></div>
   </div>
 
   <div class="dvd-hint">Pfeiltasten auswählen · Enter bestätigen · Esc zurück</div>
@@ -1404,7 +1405,7 @@ const RAR = [
 ];
 /* Roguelike-Upgrades: Nach jeder Runde und jedem geschafften Feld eins von drei wählen. */
 const UPGRADES = [
-  { id: 'boot',     sym: '⛵', max: 3,  name: 'Breiteres Boot',  desc: 'Das Fangboot wird 25 % breiter.' },
+  { id: 'boot',     sym: '⊔', max: 3,  name: 'Breiteres Boot',  desc: 'Das Fangboot wird 25 % breiter.' },
   { id: 'ruhig',    sym: '≈',  max: 2,  name: 'Ruhige See',      desc: 'Das Boot fährt 30 % langsamer und ist leichter zu treffen.' },
   { id: 'fernrohr', sym: '◎',  max: 1,  name: 'Dauer-Fernrohr',  desc: 'Die lange Zielhilfe mit Abprallern ist bei jedem Schuss an.' },
   { id: 'speicher', sym: '+L', max: 2,  name: 'Ladungsspeicher', desc: '+1 maximale Ladung für deine Fähigkeit und sofort +1 Ladung.' },
@@ -1597,7 +1598,7 @@ const DECO = {
     g.fillStyle = 'rgba(255,45,135,.32)'; for (let y = 8; y < H; y += 18) for (let x = W * .6; x < W; x += 18) { g.beginPath(); g.arc(x + (y / 18 % 2) * 9, y, 3.6, 0, 7); g.fill(); } g.restore();
     g.strokeStyle = 'rgba(150,90,30,.3)'; g.lineWidth = 5; g.beginPath(); g.arc(640, 840, 70, 0, 6.1); g.stroke();
     g.strokeStyle = 'rgba(0,0,0,.08)'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, 470); g.lineTo(W, 560); g.stroke();
-    g.font = '30px "Permanent Marker", cursive'; g.fillStyle = 'rgba(26,26,122,.35)'; g.save(); g.translate(120, 930); g.rotate(-.06); g.fillText('ich ♥ plinko!!', 0, 0); g.restore();
+    g.font = '30px "Permanent Marker", cursive'; g.fillStyle = 'rgba(26,26,122,.35)'; g.save(); g.translate(120, 930); g.rotate(-.06); g.fillText('ich <3 plinko!!', 0, 0); g.restore();
     g.strokeStyle = 'rgba(26,26,122,.35)'; g.lineWidth = 3; g.beginPath(); g.moveTo(600, 110); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? 14 : 34; g.lineTo(640 + Math.cos(a) * rr, 120 + Math.sin(a) * rr); } g.closePath(); g.stroke();
   },
   storybook(g) {
@@ -3296,8 +3297,8 @@ function renderCast() {
   $('#castName').value = p.name;
   $('#castNameWrap').hidden = castOnly;
   $('#castNext').hidden = castOnly;
-  $('#castBack').textContent = castOnly ? '◀ Bonusmaterial' : '◀ Zurück';
-  $('#castNext').textContent = castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ▶` : rogue ? 'Run starten ▶' : 'Szenenauswahl ▶';
+  $('#castBack').textContent = castOnly ? '◄ Bonusmaterial' : '◄ Zurück';
+  $('#castNext').textContent = castIdx < settings.count - 1 ? `Weiter: Spieler ${castIdx + 2} ►` : rogue ? 'Run starten ►' : 'Szenenauswahl ►';
   previewChar(castOnly ? 'fuchs' : p.power);
 }
 function pickChar(k) {
@@ -3438,19 +3439,19 @@ const EXTRA_CHAPTERS = [
   { id: 'rogue', sym: '↯', name: 'Roguelike' },
   { id: 'online', sym: '⇄', name: 'Online' },
   { id: 'bloecke', sym: '▦', name: 'Klötzchenregen' },
-  { id: 'schiffe', sym: '⚓', name: 'Schiffe versenken' },
+  { id: 'schiffe', sym: '≋', name: 'Schiffe versenken' },
 ];
 function extraHTML(id) {
   const li = (icon, title, text) => `<li>${icon}<div><b>${title}</b><span>${text}</span></div></li>`;
   const dot = c => `<i class="xd" style="--xc:${c}"></i>`;
   const sym = t => `<i class="xs">${t}</i>`;
   if (id === 'regeln') return `<h3>So wird gespielt</h3><p>Schieß Leuchtkugeln von oben ins Feld. Jede getroffene Laterne leuchtet auf und verschwindet, sobald die Kugel unten raus ist. Lösch alle <b>orangen Ziellaternen</b>, dann hast du das Feld geschafft.</p><ul class="xl">
-    ${li(sym('⛵'), 'Das Boot', 'Unten fährt ein Boot hin und her. Fällt die Kugel hinein, bekommst du sie zurück (+1 Kugel).')}
+    ${li(sym('⊔'), 'Das Boot', 'Unten fährt ein Boot hin und her. Fällt die Kugel hinein, bekommst du sie zurück (+1 Kugel).')}
     ${li(sym('×10'), 'Multiplikator', 'Je weniger Ziellaternen übrig sind, desto mehr zählt jeder Treffer: ×2, ×3, ×5 und am Ende ×10.')}
     ${li(sym('+1'), 'Starker Schuss', `Holst du mit einem Schuss ${fmt(2500)} Punkte oder mehr, gibt es eine Kugel gratis.`)}
     ${li(sym('★'), 'Finale', `Triffst du die letzte Ziellaterne, öffnen sich unten Bonuszonen: ${ZONES.map(fmt).join(' · ')} Punkte.`)}
     ${li(sym('F'), 'Fähigkeiten', 'Jeder Charakter hat eine Spezialfähigkeit. Mit F oder dem Fähigkeiten-Knopf machst du sie für den nächsten Schuss scharf. Das kostet eine Ladung.')}
-    ${li(sym('⌨'), 'Steuerung', 'Maus: zielen und klicken. Touch: ziehen und loslassen. Tastatur: Pfeiltasten zielen (mit Umschalt fein), Leertaste schießt.')}
+    ${li(sym('⎵'), 'Steuerung', 'Maus: zielen und klicken. Touch: ziehen und loslassen. Tastatur: Pfeiltasten zielen (mit Umschalt fein), Leertaste schießt.')}
   </ul>`;
   if (id === 'laternen') return `<h3>Die Laternen</h3><ul class="xl">
     ${li(dot(TYPES.target.c), 'Orange: Ziellaterne', `${TYPES.target.base} Punkte. Alle löschen heißt Feld geschafft. Sie treiben den Multiplikator hoch.`)}
@@ -3462,14 +3463,14 @@ function extraHTML(id) {
   if (id === 'loot') return `<h3>Themes &amp; Lootboxen</h3><p>Nach jedem Spiel bekommst du eine Lootbox, für einen Sieg, ein geschafftes Feld oder Feld 3 im Roguelike eine zweite. Geöffnet wird im Hauptmenü unter <b>Themes &amp; Boxen</b>. In jeder Box steckt ein Theme. Ein Theme verändert das ganze Spiel: Farben, Schrift, Knöpfe, Rahmen, Hintergrund und Spielfeld. </p><ul class="xl">${li('<i class="xs"><span class="shard on"></span></i>', 'Splitter', 'Ziehst du ein Theme, das du schon hast, bekommst du stattdessen einen Splitter. Bei drei Splittern gibt es automatisch eine neue Lootbox, und der Zähler beginnt wieder bei null. Deinen Stand siehst du unter Themes &amp; Boxen.')}</ul><p>Mit einem <b>Konto</b> (Hauptmenü → Konto) sind deine Themes gesichert und auf jedem Gerät da.</p><ul class="xl">${Object.values(UI_THEMES).map(t => li(`<i class="xs" style="background:${swatchBg(t)}"></i>`, `${t.name} <small style="color:${RARITY[t.rar].c}">${RARITY[t.rar].n}</small>`, t.desc)).join('')}</ul>`;
   if (id === 'rogue') return `<h3>Roguelike-Modus</h3><p>Im Hauptmenü wählst du zuerst den Spielmodus, danach lokal oder online. Im Roguelike-Modus spielen 1 bis 4 Personen einen Run über immer schwerere Felder. Alle starten mit 10 Kugeln. Nach jeder Runde (allein: 3 Schüsse) und nach jedem geschafften Feld wählt jede Person <b>eins von drei Upgrades</b>, online auf dem eigenen Gerät. Geschaffte Felder geben allen +3 Kugeln, und das nächste Feld hat mehr Ziellaternen. Der Run endet, wenn alle Kugeln weg sind. Im Online-Raum stellt der Host den Modus um.</p><ul class="xl">${UPGRADES.map(u => li(sym(u.sym), u.name + (u.max > 1 && u.max < 99 ? ` <small>bis Stufe ${u.max}</small>` : u.max === 1 ? ' <small>einmalig</small>' : ''), u.desc)).join('')}</ul>`;
   if (id === 'bloecke') return `<h3>Klötzchenregen</h3><p>Steine aus vier Kästchen fallen ins Feld. Schieb und dreh sie so, dass waagerechte Reihen voll werden, dann verschwinden sie. Alle 10 Reihen steigt die Stufe und es wird schneller. Ist der Stapel oben angekommen, ist das Spiel vorbei.</p><ul class="xl">
-    ${li(sym('⌨'), 'Tastatur', 'Pfeile links/rechts schieben, Pfeil runter beschleunigt, Pfeil hoch oder X dreht, Z dreht andersrum, Leertaste lässt fallen, C hält einen Stein fest, P pausiert.')}
-    ${li(sym('☝'), 'Touch', 'Tippen dreht, seitlich wischen schiebt, schnell nach unten wischen lässt fallen. Darunter gibt es dieselben Knöpfe.')}
+    ${li(sym('⎵'), 'Tastatur', 'Pfeile links/rechts schieben, Pfeil runter beschleunigt, Pfeil hoch oder X dreht, Z dreht andersrum, Leertaste lässt fallen, C hält einen Stein fest, P pausiert.')}
+    ${li(sym('◉'), 'Touch', 'Wie in der bekannten Handy-Version, überall auf der Spielfläche: Tippen dreht. Links oder rechts ziehen schiebt den Stein Spalte für Spalte mit dem Finger. Langsam nach unten ziehen lässt ihn schneller fallen, schnell nach unten wischen lässt ihn sofort fallen. Schnell nach oben wischen oder auf das Halten-Feld tippen hält den Stein.')}
     ${li(sym('×4'), 'Punkte', 'Eine Reihe 100, zwei 300, drei 500, vier auf einmal 800, mal Stufe. Reihen direkt hintereinander geben Kombo-Punkte.')}
     ${li(sym('⇄'), 'Online-Duell', '2 bis 4 Personen spielen gleichzeitig. Wer 2 oder mehr Reihen auf einmal abräumt, schickt Müllreihen mit einem Loch an die anderen. Wer zuletzt übrig ist, gewinnt.')}
   </ul>`;
   if (id === 'schiffe') return `<h3>Schiffe versenken</h3><p>Jede Seite hat eine geheime Flotte auf einem 10×10-Feld: Flaggschiff (5), Kreuzer (4), Zerstörer (3), Fregatte (3) und U-Boot (2). Schiffe dürfen sich nicht berühren, auch nicht über Eck.</p><ul class="xl">
     ${li(sym('✹'), 'Schießen', 'Tippe aufs Gegnerfeld. Bei einem Treffer darfst du nochmal. Versenkte Schiffe werden aufgedeckt und das Wasser drumherum markiert.')}
-    ${li(sym('⚙'), 'Gegen den Computer', 'Der Computer rechnet aus, wo deine Schiffe noch liegen könnten. Ganz fehlerfrei ist er aber nicht.')}
+    ${li(sym('⊞'), 'Gegen den Computer', 'Der Computer rechnet aus, wo deine Schiffe noch liegen könnten. Ganz fehlerfrei ist er aber nicht.')}
     ${li(sym('⇆'), 'Zu zweit an einem Gerät', 'Zwischen den Zügen erscheint ein Übergabe-Bildschirm, damit niemand die andere Flotte sieht.')}
     ${li(sym('⌂'), 'Online', 'Genau 2 Personen im Raum. Der Host wählt in der Lobby Schiffe versenken und startet.')}
   </ul>`;

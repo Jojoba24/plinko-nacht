@@ -13,12 +13,12 @@ const sfx = (f, d, w, v, t) => SK().tone(f, d, w, v, t);
 
 /* Kopfzeile jeder Arcade-Seite. Online fragt der Zurück-Knopf einmal nach. */
 function topBar(root, title, online) {
-  const bar = el('div', 'ar-bar', `<button class="btn ar-back" type="button">${online ? '◀ Raum verlassen' : '◀ Menü'}</button><b class="ar-title">${title}</b><span class="ar-info"></span>`);
+  const bar = el('div', 'ar-bar', `<button class="btn ar-back" type="button">${online ? '◄ Raum verlassen' : '◄ Menü'}</button><b class="ar-title">${title}</b><span class="ar-info"></span>`);
   root.appendChild(bar);
   const back = bar.querySelector('.ar-back');
   let armed = 0;
   back.addEventListener('click', () => {
-    if (online && Date.now() - armed > 3000) { armed = Date.now(); back.textContent = 'Wirklich verlassen?'; setTimeout(() => { back.textContent = '◀ Raum verlassen'; }, 3000); return; }
+    if (online && Date.now() - armed > 3000) { armed = Date.now(); back.textContent = 'Wirklich verlassen?'; setTimeout(() => { back.textContent = '◄ Raum verlassen'; }, 3000); return; }
     if (online) SK().toMenu(); else SK().openSetup();
   });
   return bar.querySelector('.ar-info');
@@ -76,7 +76,7 @@ function kroeGame(opt) {
   main.innerHTML = `
     <aside class="kr-side kr-l">
       <div class="kr-card kr-me"><img alt="" src="${S.ICON_URL[meP.power] || S.ICON_URL.fuchs}"><b>${esc(meP.name)}</b></div>
-      <div class="kr-card"><span class="kr-lab">Halten</span><canvas class="kr-hold" width="96" height="64"></canvas></div>
+      <div class="kr-card kr-holdcard"><span class="kr-lab">Halten</span><canvas class="kr-hold" width="96" height="64"></canvas></div>
       <div class="kr-card kr-stats"><span class="kr-lab">Punkte</span><b class="kr-score">0</b><span class="kr-lab">Reihen</span><b class="kr-lines">0</b><span class="kr-lab">Stufe</span><b class="kr-level">1</b></div>
     </aside>
     <div class="kr-well"><canvas class="kr-board"></canvas><div class="kr-msg" hidden></div></div>
@@ -85,10 +85,8 @@ function kroeGame(opt) {
       ${online ? `<div class="kr-opps">${others.map(p => `<div class="kr-card kr-opp" data-uid="${esc(p.uid)}"><span class="kr-on"><img alt="" src="${S.ICON_URL[p.power] || S.ICON_URL.fuchs}">${esc(p.name)}</span><canvas width="60" height="120"></canvas><span class="kr-os">0</span></div>`).join('')}</div>` : ''}
     </aside>`;
   root.appendChild(main);
-  const pad = el('div', 'kr-pad', ['hold:Halten', 'rotL:⟲', 'left:◀', 'down:▼', 'right:▶', 'rotR:⟳', 'drop:⤓'].map(s => { const [a, l] = s.split(':'); return `<button class="btn" type="button" data-a="${a}" aria-label="${{ hold: 'Halten', rotL: 'Links drehen', left: 'Links', down: 'Runter', right: 'Rechts', rotR: 'Rechts drehen', drop: 'Fallen lassen' }[a]}">${l}</button>`; }).join(''));
-  root.appendChild(pad);
   const touch = window.matchMedia('(pointer:coarse)').matches;
-  info.textContent = online ? `${opt.players.length} im Duell` : touch ? 'Tippen dreht, wischen schiebt' : 'Pfeile, ↑ drehen, Leertaste fallen, C halten';
+  info.textContent = online ? `${opt.players.length} im Duell` : touch ? 'Tippen dreht · Wischen ↓ fällt · ↑ hält' : 'Pfeile, ↑ drehen, Leertaste fallen, C halten';
 
   const cv = main.querySelector('.kr-board'), cx = cv.getContext('2d');
   const hold = main.querySelector('.kr-hold').getContext('2d'), next = main.querySelector('.kr-next').getContext('2d');
@@ -101,7 +99,11 @@ function kroeGame(opt) {
 
   function resize() {
     const narrow = window.innerWidth <= 700;
-    const availH = Math.max(200, window.innerHeight - (narrow ? 200 : 150)), availW = Math.max(120, narrow ? window.innerWidth - 2 * 74 - 12 - 24 - 20 : 640);
+    // schmal: Halten, Punkte und Nächste stehen als Reihe über dem Feld, das Feld bekommt fast die ganze Breite
+    const top = narrow ? Math.max(main.querySelector('.kr-l').offsetHeight, main.querySelector('.kr-r').offsetHeight, 60) + 8 : 0;
+    const availH = Math.max(200, window.innerHeight - (narrow ? 96 + top : 150)), availW = Math.max(120, narrow ? window.innerWidth - 24 - 16 : 640);
+    const nc = main.querySelector('.kr-next'), nw = narrow ? 150 : 96, nh = narrow ? 44 : 216;
+    if (nc.width !== nw) { nc.width = nw; nc.height = nh; }
     cell = Math.max(10, Math.floor(Math.min(availH / KH, availW / KW, 38)));
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     cv.style.width = cell * KW + 'px'; cv.style.height = cell * KH + 'px';
@@ -143,8 +145,9 @@ function kroeGame(opt) {
     for (const f of B.flash) { cx.fillStyle = `rgba(255,255,255,${f.t * 2.4})`; cx.fillRect(0, (f.y - KHID) * s, W, s); }
     cx.restore();
     drawMini(hold, B.hold, !B.canHold);
-    next.clearRect(0, 0, 96, 216);
-    B.queue.slice(0, 3).forEach((t, i) => drawPiece(next, t, 48, 36 + i * 70, 18));
+    const nc = next.canvas; next.clearRect(0, 0, nc.width, nc.height);
+    if (nc.width > nc.height) B.queue.slice(0, 3).forEach((t, i) => drawPiece(next, t, 26 + i * 50, 22, i ? 9 : 11));
+    else B.queue.slice(0, 3).forEach((t, i) => drawPiece(next, t, 48, 36 + i * 70, 18));
   }
   function drawPiece(c, t, mx, my, s, dim) {
     const cells = ROT[t][0], xs = cells.map(a => a[0]), ys = cells.map(a => a[1]);
@@ -367,29 +370,47 @@ function kroeGame(opt) {
   function onVis() { if (document.hidden) setPause(true); }
   window.addEventListener('keydown', onKey); window.addEventListener('keyup', onKey);
   document.addEventListener('visibilitychange', onVis);
-  pad.querySelectorAll('button').forEach(b => {
-    const a = b.dataset.a;
-    b.addEventListener('pointerdown', e => { e.preventDefault(); b.setPointerCapture(e.pointerId); act(a, true); });
-    const up = () => act(a, false);
-    b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('lostpointercapture', up);
-  });
-  // Wischen auf dem Feld: tippen dreht, seitlich ziehen schiebt, schnell nach unten wischen lässt fallen
+  /* Touch wie in der offiziellen Handy-Version, auf der ganzen Spielfläche:
+     ziehen links/rechts: der Stein folgt dem Finger Spalte für Spalte
+     langsam nach unten ziehen: schneller fallen
+     schnell nach unten wischen: sofort fallen lassen
+     schnell nach oben wischen: halten
+     tippen: drehen */
   let tp = null;
-  cv.addEventListener('pointerdown', e => { tp = { x: e.clientX, y: e.clientY, sx: e.clientX, sy: e.clientY, t: performance.now(), moved: false }; cv.setPointerCapture(e.pointerId); });
-  cv.addEventListener('pointermove', e => {
-    if (!tp) return;
-    while (e.clientX - tp.x > cell) { tp.x += cell; act('right', true); act('right', false); tp.moved = true; }
-    while (tp.x - e.clientX > cell) { tp.x -= cell; act('left', true); act('left', false); tp.moved = true; }
-    while (e.clientY - tp.y > cell) { tp.y += cell; soft(); tp.moved = true; }
+  const ready = () => !paused && !B.over && B.cur && !S.overOpen();
+  main.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || tp || e.target.closest('button,.kr-msg')) return;
+    tp = { hold: !!e.target.closest(".kr-holdcard"), id: e.pointerId, x0: e.clientX, y0: e.clientY, cx: e.clientX, cy: e.clientY, t0: performance.now(), hist: [[e.clientX, e.clientY, performance.now()]], moved: false, axis: null };
+    try { main.setPointerCapture(e.pointerId); } catch (x) {}
   });
-  cv.addEventListener('pointerup', e => {
-    if (!tp) return;
-    const dt = performance.now() - tp.t, dy = e.clientY - tp.sy;
-    if (dy > cell * 2 && dt < 260) hard();
-    else if (!tp.moved && dt < 300) act(e.clientX - cv.getBoundingClientRect().left < cv.clientWidth / 3 ? 'rotL' : 'rotR', true);
-    tp = null;
+  main.addEventListener('pointermove', e => {
+    if (!tp || e.pointerId !== tp.id) return;
+    const now = performance.now(); tp.hist.push([e.clientX, e.clientY, now]); while (tp.hist.length > 2 && now - tp.hist[0][2] > 90) tp.hist.shift();
+    const dx = e.clientX - tp.x0, dy = e.clientY - tp.y0;
+    if (!tp.axis && Math.hypot(dx, dy) > 10) tp.axis = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+    if (!tp.axis || !ready()) return;
+    const step = Math.max(14, cell * 0.85);
+    // seitlich: bei senkrechtem Wischen erst ab einem deutlichen Ausschlag, damit ein Wurf nach unten nicht verrutscht
+    if (tp.axis === 'h' || Math.abs(dx) > step * 2.5) {
+      while (e.clientX - tp.cx >= step) { tp.cx += step; move(1); tp.moved = true; }
+      while (tp.cx - e.clientX >= step) { tp.cx -= step; move(-1); tp.moved = true; }
+    }
+    if (tp.axis === 'v') while (e.clientY - tp.cy >= step) { tp.cy += step; soft(); tp.moved = true; }
   });
-  cv.addEventListener('pointercancel', () => { tp = null; });
+  const endTouch = e => {
+    if (!tp || e.pointerId !== tp.id) return;
+    const t = tp; tp = null;
+    if (e.type === 'pointercancel' || !ready()) return;
+    const now = performance.now(), h0 = t.hist[0], dt = Math.max(1, now - h0[2]);
+    const vy = (e.clientY - h0[1]) / dt, dy = e.clientY - t.y0, dx = e.clientX - t.x0;
+    // Wischen = kurze, deutliche Bewegung oder hohe Endgeschwindigkeit; langsames Ziehen bleibt Soft Drop
+    const dur = now - t.t0, vert = Math.abs(dy) > Math.abs(dx) * 1.2;
+    if (vert && dy > 40 && (vy > 0.5 || (dur < 320 && dy > 60))) hard();
+    else if (vert && dy < -40 && (vy < -0.5 || (dur < 320 && dy < -60))) holdPiece();
+    else if (!t.moved && Math.hypot(dx, dy) < 12 && now - t.t0 < 350) { if (t.hold) holdPiece(); else rotate(1); }
+  };
+  main.addEventListener('pointerup', endTouch);
+  main.addEventListener('pointercancel', endTouch);
   window.addEventListener('resize', resize);
   requestAnimationFrame(() => { resize(); raf = requestAnimationFrame(tick); });
   sfx(S.noteFreq(5), 0.2, 'triangle', 0.06); sfx(S.noteFreq(9), 0.25, 'triangle', 0.06, 0.1);
@@ -564,7 +585,7 @@ function schiffeGame(opt) {
       <div class="sv-ph">${face(i)}<div><b>${esc(P[i].name)}: Flotte aufstellen</b><span>Schiff wählen, aufs Feld tippen. Schiffe dürfen sich nicht berühren. Tippen auf ein gesetztes Schiff nimmt es wieder hoch.</span></div></div>
       <div class="sv-pl">${gridHTML('own big', true)}
         <div class="sv-dock"><div class="sv-ships">${FLEET.map((f, k) => `<button class="btn sv-ship" type="button" data-k="${k}"><i style="--n:${f.len}"></i>${f.name}</button>`).join('')}</div>
-        <div class="sv-btns"><button class="btn" type="button" data-b="rot">Drehen (R)</button><button class="btn" type="button" data-b="rnd">Zufällig</button><button class="btn" type="button" data-b="clr">Leeren</button><button class="btn def" type="button" data-b="ok" disabled>Fertig ▶</button></div></div>
+        <div class="sv-btns"><button class="btn" type="button" data-b="rot">Drehen (R)</button><button class="btn" type="button" data-b="rnd">Zufällig</button><button class="btn" type="button" data-b="clr">Leeren</button><button class="btn def" type="button" data-b="ok" disabled>Fertig ►</button></div></div>
       </div></div>`;
     const grid = body.querySelector('.sv-grid');
     const refresh = () => {
@@ -607,7 +628,7 @@ function schiffeGame(opt) {
 
   /* ---- Übergabe-Bildschirm für zwei Personen an einem Gerät ---- */
   function pass(i, text, then) {
-    body.innerHTML = `<div class="sv-pass">${face(i)}<b>Gib das Gerät an ${esc(P[i].name)}</b><span>${text}</span><button class="btn def" type="button">Ich bin ${esc(P[i].name)} ▶</button></div>`;
+    body.innerHTML = `<div class="sv-pass">${face(i)}<b>Gib das Gerät an ${esc(P[i].name)}</b><span>${text}</span><button class="btn def" type="button">Ich bin ${esc(P[i].name)} ►</button></div>`;
     info.textContent = 'Nicht hinschauen!';
     const b = body.querySelector('button'); b.focus(); b.addEventListener('click', () => { S.confirmTone(); then(); });
   }
