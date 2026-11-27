@@ -11,6 +11,7 @@ Das Spiel wurde mit [Claude](https://claude.ai) entwickelt.
 - **Plinko Nacht:** Schieß Leuchtkugeln ins Feld und lösch alle orangen Ziellaternen. Modi Klassisch und Roguelike (nach jeder Runde ein Upgrade aus drei), 1 bis 4 Personen lokal oder online
 - **Klötzchenregen:** Fallende Steine zu vollen Reihen stapeln. Allein oder online im Duell mit 2 bis 4 Personen, wobei abgeräumte Reihen als Müll bei den anderen landen
 - **Schiffe versenken:** Gegen den Computer, zu zweit an einem Gerät (mit Übergabe-Bildschirm) oder online
+- **Orbit Zirkus:** Kugeln durch eine Zirkus-Manege im Weltall schießen und alle goldenen Sterne treffen. Vier Artisten mit eigenen Kräften, zehn Level, allein, zu mehreren an einem Gerät oder online
 - Weitere Spiele folgen
 
 ## Funktionen

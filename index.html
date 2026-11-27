@@ -927,6 +927,7 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
       <button class="dvd-item mode-item game-item" type="button" data-game="plinko">Plinko Nacht</button>
       <button class="dvd-item mode-item game-item" type="button" data-game="bloecke">Klötzchenregen</button>
       <button class="dvd-item mode-item game-item" type="button" data-game="schiffe">Schiffe versenken</button>
+      <button class="dvd-item mode-item game-item" type="button" data-game="orbit">Orbit Zirkus</button>
       <button class="dvd-item mode-item online-item" type="button" id="onlineMenuBtn">Online-Räume</button>
       <div class="dvd-toggles main-more">
         <button class="dvd-item" type="button" id="themesMenuBtn">Themes &amp; Boxen</button>
@@ -1157,6 +1158,8 @@ body[data-ui=luna] .kr-msg b,body[data-ui=maerchen] .kr-msg b,body[data-ui=luna]
 </div>
 
 <script src="games.js"></script>
+<link rel="stylesheet" href="orbit/orbit.css">
+<script type="module" src="orbit/orbit.js"></script>
 <script>
 (() => {
 'use strict';
@@ -3385,6 +3388,7 @@ const GAME_META = {
   plinko: { name: 'Plinko Nacht', min: 2, max: 4, short: 'Kugeln und Laternen' },
   bloecke: { name: 'Klötzchenregen', min: 2, max: 4, short: 'Reihen voll machen, Müll schicken' },
   schiffe: { name: 'Schiffe versenken', min: 2, max: 2, short: 'Zu zweit, Flotte gegen Flotte' },
+  orbit: { name: 'Orbit Zirkus', min: 2, max: 4, short: 'Kugeln, Sterne und Supernova' },
 };
 const gameOf = () => (ONLINE && ONLINE.meta && GAME_META[ONLINE.meta.game]) ? ONLINE.meta.game : 'plinko';
 function openGamePage(id) {
